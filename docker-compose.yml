@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  expotes-db:
+    image: postgres:16.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: expotes
+    ports:
+      - '5532:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  expotes-minio:
+    image: minio/minio
+    ports: 
+      - "9100:9000"
+      - "9101:9001" 
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
+
+volumes:
+  db:
+  minio_data:

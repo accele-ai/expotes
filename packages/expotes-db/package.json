@@ -1,0 +1,30 @@
+{
+  "name": "@expotes/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./schema": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "push": "drizzle-kit push"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.23.1",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.32.1"
+  }
+}
