@@ -9,10 +9,12 @@ export class AuthService {
     private readonly cacheService: CacheService,
   ) {}
 
-  async signUp(username: string, password: string): Promise<any> {}
+  async signUp(email: string, password: string): Promise<any> {
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userService.findOne(username);
+  }
+
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.userService.findOne(email);
     if (user && user.password === pass) {
       return user;
     }
