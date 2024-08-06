@@ -28,6 +28,8 @@ export class CacheService {
   }
 
   public get redisClient() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return this.cache.store.client as Redis;
   }
 

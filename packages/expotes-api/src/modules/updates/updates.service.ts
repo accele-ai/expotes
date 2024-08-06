@@ -37,7 +37,7 @@ export class UpdatesService {
   }
 
   private createAssetS3Key(
-    runtimeVersion: number,
+    runtimeVersion: string,
     mainfestId: string,
     assetName: string,
   ): string {
@@ -55,7 +55,7 @@ export class UpdatesService {
       localPath,
     }: {
       assetId?: string;
-      runtimeVersion: number;
+      runtimeVersion: string;
       manifestId: string;
       contentType: string;
       fileExtension: string;
@@ -164,7 +164,7 @@ export class UpdatesService {
                   contentType: mime.getType(asset.ext),
                   fileExtension: `.${asset.ext}`,
                   fileName: asset.path,
-                  localPath: path.join(extractFolder, asset.path),
+                  localPath: path.join(extractPath, asset.path),
                 },
                 tx,
               ),

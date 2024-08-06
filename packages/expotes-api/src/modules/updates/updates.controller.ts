@@ -18,7 +18,7 @@ export class UpdatesController {
     return this.uploadService.createUpdates(
       {
         appId: '866eebb7-35fc-45b0-b31e-b94a470a2580',
-        meta: { runtimeVersion: 1 },
+        meta: { runtimeVersion: '1' },
       },
       file,
     );
