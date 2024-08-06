@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,9 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from "../../processors/database/database.service";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DriectiveService = void 0;
+const common_1 = require("@nestjs/common");
+const database_service_1 = require("../../processors/database/database.service");
 let DriectiveService = class DriectiveService {
     constructor(db) {
         this.db = db;
@@ -31,9 +33,9 @@ let DriectiveService = class DriectiveService {
         };
     }
 };
-DriectiveService = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof DatabaseService !== "undefined" && DatabaseService) === "function" ? _a : Object])
+exports.DriectiveService = DriectiveService;
+exports.DriectiveService = DriectiveService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [database_service_1.DatabaseService])
 ], DriectiveService);
-export { DriectiveService };
 //# sourceMappingURL=driective.service.js.map

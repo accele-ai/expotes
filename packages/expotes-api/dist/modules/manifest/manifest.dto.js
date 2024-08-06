@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,16 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { IsString, IsIn, IsNotEmpty } from 'class-validator';
-export class ManifestQueryDto {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ManifestQueryDto = void 0;
+const class_validator_1 = require("class-validator");
+class ManifestQueryDto {
 }
+exports.ManifestQueryDto = ManifestQueryDto;
 __decorate([
-    IsString(),
-    IsNotEmpty({ message: 'No runtimeVersion provided.' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'No runtimeVersion provided.' }),
     __metadata("design:type", String)
 ], ManifestQueryDto.prototype, "runtime-version", void 0);
 __decorate([
-    IsIn(['ios', 'android'], {
+    (0, class_validator_1.IsIn)(['ios', 'android'], {
         message: 'Unsupported platform. Expected either ios or android.',
     }),
     __metadata("design:type", String)

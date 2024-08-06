@@ -1,7 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { SessionService } from './session.service';
+import { CacheModule } from '@/processors/cache/cache.module';
 
 @Module({
+  imports: [CacheModule],
   providers: [SessionService],
   exports: [SessionService],
 })
