@@ -20,7 +20,7 @@ export declare const applicationsTable: import("drizzle-orm/pg-core").PgTableWit
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         organizationId: import("drizzle-orm/pg-core").PgColumn<{
             name: "organization_id";
@@ -36,7 +36,7 @@ export declare const applicationsTable: import("drizzle-orm/pg-core").PgTableWit
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         name: import("drizzle-orm/pg-core").PgColumn<{
             name: "name";
@@ -52,7 +52,7 @@ export declare const applicationsTable: import("drizzle-orm/pg-core").PgTableWit
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         createdAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "created_at";
@@ -68,13 +68,13 @@ export declare const applicationsTable: import("drizzle-orm/pg-core").PgTableWit
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<Date>;
         }, {}, {}>;
     };
     dialect: "pg";
 }>;
 export declare const applicationsRelation: import("drizzle-orm").Relations<"applications", {
-    organization: import("drizzle-orm").One<"organizationes", true>;
+    organization: import("drizzle-orm").One<"teams", true>;
     manifests: import("drizzle-orm").Many<"manifests">;
 }>;
 //# sourceMappingURL=applications.d.ts.map

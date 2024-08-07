@@ -16,7 +16,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         manifestId: import("drizzle-orm/pg-core").PgColumn<{
             name: "manifest_id";
@@ -32,7 +32,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         path: import("drizzle-orm/pg-core").PgColumn<{
             name: "path";
@@ -48,7 +48,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         contentType: import("drizzle-orm/pg-core").PgColumn<{
             name: "content_type";
@@ -64,7 +64,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         hash: import("drizzle-orm/pg-core").PgColumn<{
             name: "hash";
@@ -80,7 +80,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         fileExtension: import("drizzle-orm/pg-core").PgColumn<{
             name: "file_extension";
@@ -96,7 +96,7 @@ export declare const assetsTable: import("drizzle-orm/pg-core").PgTableWithColum
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
     };
     dialect: "pg";

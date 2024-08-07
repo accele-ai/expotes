@@ -16,7 +16,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         appId: import("drizzle-orm/pg-core").PgColumn<{
             name: "app_id";
@@ -32,7 +32,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         isRollbacked: import("drizzle-orm/pg-core").PgColumn<{
             name: "is_rollback";
@@ -48,7 +48,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<boolean>;
         }, {}, {}>;
         rollbackedAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "rollbacked_at";
@@ -64,7 +64,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<Date>;
         }, {}, {}>;
         runtimeVersion: import("drizzle-orm/pg-core").PgColumn<{
             name: "runtime_version";
@@ -80,7 +80,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         iosLaunchAssetId: import("drizzle-orm/pg-core").PgColumn<{
             name: "ios_launch_asset_id";
@@ -96,7 +96,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         androidLaunchAssetId: import("drizzle-orm/pg-core").PgColumn<{
             name: "android_launch_asset_id";
@@ -112,7 +112,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         metadata: import("drizzle-orm/pg-core").PgColumn<{
             name: "metadata";
@@ -130,7 +130,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<unknown>;
         }, {}, {}>;
         extra: import("drizzle-orm/pg-core").PgColumn<{
             name: "extra";
@@ -148,7 +148,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<unknown>;
         }, {}, {}>;
         createdAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "created_at";
@@ -164,7 +164,7 @@ export declare const manifestsTable: import("drizzle-orm/pg-core").PgTableWithCo
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<Date>;
         }, {}, {}>;
     };
     dialect: "pg";

@@ -16,7 +16,7 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         email: import("drizzle-orm/pg-core").PgColumn<{
             name: "email";
@@ -32,7 +32,7 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         password: import("drizzle-orm/pg-core").PgColumn<{
             name: "password";
@@ -48,7 +48,7 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             hasRuntimeDefault: false;
             enumValues: [string, ...string[]];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         createdAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "created_at";
@@ -64,19 +64,19 @@ export declare const usersTable: import("drizzle-orm/pg-core").PgTableWithColumn
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<Date>;
         }, {}, {}>;
     };
     dialect: "pg";
 }>;
 export declare const roleEnum: import("drizzle-orm/pg-core").PgEnum<["admin", "user"]>;
-export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableWithColumns<{
-    name: "users_to_organizationes";
+export declare const usersToTeams: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "users_to_teams";
     schema: undefined;
     columns: {
         userId: import("drizzle-orm/pg-core").PgColumn<{
             name: "user_id";
-            tableName: "users_to_organizationes";
+            tableName: "users_to_teams";
             dataType: "string";
             columnType: "PgUUID";
             data: string;
@@ -88,11 +88,11 @@ export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableW
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
-        organizationId: import("drizzle-orm/pg-core").PgColumn<{
-            name: "organization_id";
-            tableName: "users_to_organizationes";
+        teamId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "team_id";
+            tableName: "users_to_teams";
             dataType: "string";
             columnType: "PgUUID";
             data: string;
@@ -104,11 +104,11 @@ export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableW
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<string>;
         }, {}, {}>;
         role: import("drizzle-orm/pg-core").PgColumn<{
             name: "role";
-            tableName: "users_to_organizationes";
+            tableName: "users_to_teams";
             dataType: "string";
             columnType: "PgEnumColumn";
             data: "admin" | "user";
@@ -120,11 +120,11 @@ export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableW
             hasRuntimeDefault: false;
             enumValues: ["admin", "user"];
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<"admin" | "user">;
         }, {}, {}>;
         isSuspened: import("drizzle-orm/pg-core").PgColumn<{
             name: "is_suspened";
-            tableName: "users_to_organizationes";
+            tableName: "users_to_teams";
             dataType: "boolean";
             columnType: "PgBoolean";
             data: boolean;
@@ -136,11 +136,11 @@ export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableW
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<boolean>;
         }, {}, {}>;
         createdAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "created_at";
-            tableName: "users_to_organizationes";
+            tableName: "users_to_teams";
             dataType: "date";
             columnType: "PgTimestamp";
             data: Date;
@@ -152,64 +152,13 @@ export declare const usersToOrganization: import("drizzle-orm/pg-core").PgTableW
             hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
-            generated: undefined;
+            generated: import("drizzle-orm").GeneratedColumnConfig<Date>;
         }, {}, {}>;
     };
     dialect: "pg";
 }>;
-export declare const sessionsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
-    name: "sessions";
-    schema: undefined;
-    columns: {
-        id: import("drizzle-orm/pg-core").PgColumn<{
-            name: "id";
-            tableName: "sessions";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        userId: import("drizzle-orm/pg-core").PgColumn<{
-            name: "user_id";
-            tableName: "sessions";
-            dataType: "string";
-            columnType: "PgUUID";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-        expiresAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "expires_at";
-            tableName: "sessions";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            generated: undefined;
-        }, {}, {}>;
-    };
-    dialect: "pg";
+export declare const usersToTeamsRelation: import("drizzle-orm").Relations<"users_to_teams", {
+    user: import("drizzle-orm").One<"users", true>;
+    team: import("drizzle-orm").One<"teams", true>;
 }>;
 //# sourceMappingURL=user.d.ts.map

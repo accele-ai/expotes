@@ -165,9 +165,6 @@ importers:
       '@types/multer':
         specifier: ^1.4.11
         version: 1.4.11
-      '@types/node':
-        specifier: ^20.3.1
-        version: 20.14.14
       '@types/passport-local':
         specifier: ^1.0.38
         version: 1.0.38
@@ -8145,7 +8142,7 @@ snapshots:
       prettier-package-json: 2.8.0
       prettier-plugin-autocorrect: 0.4.1(prettier@3.3.3)
       prettier-plugin-sh: 0.14.0(prettier@3.3.3)
-      prettier-plugin-tailwindcss: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.3))(prettier@3.3.3)
+      prettier-plugin-tailwindcss: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@2.8.8))(prettier@3.3.3)
     transitivePeerDependencies:
       - '@prettier/plugin-pug'
       - '@shopify/prettier-plugin-liquid'
@@ -14486,7 +14483,7 @@ snapshots:
       prettier: 3.3.3
       sh-syntax: 0.4.2
 
-  prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.3))(prettier@3.3.3):
+  prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@2.8.8))(prettier@3.3.3):
     dependencies:
       prettier: 3.3.3
     optionalDependencies:

@@ -32,7 +32,7 @@ export const usersToTeams = pgTable(
 
     role: roleEnum("role").notNull().default("user"),
 
-    isSuspened: boolean("is_suspened"),
+    isSuspend: boolean("is_suspend"),
     createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
   },
   (t) => {

@@ -1,6 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post, Param } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto } from './team.dto';
+import { CreateTeamDto, UpdateTeamDto } from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
 
 @Controller('team')
@@ -13,5 +13,15 @@ export class TeamController {
     @Body() dto: Omit<CreateTeamDto, 'userId'>,
   ) {
     return this.teamService.create({ ...dto, userId });
+  }
+
+  @Delete('/delete/:id')
+  async delete(@Param('id') id: string) {
+    return this.teamService.delete(id);
+  }
+
+  @Post('/update')
+  async update(@Body() dto: UpdateTeamDto) {
+    return this.teamService.update(dto);
   }
 }
