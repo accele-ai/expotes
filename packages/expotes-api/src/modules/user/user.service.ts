@@ -68,11 +68,19 @@ export class UserService {
   async register(dto: CreateUserDto) {
     const hashedPassword = await hash(dto.password, SALT_ROUNDS);
 
-    const user = await this.db.insert(usersTable).values({
-      id: uuidv4(),
-      email: dto.email,
-      password: hashedPassword,
-    }).returning();
-    return  user;
+    const user = (
+      await this.db
+        .insert(usersTable)
+        .values({
+          id: uuidv4(),
+          email: dto.email,
+          password: hashedPassword,
+        })
+        .returning()
+    )?.[0];
+    return this.sessionService.create(user.id, {
+      email: user.email,
+      createdAt: new Date(),
+    });
   }
 }
