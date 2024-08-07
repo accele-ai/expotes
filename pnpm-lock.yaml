@@ -138,9 +138,6 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
     devDependencies:
-      '@innei/prettier':
-        specifier: ^0.14.2
-        version: 0.14.2
       '@nestjs/cli':
         specifier: ^10.0.0
         version: 10.4.2
@@ -199,7 +196,7 @@ importers:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@20.14.14)(ts-node@10.9.2(@types/node@20.14.14)(typescript@5.5.4))
       prettier:
-        specifier: ^2.8.8
+        specifier: '*'
         version: 2.8.8
       source-map-support:
         specifier: ^0.5.21
