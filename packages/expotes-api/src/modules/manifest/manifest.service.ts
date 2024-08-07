@@ -31,7 +31,7 @@ export class ManifestService {
 
   async getLatestManifest(runtimeVersion: number) {
     const manifest = await this.db.query.manifestsTable.findFirst({
-      where: eq(manifestsTable.runtimeVersion, runtimeVersion),
+      where: eq(manifestsTable.runtimeVersion, runtimeVersion.toString()),
       orderBy: desc(manifestsTable.createdAt),
     });
     if (!manifest) {

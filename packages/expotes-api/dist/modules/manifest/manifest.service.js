@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,15 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
-import { manifestsTable } from '@expotes/db/schema';
-import { Injectable } from '@nestjs/common';
-import { desc, eq } from 'drizzle-orm';
-import { DatabaseService, } from "../../processors/database/database.service";
-import { DriectiveService } from './driective.service';
-import { convertSHA256HashToUUID } from "../../shared/utils/crypto.util";
-export class NoUpdateAvailableError extends Error {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ManifestService = exports.NoUpdateAvailableError = void 0;
+const schema_1 = require("@expotes/db/schema");
+const common_1 = require("@nestjs/common");
+const drizzle_orm_1 = require("drizzle-orm");
+const database_service_1 = require("../../processors/database/database.service");
+const driective_service_1 = require("./driective.service");
+const crypto_util_1 = require("../../shared/utils/crypto.util");
+class NoUpdateAvailableError extends Error {
 }
+exports.NoUpdateAvailableError = NoUpdateAvailableError;
 let ManifestService = class ManifestService {
     constructor(db, directiveService) {
         this.db = db;
@@ -30,8 +33,8 @@ let ManifestService = class ManifestService {
     }
     async getLatestManifest(runtimeVersion) {
         const manifest = await this.db.query.manifestsTable.findFirst({
-            where: eq(manifestsTable.runtimeVersion, runtimeVersion),
-            orderBy: desc(manifestsTable.createdAt),
+            where: (0, drizzle_orm_1.eq)(schema_1.manifestsTable.runtimeVersion, runtimeVersion.toString()),
+            orderBy: (0, drizzle_orm_1.desc)(schema_1.manifestsTable.createdAt),
         });
         if (!manifest) {
             throw new NoUpdateAvailableError();
@@ -40,7 +43,7 @@ let ManifestService = class ManifestService {
     }
     async getFullManifest(manifestId) {
         this.db.query.manifestsTable.findFirst({
-            where: eq(manifestsTable.id, manifestId),
+            where: (0, drizzle_orm_1.eq)(schema_1.manifestsTable.id, manifestId),
             columns: {
                 id: true,
                 createdAt: true,
@@ -61,7 +64,7 @@ let ManifestService = class ManifestService {
         });
     }
     async update(meta, manifest) {
-        if (meta.currentUpdateId === convertSHA256HashToUUID(manifest.id) &&
+        if (meta.currentUpdateId === (0, crypto_util_1.convertSHA256HashToUUID)(manifest.id) &&
             meta.protocolVersion === 1) {
             throw new NoUpdateAvailableError();
         }
@@ -85,12 +88,13 @@ let ManifestService = class ManifestService {
         return await this.directiveService.NoUpdateAvailable();
     }
     async createManifest(manifest, tx) {
-        return await (tx ?? this.db).insert(manifestsTable).values(manifest);
+        return await (tx ?? this.db).insert(schema_1.manifestsTable).values(manifest);
     }
 };
-ManifestService = __decorate([
-    Injectable(),
-    __metadata("design:paramtypes", [typeof (_a = typeof DatabaseService !== "undefined" && DatabaseService) === "function" ? _a : Object, typeof (_b = typeof DriectiveService !== "undefined" && DriectiveService) === "function" ? _b : Object])
+exports.ManifestService = ManifestService;
+exports.ManifestService = ManifestService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [database_service_1.DatabaseService,
+        driective_service_1.DriectiveService])
 ], ManifestService);
-export { ManifestService };
 //# sourceMappingURL=manifest.service.js.map

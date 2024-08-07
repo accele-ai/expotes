@@ -9,12 +9,39 @@ export declare class ManifestService {
     private readonly db;
     private readonly directiveService;
     constructor(db: DatabaseService, directiveService: DriectiveService);
-    endpoint(meta: ExpoUpdatesV1Dto): Promise<any>;
-    getLatestManifest(runtimeVersion: number): Promise<any>;
+    endpoint(meta: ExpoUpdatesV1Dto): Promise<{
+        type: string;
+        parameters: {
+            commitTime: string;
+        };
+    }>;
+    getLatestManifest(runtimeVersion: number): Promise<{
+        id: string;
+        createdAt: Date;
+        appId: string;
+        isRollbacked: boolean;
+        rollbackedAt: Date;
+        runtimeVersion: string;
+        iosLaunchAssetId: string;
+        androidLaunchAssetId: string;
+        metadata: {
+            [key: string]: string;
+        };
+        extra: {
+            [key: string]: any;
+        };
+    }>;
     getFullManifest(manifestId: string): Promise<void>;
     update(meta: ExpoUpdatesV1Dto, manifest: any): Promise<void>;
-    rollback(meta: ExpoUpdatesV1Dto, manifest: any): Promise<any>;
-    noUpdate(): Promise<any>;
-    createManifest(manifest: InsertManifest, tx?: Database): Promise<any>;
+    rollback(meta: ExpoUpdatesV1Dto, manifest: any): Promise<{
+        type: string;
+        parameters: {
+            commitTime: string;
+        };
+    }>;
+    noUpdate(): Promise<{
+        type: string;
+    }>;
+    createManifest(manifest: InsertManifest, tx?: Database): Promise<import("postgres").RowList<never[]>>;
 }
 export {};

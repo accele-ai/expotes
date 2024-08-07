@@ -5,18 +5,27 @@ import { AssetsModule } from './modules/assets/assets.module';
 import { ManifestModule } from './modules/manifest/manifest.module';
 import { UpdatesModule } from './modules/updates/updates.module';
 import { DatabaseModule } from './processors/database/database.module';
-// import { CacheModule } from '@nestjs/cache-manager';
+import { UserModule } from '@/modules/user/user.module';
+import { CacheModule } from '@/processors/cache/cache.module';
+import { SessionModule } from '@/modules/session/session.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MulterModule.register({
       dest: './uploads',
     }),
-    DatabaseModule,
-    // CacheModule,
 
+    // processors
+    DatabaseModule,
+    CacheModule,
+
+    // BIZ
+    UserModule,
     AssetsModule,
+    SessionModule,
     ManifestModule,
     UpdatesModule,
   ],

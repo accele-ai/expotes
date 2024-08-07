@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,72 +8,77 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { createParamDecorator, BadRequestException, } from '@nestjs/common';
-import { Expose, plainToInstance } from 'class-transformer';
-import { IsNumberString, validate } from 'class-validator';
-import { IsString, IsIn, IsOptional } from 'class-validator';
-export class ExpoUpdatesV1HeadersDto {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ExpoUpdatesV1 = exports.ExpoUpdatesV1Dto = exports.ExpoUpdatesV1QueryDto = exports.ExpoUpdatesV1HeadersDto = void 0;
+const common_1 = require("@nestjs/common");
+const class_transformer_1 = require("class-transformer");
+const class_validator_1 = require("class-validator");
+const class_validator_2 = require("class-validator");
+class ExpoUpdatesV1HeadersDto {
 }
+exports.ExpoUpdatesV1HeadersDto = ExpoUpdatesV1HeadersDto;
 __decorate([
-    IsNumberString(),
-    IsIn(['0', '1'], {
+    (0, class_validator_1.IsNumberString)(),
+    (0, class_validator_2.IsIn)(['0', '1'], {
         message: 'Unsupported protocol version. Expected either 0 or 1.',
     }),
-    Expose({ name: 'expo-protocol-version' }),
+    (0, class_transformer_1.Expose)({ name: 'expo-protocol-version' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1HeadersDto.prototype, "protocolVersion", void 0);
 __decorate([
-    IsString(),
-    IsIn(['ios', 'android'], {
+    (0, class_validator_2.IsString)(),
+    (0, class_validator_2.IsIn)(['ios', 'android'], {
         message: 'Unsupported platform. Expected either ios or android.',
     }),
-    IsOptional(),
-    Expose({ name: 'expo-platform' }),
+    (0, class_validator_2.IsOptional)(),
+    (0, class_transformer_1.Expose)({ name: 'expo-platform' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1HeadersDto.prototype, "platform", void 0);
 __decorate([
-    IsNumberString(),
-    IsOptional(),
-    Expose({ name: 'expo-runtime-version' }),
+    (0, class_validator_1.IsNumberString)(),
+    (0, class_validator_2.IsOptional)(),
+    (0, class_transformer_1.Expose)({ name: 'expo-runtime-version' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1HeadersDto.prototype, "runtimeVersion", void 0);
 __decorate([
-    IsString(),
-    IsOptional(),
-    Expose({ name: 'expo-current-update-id' }),
+    (0, class_validator_2.IsString)(),
+    (0, class_validator_2.IsOptional)(),
+    (0, class_transformer_1.Expose)({ name: 'expo-current-update-id' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1HeadersDto.prototype, "currentUpdateId", void 0);
 __decorate([
-    IsString(),
-    IsOptional(),
-    Expose({ name: 'expo-embedded-update-id' }),
+    (0, class_validator_2.IsString)(),
+    (0, class_validator_2.IsOptional)(),
+    (0, class_transformer_1.Expose)({ name: 'expo-embedded-update-id' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1HeadersDto.prototype, "embeddedUpdateId", void 0);
-export class ExpoUpdatesV1QueryDto {
+class ExpoUpdatesV1QueryDto {
 }
+exports.ExpoUpdatesV1QueryDto = ExpoUpdatesV1QueryDto;
 __decorate([
-    IsString(),
-    IsIn(['ios', 'android'], {
+    (0, class_validator_2.IsString)(),
+    (0, class_validator_2.IsIn)(['ios', 'android'], {
         message: 'Unsupported platform. Expected either ios or android.',
     }),
-    IsOptional(),
+    (0, class_validator_2.IsOptional)(),
     __metadata("design:type", String)
 ], ExpoUpdatesV1QueryDto.prototype, "platform", void 0);
 __decorate([
-    IsString(),
-    IsOptional(),
-    Expose({ name: 'runtime-version' }),
+    (0, class_validator_2.IsString)(),
+    (0, class_validator_2.IsOptional)(),
+    (0, class_transformer_1.Expose)({ name: 'runtime-version' }),
     __metadata("design:type", String)
 ], ExpoUpdatesV1QueryDto.prototype, "runtimeVersion", void 0);
-export class ExpoUpdatesV1Dto {
+class ExpoUpdatesV1Dto {
 }
-export const ExpoUpdatesV1 = createParamDecorator(async (data, ctx) => {
+exports.ExpoUpdatesV1Dto = ExpoUpdatesV1Dto;
+exports.ExpoUpdatesV1 = (0, common_1.createParamDecorator)(async (data, ctx) => {
     const request = ctx.switchToHttp().getRequest();
     const headers = request.headers;
-    const headersDto = plainToInstance(ExpoUpdatesV1HeadersDto, headers);
-    const errors = await validate(headersDto);
+    const headersDto = (0, class_transformer_1.plainToInstance)(ExpoUpdatesV1HeadersDto, headers);
+    const errors = await (0, class_validator_1.validate)(headersDto);
     if (errors.length > 0) {
-        throw new BadRequestException('Invalid headers');
+        throw new common_1.BadRequestException('Invalid headers');
     }
     return {
         protocolVersion: headersDto['expo-protocol-version'],

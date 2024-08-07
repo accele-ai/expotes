@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,10 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
-import { Controller, Get, Query, UsePipes, ValidationPipe, } from '@nestjs/common';
-import { AssetsService } from './assets.service';
-import { AssetsQueryDto } from './assets.dto';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AssetsController = void 0;
+const common_1 = require("@nestjs/common");
+const assets_service_1 = require("./assets.service");
+const assets_dto_1 = require("./assets.dto");
 let AssetsController = class AssetsController {
     constructor(assetsService) {
         this.assetsService = assetsService;
@@ -21,17 +23,17 @@ let AssetsController = class AssetsController {
     getAssets(query) {
     }
 };
+exports.AssetsController = AssetsController;
 __decorate([
-    Get(),
-    UsePipes(new ValidationPipe({ transform: true })),
-    __param(0, Query()),
+    (0, common_1.Get)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof AssetsQueryDto !== "undefined" && AssetsQueryDto) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [assets_dto_1.AssetsQueryDto]),
     __metadata("design:returntype", void 0)
 ], AssetsController.prototype, "getAssets", null);
-AssetsController = __decorate([
-    Controller('assets'),
-    __metadata("design:paramtypes", [typeof (_a = typeof AssetsService !== "undefined" && AssetsService) === "function" ? _a : Object])
+exports.AssetsController = AssetsController = __decorate([
+    (0, common_1.Controller)('assets'),
+    __metadata("design:paramtypes", [assets_service_1.AssetsService])
 ], AssetsController);
-export { AssetsController };
 //# sourceMappingURL=assets.controller.js.map

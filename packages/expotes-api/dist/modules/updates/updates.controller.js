@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,10 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a;
-import { Controller, Post, UploadedFile, UseInterceptors, } from '@nestjs/common';
-import { UpdatesService } from './updates.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdatesController = void 0;
+const common_1 = require("@nestjs/common");
+const updates_service_1 = require("./updates.service");
+const platform_express_1 = require("@nestjs/platform-express");
 let UpdatesController = class UpdatesController {
     constructor(uploadService) {
         this.uploadService = uploadService;
@@ -21,21 +23,21 @@ let UpdatesController = class UpdatesController {
     async uploadFile(file) {
         return this.uploadService.createUpdates({
             appId: '866eebb7-35fc-45b0-b31e-b94a470a2580',
-            meta: { runtimeVersion: 1 },
+            meta: { runtimeVersion: '1' },
         }, file);
     }
 };
+exports.UpdatesController = UpdatesController;
 __decorate([
-    Post(),
-    UseInterceptors(FileInterceptor('file')),
-    __param(0, UploadedFile()),
+    (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UpdatesController.prototype, "uploadFile", null);
-UpdatesController = __decorate([
-    Controller('updates'),
-    __metadata("design:paramtypes", [typeof (_a = typeof UpdatesService !== "undefined" && UpdatesService) === "function" ? _a : Object])
+exports.UpdatesController = UpdatesController = __decorate([
+    (0, common_1.Controller)('updates'),
+    __metadata("design:paramtypes", [updates_service_1.UpdatesService])
 ], UpdatesController);
-export { UpdatesController };
 //# sourceMappingURL=updates.controller.js.map

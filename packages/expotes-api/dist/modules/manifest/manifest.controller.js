@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,10 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b;
-import { Controller, Get } from '@nestjs/common';
-import { ManifestService } from './manifest.service';
-import { ExpoUpdatesV1, ExpoUpdatesV1Dto, } from "../../common/decorators/expo-updates-v1";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ManifestController = void 0;
+const common_1 = require("@nestjs/common");
+const manifest_service_1 = require("./manifest.service");
+const expo_updates_v1_1 = require("../../common/decorators/expo-updates-v1");
 let ManifestController = class ManifestController {
     constructor(manifestService) {
         this.manifestService = manifestService;
@@ -22,16 +24,16 @@ let ManifestController = class ManifestController {
         return this.manifestService.endpoint(meta);
     }
 };
+exports.ManifestController = ManifestController;
 __decorate([
-    Get(),
-    __param(0, ExpoUpdatesV1()),
+    (0, common_1.Get)(),
+    __param(0, (0, expo_updates_v1_1.ExpoUpdatesV1)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [typeof (_b = typeof ExpoUpdatesV1Dto !== "undefined" && ExpoUpdatesV1Dto) === "function" ? _b : Object]),
+    __metadata("design:paramtypes", [expo_updates_v1_1.ExpoUpdatesV1Dto]),
     __metadata("design:returntype", void 0)
 ], ManifestController.prototype, "manifest", null);
-ManifestController = __decorate([
-    Controller('manifest'),
-    __metadata("design:paramtypes", [typeof (_a = typeof ManifestService !== "undefined" && ManifestService) === "function" ? _a : Object])
+exports.ManifestController = ManifestController = __decorate([
+    (0, common_1.Controller)('manifest'),
+    __metadata("design:paramtypes", [manifest_service_1.ManifestService])
 ], ManifestController);
-export { ManifestController };
 //# sourceMappingURL=manifest.controller.js.map

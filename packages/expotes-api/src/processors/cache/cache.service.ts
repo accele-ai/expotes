@@ -2,9 +2,9 @@ import { Cache } from 'cache-manager';
 
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { RedisDelimiter } from '@/constants/cache.constant';
 import { Redis } from 'ioredis';
 
-export const RedisDelimiter = ':';
 // 获取器
 export type TCacheKey = string;
 export type TCacheResult<T> = Promise<T | undefined>;
@@ -37,15 +37,17 @@ export class CacheService {
     return `cache:${key}`;
   }
 
-  public createKey(...parts: (string | number)[]): string {
-    return parts.join(RedisDelimiter);
-  }
-
   public get<T>(key: TCacheKey): TCacheResult<T> {
+    // return this.cache.get(key);
     return this.cache.get(this.getKey(key));
   }
 
   public set(key: TCacheKey, value: any, ttl?: number | undefined) {
+    // return this.cache.set(key, value, ttl || 0);
     return this.cache.set(this.getKey(key), value, ttl || 0);
+  }
+
+  public createCacheKey(...parts: (string | number)[]): string {
+    return parts.join(RedisDelimiter);
   }
 }

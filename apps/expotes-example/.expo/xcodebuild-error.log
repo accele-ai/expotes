@@ -1,0 +1,60 @@
+2024-08-06 15:30:35.265 xcodebuild[26318:165378] DVTCoreDeviceEnabledState: DVTCoreDeviceEnabledState_Enabled set via user default (DVTEnableCoreDevice=enabled)
+2024-08-06 15:30:35.266 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (inserting): added = {(
+    <DVTiOSDevicePlaceholder: 0x7f794e8fd2d0 (Any watchOS Device | undefined_arch)>,
+    <DVTiOSDeviceSimulatorPlaceholder: 0x7f791d9066e0 (Any watchOS Simulator Device | undefined_arch)>,
+    <DVTiOSDeviceSimulatorPlaceholder: 0x7f794e8b6050 (Any iOS Simulator Device | undefined_arch)>,
+    <DVTiPhonePlaceholder: 0x7f791d906aa0 (Any iOS Device | undefined_arch)>,
+    <DVTiOSDeviceSimulatorPlaceholder: 0x7f794e8a9740 (Any tvOS Simulator Device | undefined_arch)>,
+    <DVTiOSDevicePlaceholder: 0x7f791d906950 (Any tvOS Device | undefined_arch)>
+)} removed = (null)
+2024-08-06 15:30:35.268 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (inserting): added = {(
+)} removed = (null)
+2024-08-06 15:30:35.910 xcodebuild[26318:165420]  DTDeviceKit: DTDKRemoteDeviceDataListener thread started. Set iOSDeviceDiscoveryLogLevel to verbose (3) to log notification events
+2024-08-06 15:30:37.437 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+    <DVTiPhoneSimulator: 0x7f791ec46070> {
+		SimDevice: iPhone 14 Plus (295C2C8B-DA51-4B13-9118-D534FF0916BE, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ec75af0> {
+		SimDevice: iPhone SE (3rd generation) (D055A59A-5D46-4F63-8023-A62BB71D58D0, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ed75a70> {
+		SimDevice: iPad Air (5th generation) (CA1092B7-8443-4800-878D-31F8439441A4, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791d9ea090> {
+		SimDevice: iPad Pro (12.9-inch) (6th generation) (66B50868-4A41-4384-8358-4201C2DF56CA, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ecb9c30> {
+		SimDevice: iPhone 14 Pro Max (6C818658-2DFC-42FD-A1BD-A5584992906F, iOS 16.4, Booted)
+},
+    <DVTiPhoneSimulator: 0x7f791d95ea10> {
+		SimDevice: iPad Pro (11-inch) (4th generation) (A7A450FE-1985-4DB8-A225-7DC0A36955F8, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ec09700> {
+		SimDevice: iPhone 14 (CB62BEF0-EF16-4572-9042-6D8EE7C957AF, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ec8a300> {
+		SimDevice: iPhone 14 Pro (4E335640-8004-4087-9CC7-7EEE7D04590C, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791edc2440> {
+		SimDevice: iPad mini (6th generation) (BDAC54EC-23FD-4C08-A054-2F5FB0B7ECE3, iOS 16.4, Shutdown)
+},
+    <DVTiPhoneSimulator: 0x7f791ed77680> {
+		SimDevice: iPad (10th generation) (2CBB6817-8C80-427E-8F41-466D1676585F, iOS 16.4, Shutdown)
+}
+)} removed = {(
+)}
+2024-08-06 15:30:38.036 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+)} removed = {(
+)}
+2024-08-06 15:30:47.681 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+)} removed = {(
+)}
+2024-08-06 15:34:04.929 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+)} removed = {(
+)}
+2024-08-06 15:34:04.930 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+)} removed = {(
+)}
+2024-08-06 15:34:06.075 xcodebuild[26318:165378] [MT] DVTDevice: Adjusting available devices (replacing): added = {(
+)} removed = {(
+)}
