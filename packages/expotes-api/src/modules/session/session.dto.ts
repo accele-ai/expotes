@@ -5,7 +5,7 @@ export interface ISessionPayload {
   sessionId: string;
   email: string;
   createdAt: Date;
-  extra: {
+  extra?: {
     ua: string;
     geo?: string;
     ip: string;

@@ -24,5 +24,5 @@ export enum RedisKeys {
   Dislike = 'dislike',
 }
 
-export const SESSION_COOKIE_NAME = 'FART';
+export const SESSION_COOKIE_NAME = 'JST';
 export const SESSION_DURATION = 30 * 24 * 60 * 60; // 30 days

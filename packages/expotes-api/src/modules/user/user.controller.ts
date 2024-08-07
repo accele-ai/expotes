@@ -1,43 +1,39 @@
-import {Body, Controller, Post, Req} from '@nestjs/common';
-import {UserService} from './user.service';
-import {Request} from 'express';
-import {CreateUserDto, LoginUserDto} from "@/modules/user/user.dto";
-import {SessionResult} from "@/modules/session/session.service";
-import {Auth} from "@/common/decorators/auth.decorator";
-import {Owner} from "@/common/decorators/get-owner-decorator";
-import {ISessionPayload} from "@/modules/session/session.dto";
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { UserService } from './user.service';
 
+import { CreateUserDto, LoginUserDto } from '@/modules/user/user.dto';
+
+import { Public } from '@/common/decorators/auth.decorator';
+import { Owner } from '@/common/decorators/get-owner-decorator';
+import { ISessionPayload } from '@/modules/session/session.dto';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {
-  }
+  constructor(private readonly userService: UserService) {}
 
-  @Post('/create')
-  async create(@Body() dto: CreateUserDto) {
-    return this.userService.create(dto);
-  }
-
+  @Public()
   @Post('/login')
   async login(
     @Body() dto: LoginUserDto,
-    @Req() req: Request
+    @Res({ passthrough: true }) response: Response,
   ) {
-  // ): Promise<SessionResult> {
-    const extra = {
-      ua: req.headers['user-agent'] || '',
-      geo: (req.headers['x-geo'] as string) || '',
-      ip: req.ip,
-    };
-
-    const session = await this.userService.login(dto, extra);
-    // return this.userService.signToken(session);
+    const result = await this.userService.login(dto);
+    return this.userService.signToken(response, result);
   }
 
-  @Auth()
+  @Public()
+  @Post('/register')
+  async register(
+    @Body() dto: CreateUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.userService.register(dto);
+    return this.userService.signToken(response, result);
+  }
+
   @Post('/logout')
   async logout(@Owner() owner: ISessionPayload) {
     return this.userService.logoutOne(owner.userId, owner.sessionId);
   }
-
 }

@@ -11,9 +11,12 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const platform_express_1 = require("@nestjs/platform-express");
 const assets_module_1 = require("./modules/assets/assets.module");
+const manifest_module_1 = require("./modules/manifest/manifest.module");
+const updates_module_1 = require("./modules/updates/updates.module");
 const database_module_1 = require("./processors/database/database.module");
 const user_module_1 = require("./modules/user/user.module");
-const cache_manager_1 = require("@nestjs/cache-manager");
+const cache_module_1 = require("./processors/cache/cache.module");
+const session_module_1 = require("./modules/session/session.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -27,9 +30,12 @@ exports.AppModule = AppModule = __decorate([
                 dest: './uploads',
             }),
             database_module_1.DatabaseModule,
-            cache_manager_1.CacheModule,
+            cache_module_1.CacheModule,
             user_module_1.UserModule,
             assets_module_1.AssetsModule,
+            session_module_1.SessionModule,
+            manifest_module_1.ManifestModule,
+            updates_module_1.UpdatesModule,
         ],
     })
 ], AppModule);

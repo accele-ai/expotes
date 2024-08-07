@@ -18,12 +18,10 @@ const system_config_1 = require("../../constants/system.config");
 const db_1 = require("@expotes/db");
 const drizzle_orm_1 = require("drizzle-orm");
 const session_service_1 = require("../session/session.service");
-const jwe_service_1 = require("../../processors/helper/jwe.service");
 let UserService = class UserService {
-    constructor(db, sessionService, jweService) {
+    constructor(db, sessionService) {
         this.db = db;
         this.sessionService = sessionService;
-        this.jweService = jweService;
     }
     async create(dto) {
         try {
@@ -66,14 +64,6 @@ let UserService = class UserService {
             console.log(error);
         }
     }
-    async signToken(session) {
-        return {
-            value: await this.jweService.encrypt({
-                token: session.value,
-            }),
-            expires: session.expires,
-        };
-    }
     async logoutOne(userId, sessionId) {
         await this.sessionService.revokeOne(userId, sessionId);
     }
@@ -82,7 +72,6 @@ exports.UserService = UserService;
 exports.UserService = UserService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [database_service_1.DatabaseService,
-        session_service_1.SessionService,
-        jwe_service_1.JWEService])
+        session_service_1.SessionService])
 ], UserService);
 //# sourceMappingURL=user.service.js.map
