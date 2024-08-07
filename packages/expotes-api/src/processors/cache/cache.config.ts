@@ -14,7 +14,6 @@ export class CacheConfigService implements CacheOptionsFactory {
     const redisOptions = parseRedisUrl(
       'redis://localhost:6379',
     )[0] satisfies RedisOptions;
-
     return {
       store: redisStore,
       ttl: 60 * 1000, // millisecond

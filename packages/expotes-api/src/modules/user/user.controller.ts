@@ -22,7 +22,8 @@ export class UserController {
   async login(
     @Body() dto: LoginUserDto,
     @Req() req: Request
-  ): Promise<SessionResult> {
+  ) {
+  // ): Promise<SessionResult> {
     const extra = {
       ua: req.headers['user-agent'] || '',
       geo: (req.headers['x-geo'] as string) || '',
@@ -30,7 +31,7 @@ export class UserController {
     };
 
     const session = await this.userService.login(dto, extra);
-    return this.userService.signToken(session);
+    // return this.userService.signToken(session);
   }
 
   @Auth()

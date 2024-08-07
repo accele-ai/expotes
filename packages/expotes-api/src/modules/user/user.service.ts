@@ -7,7 +7,6 @@ import {
 import {
   CreateUserDto,
   ExtraInfo,
-  IUserInsert,
   LoginUserDto,
 } from '@/modules/user/user.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -19,15 +18,13 @@ import {
   SessionResult,
   SessionService,
 } from '@/modules/session/session.service';
-import { JWEService } from '@/processors/helper/jwe.service';
-import { TokenPayload } from '@/common/guards/auth.guard';
+
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly db: DatabaseService,
     private readonly sessionService: SessionService,
-    private readonly jweService: JWEService<TokenPayload>,
   ) {}
 
   async create(dto: CreateUserDto) {
@@ -76,15 +73,6 @@ export class UserService {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  async signToken(session: SessionResult): Promise<SessionResult> {
-    return {
-      value: await this.jweService.encrypt({
-        token: session.value,
-      }),
-      expires: session.expires,
-    };
   }
 
   async logoutOne(userId: string, sessionId: string) {

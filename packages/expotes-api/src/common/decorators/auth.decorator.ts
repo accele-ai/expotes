@@ -1,11 +1,11 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
 
 import { AuthGuard } from '../guards/auth.guard';
-import { ApiCookieAuth } from '@nestjs/swagger';
+// import { ApiCookieAuth } from '@nestjs/swagger';
 
 import { SetMetadata } from '@nestjs/common';
 
-export const OptionalAuth = () => SetMetadata('isOptionalAuth', true);
+export const Public = () => SetMetadata('isPublicAuth', true);
 
 /**
  * 配置认证装饰器
@@ -19,9 +19,9 @@ export function Auth(options: { optional?: boolean } = {}) {
   ];
   // 如果配置了可选认证，则添加 OptionalAuth 装饰器
   if (options.optional) {
-    decorators.push(OptionalAuth());
+    decorators.push(Public());
   }
   // 返回一个高阶函数，该函数接受目标类、属性键和描述符作为参数
-  return applyDecorators(...decorators, ApiCookieAuth('session'));
+  return applyDecorators(...decorators);
+  // return applyDecorators(...decorators, ApiCookieAuth('session'));
 }
-
