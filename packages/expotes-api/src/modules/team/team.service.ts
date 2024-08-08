@@ -1,8 +1,8 @@
 import { teamsTable, usersToTeams } from '@db/schema';
 import { Injectable } from '@nestjs/common';
-import { CreateTeamDto, UpdateTeamDto } from './team.dto';
+import { CreateTeamDto, TeamPageQueryDto, UpdateTeamDto } from './team.dto';
 import { DatabaseService } from '@/processors/database/database.service';
-import { eq } from 'drizzle-orm';
+import { desc, eq, and, lt } from 'drizzle-orm';
 import { TeamError } from '@/common/exceptions/team.exception';
 import { ErrorConstant } from '@/constants/exception.constant';
 
@@ -92,5 +92,38 @@ export class TeamService {
       }
       return team;
     });
+  }
+
+  /**
+   * Retrieves paginated team data based on query conditions.
+   *
+   * This function fetches team data according to the provided pagination query parameters,
+   * which include page size, cursor for pagination,
+   * and filter criteria such as team handle and creation date.
+   * It supports forward pagination using the cursor.
+   *
+   * @param {TeamPageQueryDto} dto - The pagination query parameter object, comprising page size, cursor, and filtering conditions.
+   * @returns {{ items: Team[]; nextCursor: string | null }} - An object containing the paginated data and the next cursor.
+   */
+  pageQuery({ size = 10, cursor, ...dto }: TeamPageQueryDto) {
+    const cursorCondition = cursor ? lt(teamsTable.id, cursor) : undefined;
+
+    const result = this.db
+      .select()
+      .from(teamsTable)
+      .where(
+        and(
+          eq(teamsTable.handle, dto.handle),
+          eq(teamsTable.createdAt, dto.createdAt),
+          cursorCondition,
+        ),
+      )
+      .limit(size)
+      .orderBy(desc(teamsTable.id));
+
+    const items = Array.isArray(result) ? result : [];
+    const nextCursor = items.length > 0 ? items[items.length - 1].id : null;
+
+    return { items, nextCursor };
   }
 }
