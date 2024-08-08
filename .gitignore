@@ -1,6 +1,6 @@
 .turbo
 dist
 node_modules
-apps/ios/**
-apps/android/**
+apps/**/ios
+apps/**/android
 
