@@ -13,6 +13,6 @@ export interface UpdateTeamDto extends ITeamInsert {
 }
 
 export interface TeamPageQueryDto extends CursorPagerDto<string> {
-  handle: string;
-  createdAt: Date;
+  handle?: string;
+  createdAt?: Date;
 }

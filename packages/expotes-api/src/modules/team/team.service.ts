@@ -2,7 +2,7 @@ import { teamsTable, usersToTeams } from '@db/schema';
 import { Injectable } from '@nestjs/common';
 import { CreateTeamDto, TeamPageQueryDto, UpdateTeamDto } from './team.dto';
 import { DatabaseService } from '@/processors/database/database.service';
-import { desc, eq, and, lt } from 'drizzle-orm';
+import { desc, eq, and, lt, SQLWrapper } from 'drizzle-orm';
 import { TeamError } from '@/common/exceptions/team.exception';
 import { ErrorConstant } from '@/constants/exception.constant';
 
@@ -107,17 +107,20 @@ export class TeamService {
    */
   pageQuery({ size = 10, cursor, ...dto }: TeamPageQueryDto) {
     const cursorCondition = cursor ? lt(teamsTable.id, cursor) : undefined;
+    const conditions: SQLWrapper[] = [];
+
+    if (dto.handle !== undefined) {
+      conditions.push(eq(teamsTable.handle, dto.handle));
+    }
+
+    if (dto.createdAt !== undefined) {
+      conditions.push(eq(teamsTable.createdAt, dto.createdAt));
+    }
 
     const result = this.db
       .select()
       .from(teamsTable)
-      .where(
-        and(
-          eq(teamsTable.handle, dto.handle),
-          eq(teamsTable.createdAt, dto.createdAt),
-          cursorCondition,
-        ),
-      )
+      .where(and(...conditions, cursorCondition))
       .limit(size)
       .orderBy(desc(teamsTable.id));
 
