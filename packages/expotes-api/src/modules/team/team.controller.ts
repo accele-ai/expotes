@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto, UpdateTeamDto } from './team.dto';
+import { CreateTeamDto, TeamPageQueryDto, UpdateTeamDto } from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
 
 @Controller('team')
@@ -23,5 +23,10 @@ export class TeamController {
   @Post('/update')
   async update(@Body() dto: UpdateTeamDto) {
     return this.teamService.update(dto);
+  }
+
+  @Get('/page-query')
+  async pageQuery(@Body() dto: TeamPageQueryDto) {
+    return this.teamService.pageQuery(dto);
   }
 }
