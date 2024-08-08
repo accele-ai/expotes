@@ -1,7 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { CreateTeamDto, TeamPageQueryDto, UpdateTeamDto } from './team.dto';
+import {
+  Add2TeamDTO,
+  CreateTeamDto,
+  TeamPageQueryDto,
+  UpdateTeamDto,
+} from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
+import { AddUser2TeamDTO } from '../user/user.dto';
 
 @Controller('team')
 export class TeamController {
@@ -28,5 +34,10 @@ export class TeamController {
   @Get('/page-query')
   async pageQuery(@Body() dto: TeamPageQueryDto) {
     return this.teamService.pageQuery(dto);
+  }
+
+  @Post('/add-member')
+  async addMember(@Body() dto: Add2TeamDTO) {
+    return this.teamService.addMember(dto);
   }
 }

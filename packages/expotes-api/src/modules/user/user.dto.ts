@@ -12,13 +12,9 @@ export interface CreateUserDto extends BasicUserDto {}
 
 export interface LoginUserDto extends BasicUserDto {}
 
-export interface ExtraInfo {
-  ua: string;
-  geo?: string;
-  ip: string;
-}
-
 export interface UpdateTeamUserDTO extends IUser2TeamsInsert {
   role: 'admin' | 'user';
   isSuspended: boolean;
 }
+
+export interface AddUser2TeamDTO extends IUser2TeamsInsert {}

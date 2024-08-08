@@ -1,6 +1,11 @@
-import { teamsTable, usersToTeams } from '@db/schema';
+import { teamsTable, usersTable, usersToTeams } from '@db/schema';
 import { Injectable } from '@nestjs/common';
-import { CreateTeamDto, TeamPageQueryDto, UpdateTeamDto } from './team.dto';
+import {
+  Add2TeamDTO,
+  CreateTeamDto,
+  TeamPageQueryDto,
+  UpdateTeamDto,
+} from './team.dto';
 import { DatabaseService } from '@/processors/database/database.service';
 import { desc, eq, and, lt, SQLWrapper } from 'drizzle-orm';
 import { TeamError } from '@/common/exceptions/team.exception';
@@ -128,5 +133,41 @@ export class TeamService {
     const nextCursor = items.length > 0 ? items[items.length - 1].id : null;
 
     return { items, nextCursor };
+  }
+
+  /**
+   * Asynchronously adds a member to a team.
+   *
+   * This function first verifies the existence of each user and team in the database, and then adds the user to the team through a database transaction.
+   * It mainly solves the problem of the relationship between users and teams, ensuring that each user and team involved are valid, and establishing a corresponding relationship between them.
+   *
+   * @param dto The data transfer object containing information about users to be added to the team, following the Add2TeamDTO format.
+   * @throws {TeamError} Throws a TeamError if a user or team does not exist.
+   */
+  async addMember(dto: Add2TeamDTO) {
+    // Verify the existence of each user and team.
+    const checks = dto.users.map(async (user) => {
+      const [u, t] = await Promise.all([
+        this.db.query.usersTable.findFirst({
+          where: eq(usersTable.id, user.userId),
+        }),
+        this.db.query.teamsTable.findFirst({
+          where: eq(teamsTable.id, user.teamId),
+        }),
+      ]);
+
+      if (!u) throw new TeamError(ErrorConstant.USER_NOT_FOUND);
+      if (!t) throw new TeamError(ErrorConstant.TEAM_NOT_FOUND);
+    });
+
+    await Promise.all(checks);
+
+    // Use a database transaction to add users to teams.
+    return this.db.transaction(async (tx) => {
+      const insertPromises = dto.users.map((user) =>
+        tx.insert(usersToTeams).values(user),
+      );
+      await Promise.all(insertPromises);
+    });
   }
 }
