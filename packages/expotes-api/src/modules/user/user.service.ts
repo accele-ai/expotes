@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, LoginUserDto } from '@/modules/user/user.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { SALT_ROUNDS } from '@/constants/system.config';
 import { usersTable } from '@db/index';
 import { eq } from 'drizzle-orm';
@@ -53,11 +53,9 @@ export class UserService {
   }
 
   async login(dto: LoginUserDto) {
-    const hashedPassword = await hash(dto.password, SALT_ROUNDS);
-
     const user = await this.findOne(dto.email);
 
-    if (!(user && user.password === hashedPassword)) {
+    if (!(user && (await compare(dto.password, user.password)))) {
       throw new UnauthorizedException('Invalid email or password');
     }
 

@@ -2,14 +2,15 @@ import { usersTable } from '@db/index';
 
 export type IUserInsert = typeof usersTable.$inferInsert;
 
-export interface BasicUserDto {
+export class CreateUserDto {
   email: IUserInsert['email'];
   password: IUserInsert['password'];
 }
 
-export interface CreateUserDto extends BasicUserDto {}
-
-export interface LoginUserDto extends BasicUserDto {}
+export class LoginUserDto {
+  email: IUserInsert['email'];
+  password: IUserInsert['password'];
+}
 
 export interface ExtraInfo {
   ua: string;

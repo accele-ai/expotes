@@ -1,5 +1,5 @@
 import {
-  Controller,
+  Body,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -7,17 +7,22 @@ import {
 import { UpdatesService } from './updates.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+import { CreateUpdatesDto } from './updates.dto';
+import { ApiController } from '@/common/decorators/api-controller.decorator';
 
-@Controller('updates')
+@ApiController('updates')
 export class UpdatesController {
   constructor(private readonly uploadService: UpdatesService) {}
 
-  @Post()
+  @Post('create')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async create(
+    @Body() body: CreateUpdatesDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return this.uploadService.createUpdates(
       {
-        appId: '866eebb7-35fc-45b0-b31e-b94a470a2580',
+        appId: body.appId,
         meta: { runtimeVersion: '1' },
       },
       file,

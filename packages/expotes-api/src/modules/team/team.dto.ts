@@ -2,6 +2,7 @@ import { teamsTable } from '@db/schema';
 
 type ITeamInsert = typeof teamsTable.$inferInsert;
 
-export interface CreateTeamDto extends ITeamInsert {
+export class CreateTeamDto {
   userId: string;
+  handle: ITeamInsert['handle'];
 }

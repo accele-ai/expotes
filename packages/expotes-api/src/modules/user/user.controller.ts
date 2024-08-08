@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Post, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 
 import { CreateUserDto, LoginUserDto } from '@/modules/user/user.dto';
@@ -7,8 +7,9 @@ import { Public } from '@/common/decorators/auth.decorator';
 import { Owner } from '@/common/decorators/get-owner-decorator';
 import { ISessionPayload } from '@/modules/session/session.dto';
 import { Response } from 'express';
+import { ApiController } from '@/common/decorators/api-controller.decorator';
 
-@Controller('user')
+@ApiController('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -1,11 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Get } from '@nestjs/common';
 import { ManifestService } from './manifest.service';
 import {
   ExpoUpdatesV1,
   ExpoUpdatesV1Dto,
 } from 'src/common/decorators/expo-updates-v1';
+import { ApiController } from '@/common/decorators/api-controller.decorator';
 
-@Controller('manifest')
+@ApiController('manifest')
 export class ManifestController {
   constructor(private readonly manifestService: ManifestService) {}
 

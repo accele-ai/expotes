@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Post } from '@nestjs/common';
 import { TeamService } from './team.service';
 import { CreateTeamDto } from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
+import { ApiController } from '@/common/decorators/api-controller.decorator';
 
-@Controller('team')
+@ApiController('team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
