@@ -75,9 +75,9 @@ export const ExpoUpdatesV1 = createParamDecorator(
     }
 
     return {
-      protocolVersion: headersDto['expo-protocol-version'],
-      platform: headers['expo-platform'],
-      runtimeVersion: headers['expo-runtime-version'],
+      protocolVersion: headersDto.protocolVersion,
+      platform: headers.platform,
+      runtimeVersion: headers.runtimeVersion,
     };
   },
 );

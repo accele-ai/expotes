@@ -2,10 +2,12 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import fs from 'fs/promises';
 import * as Minio from 'minio';
 
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
 interface UploadProps {
   key: string;
   data: Buffer;
-  bucket?: string;
+  bucket: string;
   extras?: Partial<{
     ContentType: string;
   }>;
@@ -52,9 +54,10 @@ export class StorageService {
 
   async uploadLocalFile({
     path,
+    bucket,
     ...props
-  }: Omit<UploadProps, 'data'> & { path: string }) {
+  }: Optional<Omit<UploadProps, 'data'>, 'bucket'> & { path: string }) {
     const data = await fs.readFile(path);
-    await this.upload({ data, ...props });
+    await this.upload({ data, bucket: bucket ?? 'expotes', ...props });
   }
 }

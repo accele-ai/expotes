@@ -1,9 +1,9 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { Injectable } from '@nestjs/common';
+import { S3Client } from '@aws-sdk/client-s3';
 import AdmZip from 'adm-zip';
 import * as fs from 'fs';
 import * as path from 'path';
-import { assetsTable, manifestsTable } from '@expotes/db/schema';
+import { manifestsTable } from '@db/schema';
 import { FileMetadata } from './updates.interface';
 import { v7 as uuidv7 } from 'uuid';
 import {
@@ -155,20 +155,25 @@ export class UpdatesService {
               tx,
             ),
           );
+
           assetsPromises.push(
-            ...fileMetadata.ios.assets.map((asset) =>
-              this.createAsset(
+            ...fileMetadata.ios.assets.map((asset) => {
+              const contentType = mime.getType(asset.ext);
+              if (!contentType) {
+                throw new Error(`Unsupported file type: ${asset.ext}`);
+              }
+              return this.createAsset(
                 {
                   manifestId,
                   runtimeVersion: meta.runtimeVersion,
-                  contentType: mime.getType(asset.ext),
+                  contentType: contentType,
                   fileExtension: `.${asset.ext}`,
                   fileName: asset.path,
                   localPath: path.join(extractPath, asset.path),
                 },
                 tx,
-              ),
-            ),
+              );
+            }),
           );
         }
         const androidLaunchAssetId = fileMetadata.android ? uuidv7() : null;

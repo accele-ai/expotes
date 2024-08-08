@@ -1,4 +1,4 @@
-import { teamsTable, usersToTeams } from '@expotes/db/schema';
+import { teamsTable, usersToTeams } from '@db/schema';
 import { Injectable } from '@nestjs/common';
 import { CreateTeamDto } from './team.dto';
 import { DatabaseService } from '@/processors/database/database.service';

@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import * as schema from '@expotes/db/schema';
+import * as schema from '@db/schema';
 
 type DrizzleFn = typeof drizzle<typeof schema>;
 
@@ -20,7 +20,7 @@ export class DatabaseService
   private queryClient: ReturnType<typeof postgres>;
 
   constructor() {
-    const dbUrl = process.env.DATABASE_URL;
+    const dbUrl = process.env.DATABASE_URL!;
     const queryClient = postgres(dbUrl);
     super(queryClient, { schema });
     this.dbUrl = dbUrl;

@@ -1,4 +1,4 @@
-import { assetsTable, manifestsTable } from '@expotes/db/schema';
+import { assetsTable, manifestsTable } from '@db/schema';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { desc, eq } from 'drizzle-orm';
 import {

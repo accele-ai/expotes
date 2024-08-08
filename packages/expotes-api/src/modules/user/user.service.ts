@@ -8,7 +8,7 @@ import { CreateUserDto, LoginUserDto } from '@/modules/user/user.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { hash } from 'bcrypt';
 import { SALT_ROUNDS } from '@/constants/system.config';
-import { usersTable } from '@expotes/db';
+import { usersTable } from '@db/index';
 import { eq } from 'drizzle-orm';
 import {
   SessionResult,
@@ -42,6 +42,8 @@ export class UserService {
     response: Response,
     data: SessionResult,
   ): Promise<SessionResult> {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     response.cookie(SESSION_COOKIE_NAME, data.value, {
       expires: new Date(data.expires),
       httpOnly: true,

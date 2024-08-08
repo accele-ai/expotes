@@ -1,4 +1,4 @@
-import { teamsTable } from '@expotes/db/schema';
+import { teamsTable } from '@db/schema';
 
 type ITeamInsert = typeof teamsTable.$inferInsert;
 

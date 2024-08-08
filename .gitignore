@@ -1,4 +1,6 @@
+.turbo
+dist
 node_modules
 apps/ios/**
 apps/android/**
-**/dist/**/*
+
