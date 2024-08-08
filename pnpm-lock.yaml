@@ -308,22 +308,6 @@ importers:
         specifier: ^5.3.4
         version: 5.3.5(@types/node@20.14.14)(sass@1.77.8)(terser@5.31.3)
 
-  packages/expotes-db:
-    dependencies:
-      drizzle-orm:
-        specifier: ^0.32.1
-        version: 0.32.1(@types/react@18.3.3)(postgres@3.4.4)(react@18.3.1)
-    devDependencies:
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
-      drizzle-kit:
-        specifier: ^0.23.1
-        version: 0.23.1
-      typescript:
-        specifier: ^5.5.4
-        version: 5.5.4
-
 packages:
 
   '@alloc/quick-lru@5.2.0':
@@ -4176,10 +4160,6 @@ packages:
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
-
-  drizzle-kit@0.23.1:
-    resolution: {integrity: sha512-posGQhj8/K4S4CPhk7BO9+IcpNdIh96t0DvcAr/NvMKhPhe5D0MELzmpq9R2MpmSP3fd+Z3upwidtetrw7xnjg==}
-    hasBin: true
 
   drizzle-kit@0.23.2:
     resolution: {integrity: sha512-NWkQ7GD2OTbQ7HzcjsaCOf3n0tlFPSEAF38fvDpwDj8jRbGWGFtN2cD8I8wp4lU+5Os/oyP2xycTKGLHdPipUw==}
@@ -8192,7 +8172,7 @@ snapshots:
       prettier-package-json: 2.8.0
       prettier-plugin-autocorrect: 0.4.1(prettier@3.3.3)
       prettier-plugin-sh: 0.14.0(prettier@3.3.3)
-      prettier-plugin-tailwindcss: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.3))(prettier@3.3.3)
+      prettier-plugin-tailwindcss: 0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@2.8.8))(prettier@3.3.3)
     transitivePeerDependencies:
       - '@prettier/plugin-pug'
       - '@shopify/prettier-plugin-liquid'
@@ -12279,15 +12259,6 @@ snapshots:
 
   dotenv@16.4.5: {}
 
-  drizzle-kit@0.23.1:
-    dependencies:
-      '@drizzle-team/brocli': 0.8.2
-      '@esbuild-kit/esm-loader': 2.6.5
-      esbuild: 0.19.12
-      esbuild-register: 3.6.0(esbuild@0.19.12)
-    transitivePeerDependencies:
-      - supports-color
-
   drizzle-kit@0.23.2:
     dependencies:
       '@drizzle-team/brocli': 0.8.2
@@ -14546,7 +14517,7 @@ snapshots:
       prettier: 3.3.3
       sh-syntax: 0.4.2
 
-  prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.3.3))(prettier@3.3.3):
+  prettier-plugin-tailwindcss@0.6.5(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@2.8.8))(prettier@3.3.3):
     dependencies:
       prettier: 3.3.3
     optionalDependencies:

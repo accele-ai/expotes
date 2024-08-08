@@ -8,6 +8,7 @@ import { DatabaseModule } from './processors/database/database.module';
 import { UserModule } from '@/modules/user/user.module';
 import { CacheModule } from '@/processors/cache/cache.module';
 import { SessionModule } from '@/modules/session/session.module';
+import { TeamModule } from './modules/team/team.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SessionModule } from '@/modules/session/session.module';
 
     // BIZ
     UserModule,
+    TeamModule,
     AssetsModule,
     SessionModule,
     ManifestModule,
