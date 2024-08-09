@@ -1,4 +1,4 @@
 packages:
-  - '!apps/expotes-example'
-  - 'apps/**/*'
-  - 'packages/**/*'
+  - 'apps/**'
+  - '!apps/expotes-example/**'
+  - 'packages/**'
