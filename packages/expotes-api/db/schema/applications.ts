@@ -14,8 +14,7 @@ export const applicationsTable = pgTable('applications', {
     .references(() => teamsTable.id)
     .notNull(),
   name: varchar('name').notNull(),
-  DataHandler: varchar('name').notNull(),
-
+  
   createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 });
 

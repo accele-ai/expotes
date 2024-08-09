@@ -12,8 +12,9 @@ import {
 } from 'src/processors/database/database.service';
 import { ManifestService } from '../manifest/manifest.service';
 import { AssetsService } from '../assets/assets.service';
-import { StorageService } from './storage.services';
+import { StorageService } from '../../processors/helper/storage.services';
 import { eq } from 'drizzle-orm';
+import { createHash, getBase64URLEncoding } from '@/shared/utils/crypto.util';
 // import mime from 'mime';
 
 @Injectable()
@@ -65,13 +66,18 @@ export class UpdatesService {
     tx?: Database,
   ) {
     const s3Path = this.createAssetS3Key(runtimeVersion, manifestId, fileName);
-    await this.storageService.uploadLocalFile({
+
+    const fileBuffer = await fs.promises.readFile(localPath);
+
+    await this.storageService.uploadBuffer({
       key: s3Path,
-      path: localPath,
+      buffer: fileBuffer,
     });
+
     await this.assetsService.createAsset(
       {
         id: assetId ?? uuidv7(),
+        hash: getBase64URLEncoding(createHash(fileBuffer, 'sha256', 'base64')),
         path: s3Path,
         manifestId,
         contentType,
@@ -115,10 +121,10 @@ export class UpdatesService {
       fs.readFileSync(metadataPath, 'utf8'),
     );
 
-    const expoConfigPath = path.join(extractPath, 'expoConfig.json');
-    const expoConfig = fs.existsSync(metadataPath)
-      ? JSON.parse(fs.readFileSync(expoConfigPath, 'utf8'))
-      : undefined;
+    // const expoConfigPath = path.join(extractPath, 'expoConfig.json');
+    // const expoConfig = fs.existsSync(metadataPath)
+    //   ? JSON.parse(fs.readFileSync(expoConfigPath, 'utf8'))
+    //   : undefined;
 
     try {
       const fileMetadata = metadata.fileMetadata;
@@ -128,9 +134,9 @@ export class UpdatesService {
           appId,
           runtimeVersion: meta.runtimeVersion,
           createdAt: new Date(),
-          extra: {
-            expoClient: expoConfig,
-          },
+          // extra: {
+          //   expoClient: expoConfig,
+          // },
         });
 
         const iosLaunchAssetId = fileMetadata.ios ? uuidv7() : null;
@@ -211,7 +217,7 @@ export class UpdatesService {
       });
 
       // 删除上传的ZIP文件（可选）
-      fs.unlinkSync(extractPath);
+      // fs.unlinkSync(extractPath);
 
       return manifest;
     } catch (e) {

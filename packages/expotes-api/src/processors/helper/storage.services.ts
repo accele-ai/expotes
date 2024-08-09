@@ -52,6 +52,7 @@ export class StorageService {
     }
   }
 
+  
   async uploadLocalFile({
     path,
     bucket,
@@ -59,5 +60,25 @@ export class StorageService {
   }: Optional<Omit<UploadProps, 'data'>, 'bucket'> & { path: string }) {
     const data = await fs.readFile(path);
     await this.upload({ data, bucket: bucket ?? 'expotes', ...props });
+  }
+
+  async uploadBuffer({
+    buffer,
+    bucket,
+    ...props
+  }: Optional<Omit<UploadProps, 'data'>, 'bucket'> & { buffer: Buffer }) {
+    await this.upload({ data: buffer, bucket: bucket ?? 'expotes', ...props });
+  }
+
+  async signUrl({
+    key,
+    bucket = 'expotes',
+    expiry = 60 * 60 * 24,
+  }: {
+    key: string;
+    bucket?: string;
+    expiry?: number;
+  }) {
+    return this.minio.presignedGetObject(bucket, key, expiry);
   }
 }

@@ -1,9 +1,4 @@
-import {
-  Body,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UpdatesService } from './updates.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';

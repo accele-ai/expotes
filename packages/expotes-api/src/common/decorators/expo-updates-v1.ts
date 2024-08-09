@@ -57,7 +57,7 @@ export class ExpoUpdatesV1QueryDto {
 export class ExpoUpdatesV1Dto {
   protocolVersion: 0 | 1;
   platform: 'ios' | 'android';
-  runtimeVersion: number;
+  runtimeVersion: string;
   currentUpdateId: string;
   embeddedUpdateId?: string;
 }
@@ -76,8 +76,8 @@ export const ExpoUpdatesV1 = createParamDecorator(
 
     return {
       protocolVersion: headersDto.protocolVersion,
-      platform: headers.platform,
-      runtimeVersion: headers.runtimeVersion,
+      platform: headersDto.platform,
+      runtimeVersion: headersDto.runtimeVersion,
     };
   },
 );

@@ -1,0 +1,17 @@
+meta {
+  name: get
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base}}/manifest
+  body: none
+  auth: none
+}
+
+headers {
+  expo-platform: ios
+  expo-runtime-version: 1
+  expo-protocol-version: 1
+}

@@ -7,47 +7,47 @@ import {
   varchar,
   timestamp,
   AnyPgColumn,
-} from "drizzle-orm/pg-core";
-import { applicationsTable } from "./applications";
-import { AnyColumn, relations } from "drizzle-orm";
-import { assetsTable } from "./assets";
+} from 'drizzle-orm/pg-core';
+import { applicationsTable } from './applications';
+import { relations } from 'drizzle-orm';
+import { assetsTable } from './assets';
 
-export const manifestsTable = pgTable("manifests", {
+export const manifestsTable = pgTable('manifests', {
   /* The ID MUST uniquely specify the manifest and MUST be a UUID. */
-  id: uuid("id").primaryKey(),
-  appId: uuid("app_id")
+  id: uuid('id').primaryKey(),
+  appId: uuid('app_id')
     .references(() => applicationsTable.id)
     .notNull(),
-  isRollbacked: boolean("is_rollback").notNull().default(false),
-  rollbackedAt: timestamp("rollbacked_at"),
+  isRollbacked: boolean('is_rollback').notNull().default(false),
+  rollbackedAt: timestamp('rollbacked_at'),
   /* Can be any string defined by the developer. 
   It stipulates what native code setup is required to run the associated update. */
-  runtimeVersion: varchar("runtime_version").notNull(),
+  runtimeVersion: varchar('runtime_version').notNull(),
   /* Id of a special asset that is the entry point of the application code. 
   The fileExtension field will be ignored for this asset and SHOULD be omitted. */
-  iosLaunchAssetId: uuid("ios_launch_asset_id").references(
-    (): AnyPgColumn => assetsTable.id
+  iosLaunchAssetId: uuid('ios_launch_asset_id').references(
+    (): AnyPgColumn => assetsTable.id,
   ),
   // .notNull(),
-  androidLaunchAssetId: uuid("android_launch_asset_id").references(
-    (): AnyPgColumn => assetsTable.id
+  androidLaunchAssetId: uuid('android_launch_asset_id').references(
+    (): AnyPgColumn => assetsTable.id,
   ),
   // .notNull(),
   /* The metadata associated with an update. 
   It is a string-valued dictionary.
   The server MAY send back anything it wishes to be used for filtering the updates. 
   The metadata MUST pass the filter defined in the accompanying expo-manifest-filters header. */
-  metadata: jsonb("metadata")
+  metadata: jsonb('metadata')
     .$type<{ [key: string]: string }>()
     .notNull()
     .default({}),
   /* For storage of optional "extra" information such as third-party configuration. 
   For example, if the update is hosted on Expo Application Services (EAS), the EAS project ID may be included: */
-  extra: jsonb("extra").$type<{ [key: string]: any }>().notNull().default({}),
+  extra: jsonb('extra').$type<{ [key: string]: any }>().notNull().default({}),
   /* The date and time at which the update was created is essential 
     as the client library selects the most recent update (subject to any constraints supplied by the expo-manifest-filters header). 
   The datetime should be formatted according to ISO 8601. */
-  createdAt: timestamp("created_at", { mode: "date" }).notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
 });
 
 export const manifestsRelation = relations(manifestsTable, ({ one, many }) => ({

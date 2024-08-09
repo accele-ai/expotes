@@ -6,7 +6,7 @@ import {
   DatabaseService,
 } from 'src/processors/database/database.service';
 import { ManifestService } from '../manifest/manifest.service';
-import { StorageService } from '../updates/storage.services';
+import { StorageService } from '../../processors/helper/storage.services';
 
 type InsertAsset = typeof assetsTable.$inferInsert;
 
@@ -17,7 +17,7 @@ export class AssetsService {
     private readonly manifestService: ManifestService,
   ) {}
 
-  async getLatestBundlePath(runtimeVersion: number, assetName: string) {
+  async getLatestBundlePath(runtimeVersion: string, assetName: string) {
     const manifests = this.manifestService.getLatestManifest(runtimeVersion);
 
     if (!manifests) {
