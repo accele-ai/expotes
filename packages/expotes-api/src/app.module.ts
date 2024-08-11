@@ -12,6 +12,7 @@ import { SessionModule } from '@/modules/session/session.module';
 import { TeamModule } from './modules/team/team.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuthGuard } from './common/guards/auth.guard';
     SessionModule,
 
     // BIZ
+    AuthModule,
     UserModule,
     TeamModule,
     ApplicationModule,

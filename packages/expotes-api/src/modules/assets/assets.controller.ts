@@ -1,21 +1,28 @@
 import {
   Controller,
   Get,
+  Param,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AssetsService } from './assets.service';
-import { AssetsQueryDto } from './assets.dto';
 import { ApiController } from '@/common/decorators/api-controller.decorator';
+import {
+  ExpoUpdatesV1,
+  ExpoUpdatesV1Dto,
+} from '@/common/decorators/expo-updates-v1';
 
 @ApiController('assets')
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
-  @Get()
+  @Get(':assetId')
   @UsePipes(new ValidationPipe({ transform: true }))
-  getAssets(@Query() query: AssetsQueryDto) {
-    // return this.assetsService.getAssets();
+  getAssets(
+    @Param('assetId') assetId: string,
+    @ExpoUpdatesV1() meta: ExpoUpdatesV1Dto,
+  ) {
+    // return this.assetsService.getAsset(meta, assetId);
   }
 }

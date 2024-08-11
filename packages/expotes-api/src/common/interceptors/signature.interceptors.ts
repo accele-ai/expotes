@@ -78,6 +78,7 @@ export class SignatureInterceptor implements NestInterceptor {
         }
 
         response.status(200);
+        // set response headers to match standard: https://docs.expo.dev/technical-specs/expo-updates-1/#common-response-headers
         response.setHeader('expo-protocol-version', 1);
         response.setHeader('expo-sfv-version', 0);
         response.setHeader('cache-control', 'private, max-age=0');

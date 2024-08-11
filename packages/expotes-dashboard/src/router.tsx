@@ -1,5 +1,5 @@
-import { Link, Route, Switch } from "wouter";
-import Login from "./pages/signup.tsx";
+import { Route, Switch } from "wouter";
+import Login from "./pages/login.tsx";
 import SidebarLayout from "./components/Layout/SidebarLayout";
 import Signup from "./pages/signup.tsx";
 

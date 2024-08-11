@@ -141,6 +141,9 @@ importers:
       adm-zip:
         specifier: ^0.5.14
         version: 0.5.14
+      arctic:
+        specifier: ^1.9.2
+        version: 1.9.2
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -4663,6 +4666,9 @@ packages:
 
   aproba@2.0.0:
     resolution: {integrity: sha512-lYe4Gx7QT+MKGbDsA+Z+he/Wtef0BiwDOlK/XkBrdfsh9J/jPPXbX0tE9x9cl27Tmu5gg3QUbUrQYa/y+KOHPQ==}
+
+  arctic@1.9.2:
+    resolution: {integrity: sha512-VTnGpYx+ypboJdNrWnK17WeD7zN/xSCHnpecd5QYsBfVZde/5i+7DJ1wrf/ioSDMiEjagXmyNWAE3V2C9f1hNg==}
 
   are-we-there-yet@2.0.0:
     resolution: {integrity: sha512-Ci/qENmwHnsYo9xKIcUJN5LeDKdJ6R1Z1j9V/J5wyq8nh/mYPEpIKJbBZXtZjG04HiK7zV/p6Vs9952MrMeUIw==}
@@ -16252,6 +16258,10 @@ snapshots:
   application-config-path@0.1.1: {}
 
   aproba@2.0.0: {}
+
+  arctic@1.9.2:
+    dependencies:
+      oslo: 1.2.0
 
   are-we-there-yet@2.0.0:
     dependencies:
