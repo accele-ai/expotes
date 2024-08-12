@@ -1,7 +1,6 @@
-import { usersTable, usersToTeams, roleEnum } from '@db/index';
+import { usersTable } from '@db/index';
 
 export type IUserInsert = typeof usersTable.$inferInsert;
-export type IUser2TeamsInsert = typeof usersToTeams.$inferInsert;
 
 export interface BasicUserDto {
   email: IUserInsert['email'];
@@ -11,10 +10,3 @@ export interface BasicUserDto {
 export interface CreateUserDto extends BasicUserDto {}
 
 export interface LoginUserDto extends BasicUserDto {}
-
-export interface UpdateTeamUserDTO extends IUser2TeamsInsert {
-  role: 'admin' | 'user';
-  isSuspended: boolean;
-}
-
-export interface AddUser2TeamDTO extends IUser2TeamsInsert {}

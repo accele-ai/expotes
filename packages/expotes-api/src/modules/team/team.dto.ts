@@ -1,8 +1,8 @@
-import { teamsTable } from '@db/schema';
-import { AddUser2TeamDTO, UpdateTeamUserDTO } from '../user/user.dto';
+import { teamsTable, usersToTeams } from '@db/schema';
 import { CursorPagerDto } from '@/shared/dto/pager.dto';
 
 type ITeamInsert = typeof teamsTable.$inferInsert;
+type IUser2TeamsInsert = typeof usersToTeams.$inferInsert;
 
 export interface CreateTeamDto extends ITeamInsert {
   userId: string;
@@ -16,7 +16,14 @@ export interface Add2TeamDTO {
   users: AddUser2TeamDTO[];
 }
 
-export interface TeamPageQueryDto extends CursorPagerDto<string> {
+export interface TeamFindAllDto extends CursorPagerDto<string> {
   handle?: string;
   createdAt?: Date;
+}
+
+export interface AddUser2TeamDTO extends IUser2TeamsInsert {}
+
+export interface UpdateTeamUserDTO extends IUser2TeamsInsert {
+  role: 'admin' | 'user';
+  isSuspended: boolean;
 }

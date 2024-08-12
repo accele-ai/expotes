@@ -1,17 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { TeamService } from './team.service';
 import {
   Add2TeamDTO,
   CreateTeamDto,
-  TeamPageQueryDto,
+  TeamFindAllDto,
   UpdateTeamDto,
 } from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
-import { AddUser2TeamDTO } from '../user/user.dto';
 
 @Controller('team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
+
+  @Get('/list')
+  async list(@Body() dto: TeamFindAllDto) {
+    return this.teamService.findAll(dto);
+  }
 
   @Post('/create')
   async create(
@@ -21,23 +33,18 @@ export class TeamController {
     return this.teamService.create({ ...dto, userId });
   }
 
-  @Delete('/delete/:id')
-  async delete(@Param('id') id: string) {
-    return this.teamService.delete(id);
-  }
-
-  @Post('/update')
+  @Put('/update')
   async update(@Body() dto: UpdateTeamDto) {
     return this.teamService.update(dto);
-  }
-
-  @Get('/page-query')
-  async pageQuery(@Body() dto: TeamPageQueryDto) {
-    return this.teamService.pageQuery(dto);
   }
 
   @Post('/add-member')
   async addMember(@Body() dto: Add2TeamDTO) {
     return this.teamService.addMember(dto);
+  }
+
+  @Delete('/delete/:id')
+  async delete(@Param('id') id: string) {
+    return this.teamService.delete(id);
   }
 }

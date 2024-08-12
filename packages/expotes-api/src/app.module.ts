@@ -9,6 +9,8 @@ import { UserModule } from '@/modules/user/user.module';
 import { CacheModule } from '@/processors/cache/cache.module';
 import { SessionModule } from '@/modules/session/session.module';
 import { TeamModule } from './modules/team/team.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 
 @Module({
   imports: [
@@ -30,6 +32,12 @@ import { TeamModule } from './modules/team/team.module';
     SessionModule,
     ManifestModule,
     UpdatesModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
 })
 export class AppModule {}
