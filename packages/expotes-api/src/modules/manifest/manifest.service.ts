@@ -26,9 +26,9 @@ export class ManifestService {
 
   async endpoint(meta: ExpoUpdatesV1Dto) {
     const manifest = await this.getLatestManifest(meta.runtimeVersion);
-    if (manifest.isRollbacked) {
-      return this.rollback(meta, manifest);
-    }
+    // if (manifest.isRollbacked) {
+    //   return this.rollback(meta, manifest);
+    // }
 
     return this.normalUpdate(meta, manifest);
   }
@@ -82,8 +82,9 @@ export class ManifestService {
       fileExtension: asset.fileExtension,
       contentType: asset.contentType,
       url: asset.path
-        ? await this.storageService.signUrl({ key: asset.path })
-        : undefined,
+        ? `http://10.0.0.11:3000/api/v1/assets/${asset.id}`
+        : // ? await this.storageService.signUrl({ key: asset.path })
+          undefined,
     };
   }
 
@@ -101,9 +102,6 @@ export class ManifestService {
       id: fullManifest.id,
       createdAt: fullManifest.createdAt,
       runtimeVersion: fullManifest.runtimeVersion,
-      assets: await Promise.all(
-        fullManifest.assets.map((asset) => this.transformAsset(asset)),
-      ),
       launchAsset: await (async () => {
         const asset =
           meta.platform === 'ios'
@@ -112,6 +110,9 @@ export class ManifestService {
         if (!asset) return null;
         return this.transformAsset(asset);
       })(),
+      assets: await Promise.all(
+        fullManifest.assets.map((asset) => this.transformAsset(asset)),
+      ),
       metadata: fullManifest.metadata,
       extra: fullManifest.extra,
     };

@@ -1,6 +1,6 @@
 import { Body, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-
+import { TypedRoute } from '@nestia/core';
 import { CreateUserDto, LoginUserDto } from './auth.dto';
 
 import { Public } from '@/common/decorators/auth.decorator';
@@ -14,7 +14,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @Post('/login')
+  @TypedRoute.Post('/login')
   async login(
     @Body() dto: LoginUserDto,
     @Res({ passthrough: true }) response: Response,
@@ -24,7 +24,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post('/register')
+  @TypedRoute.Post('/register')
   async register(
     @Body() dto: CreateUserDto,
     @Res({ passthrough: true }) response: Response,
@@ -33,7 +33,7 @@ export class AuthController {
     return this.authService.signToken(response, result);
   }
 
-  @Post('/logout')
+  @TypedRoute.Post('/logout')
   async logout(@Owner() owner: ISessionPayload) {
     return this.authService.logoutOne(owner.userId, owner.sessionId);
   }

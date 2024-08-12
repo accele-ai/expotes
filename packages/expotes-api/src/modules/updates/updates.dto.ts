@@ -1,3 +1,3 @@
 export class CreateUpdatesDto {
-  appId: string
+  appId: string;
 }

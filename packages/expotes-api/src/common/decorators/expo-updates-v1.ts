@@ -66,7 +66,7 @@ export const ExpoUpdatesV1 = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const headers = request.headers;
-
+    console.log(headers);
     const headersDto = plainToInstance(ExpoUpdatesV1HeadersDto, headers);
     const errors = await validate(headersDto);
 

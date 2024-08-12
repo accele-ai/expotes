@@ -3,6 +3,7 @@ import {
   Get,
   Param,
   Query,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,17 +13,22 @@ import {
   ExpoUpdatesV1,
   ExpoUpdatesV1Dto,
 } from '@/common/decorators/expo-updates-v1';
+import { Public } from '@/common/decorators/auth.decorator';
+import { ExpoResponseHeaderInterceptor } from '@/common/interceptors/expo-response.interceptors';
 
+@Public()
 @ApiController('assets')
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 
   @Get(':assetId')
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseInterceptors(ExpoResponseHeaderInterceptor)
+  // @UsePipes(new ValidationPipe({ transform: true }))
   getAssets(
     @Param('assetId') assetId: string,
-    @ExpoUpdatesV1() meta: ExpoUpdatesV1Dto,
+    // @ExpoUpdatesV1() meta: ExpoUpdatesV1Dto,
   ) {
-    // return this.assetsService.getAsset(meta, assetId);
+    console.log('assetId', assetId);
+    return this.assetsService.getAssetObject(assetId);
   }
 }

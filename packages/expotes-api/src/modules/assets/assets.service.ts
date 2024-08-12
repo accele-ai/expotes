@@ -15,23 +15,18 @@ type InsertAsset = typeof assetsTable.$inferInsert;
 export class AssetsService {
   constructor(
     private readonly db: DatabaseService,
-    // private readonly storageService: StorageService,
+    private readonly storageService: StorageService,
     private readonly manifestService: ManifestService,
   ) {}
 
-  async getAsset(assetId: string) {
+  async getAssetObject(assetId: string) {
     const asset = await this.db.query.assetsTable.findFirst({
       where: eq(assetsTable.id, assetId),
     });
     if (!asset) {
       return new NotFoundException('Asset not found');
     }
-    return asset;
-  }
-
-  async getAssetResponse(meta: ExpoUpdatesV1Dto, assetId: string) {
-    const asset = this.getAsset(assetId);
-    // return this.storageService.signUrl(asset.url);
+    return this.storageService.getObject(asset.path);
   }
 
   async createAsset(asset: InsertAsset, tx?: Database) {

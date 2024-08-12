@@ -6,7 +6,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   convertToDictionaryItemsRepresentation,
   getPrivateKeyAsync,
@@ -32,8 +32,21 @@ const sign = async (data: object) => {
   return serializeDictionary(dictionary);
 };
 
+export class ExpoResponseHeaderInterceptor implements NestInterceptor {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<any>> {
+    const response = context.switchToHttp().getResponse();
+    response.setHeader('expo-protocol-version', 1);
+    response.setHeader('expo-sfv-version', 0);
+    response.setHeader('cache-control', 'private, max-age=0');
+    return next.handle();
+  }
+}
+
 @Injectable()
-export class SignatureInterceptor implements NestInterceptor {
+export class ExpoSignatureInterceptor implements NestInterceptor {
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
@@ -87,6 +100,7 @@ export class SignatureInterceptor implements NestInterceptor {
           `multipart/mixed; boundary=${form.getBoundary()}`,
         );
         response.write(form.getBuffer());
+
         response.end();
       }),
     );

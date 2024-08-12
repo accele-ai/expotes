@@ -49,7 +49,10 @@ interface GitHubUserResult {
 export class OauthService {
   github: GitHub;
 
-  constructor(private db: DatabaseService, private authService: AuthService) {
+  constructor(
+    private db: DatabaseService,
+    private authService: AuthService,
+  ) {
     this.github = new GitHub(
       process.env.GITHUB_CLIENT_ID!,
       process.env.GITHUB_CLIENT_SECRET!,

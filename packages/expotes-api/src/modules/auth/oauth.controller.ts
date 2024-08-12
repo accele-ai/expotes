@@ -14,6 +14,9 @@ export class OauthController {
     private readonly sessionService: SessionService,
   ) {}
 
+  /**
+   * @ignore
+   */
   @Public()
   @Get('github')
   @Redirect()
@@ -22,7 +25,9 @@ export class OauthController {
     return { url };
   }
 
-
+  /**
+   * @ignore
+   */
   @Public()
   @Get('github/callback')
   async githubCallback(

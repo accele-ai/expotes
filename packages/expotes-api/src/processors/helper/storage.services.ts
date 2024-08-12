@@ -1,4 +1,8 @@
-import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Injectable,
+  ServiceUnavailableException,
+  StreamableFile,
+} from '@nestjs/common';
 import fs from 'fs/promises';
 import * as Minio from 'minio';
 
@@ -52,7 +56,6 @@ export class StorageService {
     }
   }
 
-  
   async uploadLocalFile({
     path,
     bucket,
@@ -80,5 +83,11 @@ export class StorageService {
     expiry?: number;
   }) {
     return this.minio.presignedGetObject(bucket, key, expiry);
+  }
+
+  async getObject(key: string, bucket = 'expotes') {
+    const stream = await this.minio.getObject(bucket, key);
+
+    return new StreamableFile(stream);
   }
 }

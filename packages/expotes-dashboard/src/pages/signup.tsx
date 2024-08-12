@@ -1,30 +1,32 @@
-"use client";
+'use client'
 
-import type {InputProps} from "@nextui-org/react";
-
-import React from "react";
-import {Button, Input, Checkbox, Link, Divider} from "@nextui-org/react";
-import {Icon} from "@iconify/react";
+import { Icon } from '@iconify/react'
+import { Button, Checkbox, Divider, Input, Link } from '@nextui-org/react'
+import React from 'react'
+import type { InputProps } from '@nextui-org/react'
 
 export default function Signup() {
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(false)
+  const [isConfirmVisible, setIsConfirmVisible] = React.useState(false)
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
-  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
+  const toggleVisibility = () => setIsVisible(!isVisible)
+  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible)
 
-  const inputClasses: InputProps["classNames"] = {
+  const inputClasses: InputProps['classNames'] = {
     inputWrapper:
-      "border-transparent bg-default-50/40 dark:bg-default-50/20 group-data-[focus=true]:border-primary data-[hover=true]:border-foreground/20",
-  };
+      'border-transparent bg-default-50/40 dark:bg-default-50/20 group-data-[focus=true]:border-primary data-[hover=true]:border-foreground/20',
+  }
 
-  const buttonClasses = "bg-foreground/10 dark:bg-foreground/20";
+  const buttonClasses = 'bg-foreground/10 dark:bg-foreground/20'
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500 p-2 sm:p-4 lg:p-8">
       <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-background/60 px-8 pb-10 pt-6 shadow-small backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50">
         <p className="pb-2 text-xl font-medium">Sign Up</p>
-        <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(e) => e.preventDefault()}
+        >
           <Input
             isRequired
             classNames={inputClasses}
@@ -64,7 +66,7 @@ export default function Signup() {
             label="Password"
             name="password"
             placeholder="Enter your password"
-            type={isVisible ? "text" : "password"}
+            type={isVisible ? 'text' : 'password'}
             variant="bordered"
           />
           <Input
@@ -88,15 +90,15 @@ export default function Signup() {
             label="Confirm Password"
             name="confirmPassword"
             placeholder="Confirm your password"
-            type={isConfirmVisible ? "text" : "password"}
+            type={isConfirmVisible ? 'text' : 'password'}
             variant="bordered"
           />
           <Checkbox
             isRequired
             classNames={{
-              base: "py-4",
-              label: "text-foreground/50",
-              wrapper: "before:border-foreground/50",
+              base: 'py-4',
+              label: 'text-foreground/50',
+              wrapper: 'before:border-foreground/50',
             }}
             size="sm"
           >
@@ -119,10 +121,16 @@ export default function Signup() {
           <Divider className="flex-1" />
         </div>
         <div className="flex flex-col gap-2">
-          <Button className={buttonClasses} startContent={<Icon icon="fe:google" width={24} />}>
+          <Button
+            className={buttonClasses}
+            startContent={<Icon icon="fe:google" width={24} />}
+          >
             Continue with Google
           </Button>
-          <Button className={buttonClasses} startContent={<Icon icon="fe:github" width={24} />}>
+          <Button
+            className={buttonClasses}
+            startContent={<Icon icon="fe:github" width={24} />}
+          >
             Continue with Github
           </Button>
         </div>
@@ -134,5 +142,5 @@ export default function Signup() {
         </p>
       </div>
     </div>
-  );
+  )
 }

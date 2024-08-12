@@ -1,106 +1,106 @@
-"use client";
+'use client'
 
-import type { ChipProps, Selection } from "@nextui-org/react";
-
-import * as React from "react";
+import { Icon } from '@iconify/react'
 import {
   Button,
-  Input,
-  Chip,
-  User,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Tabs,
-  Tab,
   Card,
   CardBody,
-} from "@nextui-org/react";
-import { ChevronDownIcon, SearchIcon } from "@nextui-org/shared-icons";
-import { capitalize } from "@nextui-org/shared-utils";
-import { Icon } from "@iconify/react";
+  Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tabs,
+  User,
+} from '@nextui-org/react'
+import * as React from 'react'
+import type { ChipProps, Selection } from '@nextui-org/react'
 
-import { columns, rolesOptions, statusOptions, users } from "./TeamData";
+import { ChevronDownIcon, SearchIcon } from '@nextui-org/shared-icons'
+import { capitalize } from '@nextui-org/shared-utils'
+
+import { columns, rolesOptions, statusOptions, users } from './TeamData'
 
 interface TeamManageTableProps {
-  className?: string;
+  className?: string
 }
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  pending: "danger",
-  vacation: "warning",
-};
+const statusColorMap: Record = {
+  active: 'success',
+  pending: 'danger',
+  vacation: 'warning',
+}
 
-type User = (typeof users)[0];
+type User = (typeof users)[0]
 const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
   () => {
-    const [filterValue, setFilterValue] = React.useState("");
+    const [filterValue, setFilterValue] = React.useState('')
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
-      new Set([])
-    );
-    const [rolesFilter, setRolesFilter] = React.useState<Selection>("all");
-    const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
+      new Set([]),
+    )
+    const [rolesFilter, setRolesFilter] = React.useState<Selection>('all')
+    const [statusFilter, setStatusFilter] = React.useState<Selection>('all')
 
-    const hasSearchFilter = Boolean(filterValue);
+    const hasSearchFilter = Boolean(filterValue)
 
     const filteredItems = React.useMemo(() => {
-      let filteredUsers = [...users];
+      let filteredUsers = [...users]
 
       if (hasSearchFilter) {
         filteredUsers = filteredUsers.filter((user) =>
-          user.name.toLowerCase().includes(filterValue.toLowerCase())
-        );
+          user.name.toLowerCase().includes(filterValue.toLowerCase()),
+        )
       }
       if (
-        rolesFilter !== "all" &&
+        rolesFilter !== 'all' &&
         Array.from(rolesFilter).length !== rolesOptions.length
       ) {
         filteredUsers = filteredUsers.filter((user) =>
-          Array.from(rolesFilter).includes(user.role.toLowerCase())
-        );
+          Array.from(rolesFilter).includes(user.role.toLowerCase()),
+        )
       }
       if (
-        statusFilter !== "all" &&
+        statusFilter !== 'all' &&
         Array.from(statusFilter).length !== statusOptions.length
       ) {
         filteredUsers = filteredUsers.filter((user) =>
-          Array.from(statusFilter).includes(user.status.toLowerCase())
-        );
+          Array.from(statusFilter).includes(user.status.toLowerCase()),
+        )
       }
 
-      return filteredUsers;
-    }, [filterValue, rolesFilter, statusFilter, hasSearchFilter]);
+      return filteredUsers
+    }, [filterValue, rolesFilter, statusFilter, hasSearchFilter])
 
     const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-      const cellValue = user[columnKey as keyof User];
+      const cellValue = user[columnKey as keyof User]
 
       switch (columnKey) {
-        case "name":
+        case 'name':
           return (
             <User
-              avatarProps={{ radius: "lg", src: user.avatar }}
+              avatarProps={{ radius: 'lg', src: user.avatar }}
               description={user.email}
               name={cellValue}
             >
               {user.email}
             </User>
-          );
-        case "role":
+          )
+        case 'role':
           return (
             <div className="flex flex-col">
-              <p className="text-bold  text-small capitalize text-default-500">
+              <p className="text-bold text-small capitalize text-default-500">
                 {cellValue}
               </p>
             </div>
-          );
-        case "status":
+          )
+        case 'status':
           return (
             <Chip
               className="capitalize"
@@ -110,8 +110,8 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
             >
               {cellValue}
             </Chip>
-          );
-        case "actions":
+          )
+        case 'actions':
           return (
             <div className="relative flex items-center justify-end gap-2">
               <Dropdown>
@@ -130,23 +130,23 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
                 </DropdownMenu>
               </Dropdown>
             </div>
-          );
+          )
         default:
-          return cellValue;
+          return cellValue
       }
-    }, []);
+    }, [])
 
     const onSearchChange = React.useCallback((value?: string) => {
       if (value) {
-        setFilterValue(value);
+        setFilterValue(value)
       } else {
-        setFilterValue("");
+        setFilterValue('')
       }
-    }, []);
+    }, [])
 
     const onClear = React.useCallback(() => {
-      setFilterValue("");
-    }, []);
+      setFilterValue('')
+    }, [])
 
     const topContent = React.useMemo(() => {
       return (
@@ -164,7 +164,7 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
             <div className="flex gap-3">
               <Dropdown
                 classNames={{
-                  trigger: "bg-default-100",
+                  trigger: 'bg-default-100',
                 }}
               >
                 <DropdownTrigger className="hidden sm:flex">
@@ -194,13 +194,13 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
           </div>
           <Tabs
             aria-label="roles"
-            className={"mt-3"}
-            variant={"underlined"}
+            className={'mt-3'}
+            variant={'underlined'}
             onSelectionChange={(key) => {
-              if (key === "pending-invitations") {
-                setStatusFilter(new Set(["pending"]));
+              if (key === 'pending-invitations') {
+                setStatusFilter(new Set(['pending']))
               } else {
-                setStatusFilter("all");
+                setStatusFilter('all')
               }
             }}
           >
@@ -208,12 +208,12 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
             <Tab key="pending-invitations" title="Pending Invitations" />
           </Tabs>
         </div>
-      );
-    }, [filterValue, rolesFilter, onSearchChange, onClear]);
+      )
+    }, [filterValue, rolesFilter, onSearchChange, onClear])
 
     return (
       <Card
-        className={"border border-default-200 bg-transparent"}
+        className={'border border-default-200 bg-transparent'}
         shadow="none"
       >
         <CardBody>
@@ -224,13 +224,13 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
             checkboxesProps={{
               classNames: {
                 wrapper: [
-                  "after:bg-foreground after:text-background text-background",
+                  'after:bg-foreground after:text-background text-background',
                 ],
               },
             }}
             classNames={{
               wrapper:
-                "max-h-[382px] bg-transparent p-0 border-none shadow-none",
+                'max-h-[382px] bg-transparent p-0 border-none shadow-none',
             }}
             selectedKeys={selectedKeys}
             selectionMode="multiple"
@@ -242,14 +242,14 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
               {(column) => (
                 <TableColumn
                   key={column.uid}
-                  align={column.uid === "actions" ? "center" : "start"}
+                  align={column.uid === 'actions' ? 'center' : 'start'}
                   allowsSorting={column.sortable}
                 >
                   {column.name}
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody emptyContent={"No users found"} items={filteredItems}>
+            <TableBody emptyContent={'No users found'} items={filteredItems}>
               {(item) => (
                 <TableRow key={item.id}>
                   {(columnKey) => (
@@ -261,10 +261,10 @@ const TeamManageTable = React.forwardRef<HTMLDivElement, TeamManageTableProps>(
           </Table>
         </CardBody>
       </Card>
-    );
-  }
-);
+    )
+  },
+)
 
-TeamManageTable.displayName = "TeamManageTable";
+TeamManageTable.displayName = 'TeamManageTable'
 
-export default TeamManageTable;
+export default TeamManageTable
