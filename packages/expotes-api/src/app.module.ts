@@ -13,6 +13,8 @@ import { TeamModule } from './modules/team/team.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth.guard';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 
 @Module({
   imports: [
@@ -45,6 +47,10 @@ import { AuthModule } from './modules/auth/auth.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })
