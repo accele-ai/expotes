@@ -7,6 +7,7 @@ import {
   UpdateTeamDto,
 } from './team.dto';
 import { DatabaseService } from '@/processors/database/database.service';
+import { v7 as uuidv7 } from 'uuid';
 import { desc, eq, and, lt, SQLWrapper } from 'drizzle-orm';
 import { BizException } from '@/common/exceptions/biz.exception';
 import { ErrorCodeEnum } from '@/constants/error-code.constant';
@@ -17,7 +18,15 @@ export class TeamService {
 
   create(dto: CreateTeamDto) {
     return this.db.transaction(async (tx) => {
-      const team = (await tx.insert(teamsTable).values(dto).returning())?.[0];
+      const team = (
+        await tx
+          .insert(teamsTable)
+          .values({
+            id: uuidv7(),
+            handle: dto.handle,
+          })
+          .returning()
+      )?.[0];
       await tx
         .insert(usersToTeams)
         .values({ teamId: team.id, userId: dto.userId });

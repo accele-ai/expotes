@@ -1,14 +1,18 @@
-import "./index.css";
+import './index.css'
 
-import React from "react";
-import ReactDOM from "react-dom/client";
-import Router from "./router.tsx";
-import { NextUIProvider } from "@nextui-org/react";
+import { NextUIProvider } from '@nextui-org/react'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+import SDKProvider from './provider/SDKProvider.tsx'
+import Router from './router.tsx'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <NextUIProvider>
-      <Router />
+      <SDKProvider>
+        <Router />
+      </SDKProvider>
     </NextUIProvider>
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+)

@@ -12,7 +12,7 @@ export class CacheConfigService implements CacheOptionsFactory {
   // 缓存配置
   public createCacheOptions(): CacheModuleOptions {
     const redisOptions = parseRedisUrl(
-      'redis://localhost:6379',
+      process.env.REDIS_URL!,
     )[0] satisfies RedisOptions;
     return {
       store: redisStore,

@@ -4,8 +4,9 @@ import { CursorPagerDto } from '@/shared/dto/pager.dto';
 type ITeamInsert = typeof teamsTable.$inferInsert;
 type IUser2TeamsInsert = typeof usersToTeams.$inferInsert;
 
-export interface CreateTeamDto extends ITeamInsert {
+export class CreateTeamDto {
   userId: string;
+  handle: ITeamInsert['handle'];
 }
 
 export interface UpdateTeamDto extends ITeamInsert {

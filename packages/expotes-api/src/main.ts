@@ -7,7 +7,10 @@ async function bootstrap() {
     logger: ['error', 'warn', 'log', 'debug', 'verbose'],
   });
   app.use(cookieParser());
-  
+
+  app.setGlobalPrefix('api');
+
   await app.listen(3000);
 }
+
 bootstrap();

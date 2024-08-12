@@ -1,6 +1,0 @@
-module Pods_expotesexample {
-  umbrella header "Pods-expotesexample-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -3,6 +3,23 @@ import fs from 'fs/promises';
 import path from 'path';
 import { Dictionary } from 'structured-headers';
 
+export class NoUpdateAvailableError extends Error {}
+
+export function createHash(
+  file: Buffer,
+  hashingAlgorithm: string,
+  encoding: BinaryToTextEncoding,
+) {
+  return crypto.createHash(hashingAlgorithm).update(file).digest(encoding);
+}
+
+export function getBase64URLEncoding(base64EncodedString: string): string {
+  return base64EncodedString
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
 export function convertSHA256HashToUUID(value: string) {
   return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(
     12,

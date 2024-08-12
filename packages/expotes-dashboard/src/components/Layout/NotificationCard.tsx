@@ -1,127 +1,126 @@
-import type { CardProps } from "@nextui-org/react";
-
-import React from "react";
+import { Icon } from '@iconify/react'
 import {
   Button,
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Chip,
-  Tabs,
-  Tab,
   ScrollShadow,
-  CardFooter,
-} from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+  Tab,
+  Tabs,
+} from '@nextui-org/react'
+import React from 'react'
+import type { CardProps } from '@nextui-org/react'
 
-import NotificationItem from "./NotificationItem";
+import NotificationItem from './NotificationItem'
 
 type Notification = {
-  id: string;
-  isRead?: boolean;
-  avatar: string;
-  description: string;
-  name: string;
-  time: string;
-  type?: "default" | "request" | "file";
-};
-
-enum NotificationTabs {
-  All = "all",
-  Unread = "unread",
-  Archive = "archive",
+  id: string
+  isRead?: boolean
+  avatar: string
+  description: string
+  name: string
+  time: string
+  type?: 'default' | 'request' | 'file'
 }
 
-const notifications: Record<NotificationTabs, Notification[]> = {
+enum NotificationTabs {
+  All = 'all',
+  Unread = 'unread',
+  Archive = 'archive',
+}
+
+const notifications: Record = {
   all: [
     {
-      id: "1",
+      id: '1',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a04258114e29026708c",
-      description: "requested to join your Acme organization.",
-      name: "Tony Reichert",
-      time: "2 hours ago",
-      type: "request",
+      avatar: 'https://i.pravatar.cc/150?u=a04258114e29026708c',
+      description: 'requested to join your Acme organization.',
+      name: 'Tony Reichert',
+      time: '2 hours ago',
+      type: 'request',
     },
     {
-      id: "2",
+      id: '2',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-      description: "modified the Brand logo file.",
-      name: "Ben Berman",
-      time: "7 hours ago",
-      type: "file",
+      avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+      description: 'modified the Brand logo file.',
+      name: 'Ben Berman',
+      time: '7 hours ago',
+      type: 'file',
     },
     {
-      id: "3",
+      id: '3',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-      description: "liked your post.",
-      name: "Jane Doe",
-      time: "Yesterday",
+      avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+      description: 'liked your post.',
+      name: 'Jane Doe',
+      time: 'Yesterday',
     },
     {
-      id: "4",
+      id: '4',
       isRead: true,
-      avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d",
-      description: "started following you.",
-      name: "John Smith",
-      time: "Yesterday",
+      avatar: 'https://i.pravatar.cc/150?u=a04258a2462d826712d',
+      description: 'started following you.',
+      name: 'John Smith',
+      time: 'Yesterday',
     },
     {
-      id: "5",
+      id: '5',
       isRead: true,
-      avatar: "https://i.pravatar.cc/150?u=a04258a24a2d826712d",
-      description: "mentioned you in a post.",
-      name: "Jacob Jones",
-      time: "2 days ago",
+      avatar: 'https://i.pravatar.cc/150?u=a04258a24a2d826712d',
+      description: 'mentioned you in a post.',
+      name: 'Jacob Jones',
+      time: '2 days ago',
     },
     {
-      id: "6",
+      id: '6',
       isRead: true,
-      avatar: "https://i.pravatar.cc/150?u=a04458a24a2d826712d",
-      description: "commented on your post.",
-      name: "Amelie Dawson",
-      time: "4 days ago",
+      avatar: 'https://i.pravatar.cc/150?u=a04458a24a2d826712d',
+      description: 'commented on your post.',
+      name: 'Amelie Dawson',
+      time: '4 days ago',
     },
   ],
   unread: [
     {
-      id: "1",
+      id: '1',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a04258114e29026708c",
-      description: "requested to join your Acme organization.",
-      name: "Tony Reichert",
-      time: "2 hours ago",
-      type: "request",
+      avatar: 'https://i.pravatar.cc/150?u=a04258114e29026708c',
+      description: 'requested to join your Acme organization.',
+      name: 'Tony Reichert',
+      time: '2 hours ago',
+      type: 'request',
     },
     {
-      id: "2",
+      id: '2',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-      description: "modified the Brand logo file.",
-      name: "Ben Berman",
-      time: "7 hours ago",
-      type: "file",
+      avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+      description: 'modified the Brand logo file.',
+      name: 'Ben Berman',
+      time: '7 hours ago',
+      type: 'file',
     },
     {
-      id: "3",
+      id: '3',
       isRead: false,
-      avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-      description: "liked your post.",
-      name: "Jane Doe",
-      time: "Yesterday",
+      avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
+      description: 'liked your post.',
+      name: 'Jane Doe',
+      time: 'Yesterday',
     },
   ],
   archive: [],
-};
+}
 
 export default function Component(props: CardProps) {
   const [activeTab, setActiveTab] = React.useState<NotificationTabs>(
-    NotificationTabs.All
-  );
+    NotificationTabs.All,
+  )
 
-  const activeNotifications = notifications[activeTab];
+  const activeNotifications = notifications[activeTab]
 
   return (
     <Card className="w-full max-w-[420px]" {...props}>
@@ -147,11 +146,11 @@ export default function Component(props: CardProps) {
         <Tabs
           aria-label="Notifications"
           classNames={{
-            base: "w-full",
+            base: 'w-full',
             tabList:
-              "gap-6 px-6 py-0 w-full relative rounded-none border-b border-divider",
-            cursor: "w-full",
-            tab: "max-w-fit px-2 h-12",
+              'gap-6 px-6 py-0 w-full relative rounded-none border-b border-divider',
+            cursor: 'w-full',
+            tab: 'max-w-fit px-2 h-12',
           }}
           color="primary"
           selectedKey={activeTab}
@@ -207,7 +206,7 @@ export default function Component(props: CardProps) {
       </CardBody>
       <CardFooter className="justify-end gap-2 px-4">
         <Button
-          variant={activeTab === NotificationTabs.Archive ? "flat" : "light"}
+          variant={activeTab === NotificationTabs.Archive ? 'flat' : 'light'}
         >
           Settings
         </Button>
@@ -216,5 +215,5 @@ export default function Component(props: CardProps) {
         )}
       </CardFooter>
     </Card>
-  );
+  )
 }

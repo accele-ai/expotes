@@ -2,6 +2,7 @@ import { getNestExecutionContextRequest } from '@/transformers/get-req.transform
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Inject,
   Injectable,
   UnauthorizedException,
@@ -40,6 +41,8 @@ export class AuthGuard implements CanActivate {
       }
     } else if (isPublic) {
       return true;
+    } else {
+      throw new ForbiddenException('未登录');
     }
 
     throw new UnauthorizedException('令牌无效');

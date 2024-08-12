@@ -1,48 +1,47 @@
-import type { SidebarItem } from "./Sidebar";
-
+import { Icon } from '@iconify/react'
 import {
-  User,
-  Badge,
   Avatar,
-  Chip,
+  Badge,
   Button,
-  ScrollShadow,
   Card,
   CardBody,
   CardFooter,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Select,
-  SelectItem,
+  Chip,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
   Input,
-  Spacer,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  ScrollShadow,
+  Select,
+  SelectItem,
   SelectSection,
-} from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+  Spacer,
+  User,
+} from '@nextui-org/react'
+import type { SidebarItem } from './Sidebar'
 
 // import {AcmeIcon} from "./acme";
 
-import NotificationsCard from "./NotificationCard";
-import Sidebar from "./Sidebar";
+import NotificationsCard from './NotificationCard'
+import Sidebar from './Sidebar'
 
 const sidebarItems: SidebarItem[] = [
   {
-    key: "home",
-    href: "#",
-    icon: "solar:home-2-linear",
-    title: "Home",
+    key: 'home',
+    href: '#',
+    icon: 'solar:home-2-linear',
+    title: 'Home',
   },
   {
-    key: "projects",
-    href: "#",
-    icon: "solar:widget-2-outline",
-    title: "Applications",
+    key: 'projects',
+    href: '#',
+    icon: 'solar:widget-2-outline',
+    title: 'Applications',
     endContent: (
       <Icon
         className="text-default-400"
@@ -52,10 +51,10 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    key: "tasks",
-    href: "#",
-    icon: "solar:checklist-minimalistic-outline",
-    title: "Updates",
+    key: 'tasks',
+    href: '#',
+    icon: 'solar:checklist-minimalistic-outline',
+    title: 'Updates',
     endContent: (
       <Icon
         className="text-default-400"
@@ -65,16 +64,16 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    key: "team",
-    href: "#",
-    icon: "solar:users-group-two-rounded-outline",
-    title: "Team",
+    key: 'team',
+    href: '#',
+    icon: 'solar:users-group-two-rounded-outline',
+    title: 'Team',
   },
   {
-    key: "tracker",
-    href: "#",
-    icon: "solar:sort-by-time-linear",
-    title: "Tracker",
+    key: 'tracker',
+    href: '#',
+    icon: 'solar:sort-by-time-linear',
+    title: 'Tracker',
     endContent: (
       <Chip size="sm" variant="flat">
         New
@@ -82,77 +81,77 @@ const sidebarItems: SidebarItem[] = [
     ),
   },
   {
-    key: "analytics",
-    href: "#",
-    icon: "solar:chart-outline",
-    title: "Analytics",
+    key: 'analytics',
+    href: '#',
+    icon: 'solar:chart-outline',
+    title: 'Analytics',
   },
   {
-    key: "expenses",
-    href: "#",
-    icon: "solar:bill-list-outline",
-    title: "Expenses",
+    key: 'expenses',
+    href: '#',
+    icon: 'solar:bill-list-outline',
+    title: 'Expenses',
   },
   {
-    key: "settings",
-    href: "#",
-    icon: "solar:settings-outline",
-    title: "Settings",
+    key: 'settings',
+    href: '#',
+    icon: 'solar:settings-outline',
+    title: 'Settings',
   },
-];
+]
 
 const workspaces = [
   {
-    value: "0",
-    label: "Acme Inc.",
+    value: '0',
+    label: 'Acme Inc.',
     items: [
       {
-        value: "1",
-        label: "Core workspace",
+        value: '1',
+        label: 'Core workspace',
       },
       {
-        value: "2",
-        label: "Design workspace",
+        value: '2',
+        label: 'Design workspace',
       },
       {
-        value: "3",
-        label: "Dev. workspace",
+        value: '3',
+        label: 'Dev. workspace',
       },
       {
-        value: "4",
-        label: "Marketing workspace",
+        value: '4',
+        label: 'Marketing workspace',
       },
     ],
   },
-];
+]
 
 const users = [
   {
     id: 1,
-    name: "Kate Moore",
-    role: "Customer Support",
-    team: "Customer Support",
+    name: 'Kate Moore',
+    role: 'Customer Support',
+    team: 'Customer Support',
     avatar:
-      "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg",
-    email: "kate.moore@example.com",
+      'https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg',
+    email: 'kate.moore@example.com',
   },
   {
     id: 2,
-    name: "John Doe",
-    role: "Product Designer",
-    team: "Design",
-    avatar: "https://i.pravatar.cc/150?u=a04258114e29026708c",
-    email: "john.doe@example.com",
+    name: 'John Doe',
+    role: 'Product Designer',
+    team: 'Design',
+    avatar: 'https://i.pravatar.cc/150?u=a04258114e29026708c',
+    email: 'john.doe@example.com',
   },
   {
     id: 3,
-    name: "Jane Doe",
-    role: "Product Manager",
-    team: "Product",
-    avatar: "https://i.pravatar.cc/150?u=a04258114e22026708c",
-    email: "jane.doe@example.com",
+    name: 'Jane Doe',
+    role: 'Product Manager',
+    team: 'Product',
+    avatar: 'https://i.pravatar.cc/150?u=a04258114e22026708c',
+    email: 'jane.doe@example.com',
   },
-];
+]
 
 /**
  * 💡 TIP: You can use the usePathname hook from Next.js App Router to get the current pathname
@@ -170,11 +169,11 @@ const users = [
 export default function SidebarLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <div className="h-dvh flex flex-row">
-      <div className="relative flex h-full w-72 flex-1 flex-col border-r-small border-divider p-6 grow-0">
+    <div className="flex h-dvh flex-row">
+      <div className="relative flex h-full w-72 flex-1 grow-0 flex-col border-r-small border-divider p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 px-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-foreground">
@@ -202,7 +201,7 @@ export default function SidebarLayout({
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Custom item styles"
-                disabledKeys={["profile"]}
+                disabledKeys={['profile']}
               >
                 <DropdownSection showDivider aria-label="Profile & Actions">
                   <DropdownItem
@@ -213,15 +212,15 @@ export default function SidebarLayout({
                   >
                     <User
                       avatarProps={{
-                        size: "sm",
+                        size: 'sm',
                         imgProps: {
-                          className: "transition-none",
+                          className: 'transition-none',
                         },
-                        src: "https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg",
+                        src: 'https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg',
                       }}
                       classNames={{
-                        name: "text-default-600",
-                        description: "text-default-500",
+                        name: 'text-default-600',
+                        description: 'text-default-500',
                       }}
                       description="Customer Support"
                       name="Kate Moore"
@@ -311,16 +310,16 @@ export default function SidebarLayout({
             className="px-1"
             classNames={{
               trigger:
-                "min-h-14 bg-transparent border-small border-default-200 dark:border-default-100 data-[hover=true]:border-default-500 dark:data-[hover=true]:border-default-200 data-[hover=true]:bg-transparent",
+                'min-h-14 bg-transparent border-small border-default-200 dark:border-default-100 data-[hover=true]:border-default-500 dark:data-[hover=true]:border-default-200 data-[hover=true]:bg-transparent',
             }}
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={['1']}
             items={workspaces}
             listboxProps={{
               bottomContent: (
                 <Button
                   className="bg-default-100 text-center text-foreground"
                   size="sm"
-                  onPress={() => console.log("on create workspace")}
+                  onPress={() => console.log('on create workspace')}
                 >
                   New Workspace
                 </Button>
@@ -335,7 +334,7 @@ export default function SidebarLayout({
                     {item.data?.label}
                   </span>
                 </div>
-              ));
+              ))
             }}
             selectorIcon={
               <Icon
@@ -388,8 +387,8 @@ export default function SidebarLayout({
             fullWidth
             aria-label="search"
             classNames={{
-              base: "px-1",
-              inputWrapper: "dark:bg-default-50",
+              base: 'px-1',
+              inputWrapper: 'dark:bg-default-50',
             }}
             labelPlacement="outside"
             placeholder="Search..."
@@ -408,8 +407,8 @@ export default function SidebarLayout({
             defaultSelectedKey="home"
             iconClassName="group-data-[selected=true]:text-primary-foreground"
             itemClasses={{
-              base: "data-[selected=true]:bg-primary-400 dark:data-[selected=true]:bg-primary-300 data-[hover=true]:bg-default-300/20 dark:data-[hover=true]:bg-default-200/40",
-              title: "group-data-[selected=true]:text-primary-foreground",
+              base: 'data-[selected=true]:bg-primary-400 dark:data-[selected=true]:bg-primary-300 data-[hover=true]:bg-default-300/20 dark:data-[hover=true]:bg-default-200/40',
+              title: 'group-data-[selected=true]:text-primary-foreground',
             }}
             items={sidebarItems}
           />
@@ -442,7 +441,7 @@ export default function SidebarLayout({
             >
               <User
                 avatarProps={{
-                  size: "sm",
+                  size: 'sm',
                   isBordered: false,
                   src: users[0].avatar,
                 }}
@@ -468,8 +467,8 @@ export default function SidebarLayout({
                   <Avatar
                     alt={user.name}
                     classNames={{
-                      base: "flex-shrink-0",
-                      img: "transition-none",
+                      base: 'flex-shrink-0',
+                      img: 'transition-none',
                     }}
                     size="sm"
                     src={user.avatar}
@@ -488,5 +487,5 @@ export default function SidebarLayout({
       </div>
       <div className="grow">{children}</div>
     </div>
-  );
+  )
 }

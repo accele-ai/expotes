@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import * as React from "react";
+import { Icon } from '@iconify/react'
 import {
   Button,
   Input,
@@ -8,37 +8,38 @@ import {
   Select,
   SelectItem,
   Spacer,
-} from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+} from '@nextui-org/react'
+import * as React from 'react'
 
-import { cn } from "@/utils/cn";
-import { PlanCustomRadio } from "./PlanCustomRadio";
+import { cn } from '@/utils/cn'
+
+import { PlanCustomRadio } from './PlanCustomRadio'
 
 interface BillingSettingCardProps {
-  className?: string;
+  className?: string
 }
 
 const addressOptions = [
   {
-    label: "Buenos Aires",
-    value: "buenos-aires",
-    description: "Buenos Aires",
+    label: 'Buenos Aires',
+    value: 'buenos-aires',
+    description: 'Buenos Aires',
   },
-];
+]
 
 const countryOptions = [
   {
-    label: "Argentina",
-    value: "ar",
-    description: "Argentina",
+    label: 'Argentina',
+    value: 'ar',
+    description: 'Argentina',
   },
-];
+]
 
 const BillingSetting = React.forwardRef<
   HTMLDivElement,
   BillingSettingCardProps
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-2", className)} {...props}>
+  <div ref={ref} className={cn('p-2', className)} {...props}>
     {/* Payment Method */}
     <div>
       <div className="rounded-large bg-default-100">
@@ -73,21 +74,21 @@ const BillingSetting = React.forwardRef<
     <div>
       <p className="text-base font-medium text-default-700">Current Plan</p>
       <p className="mt-1 text-sm font-normal text-default-400">
-        Your free trial ends in{" "}
+        Your free trial ends in{' '}
         <span className="text-default-500">8 days.</span>
       </p>
       {/* Plan radio group */}
       <RadioGroup
         className="mt-4"
         classNames={{
-          wrapper: "gap-4 flex-row flex-wrap",
+          wrapper: 'gap-4 flex-row flex-wrap',
         }}
         defaultValue="pro-monthly"
         orientation="horizontal"
       >
         <PlanCustomRadio
           classNames={{
-            label: "text-default-500 font-medium",
+            label: 'text-default-500 font-medium',
           }}
           description="Pro Monthly"
           value="pro-monthly"
@@ -112,7 +113,7 @@ const BillingSetting = React.forwardRef<
         </PlanCustomRadio>
         <PlanCustomRadio
           classNames={{
-            label: "text-default-500 font-medium",
+            label: 'text-default-500 font-medium',
           }}
           description="Pro Yearly"
           value="pro-yearly"
@@ -156,7 +157,7 @@ const BillingSetting = React.forwardRef<
       <Input placeholder="Address Line 2" />
       <Input placeholder="City" />
       <div className="flex items-center gap-2">
-        <Select defaultSelectedKeys={["buenos-aires"]}>
+        <Select defaultSelectedKeys={['buenos-aires']}>
           {addressOptions.map((addressOption) => (
             <SelectItem key={addressOption.value} value={addressOption.value}>
               {addressOption.label}
@@ -165,7 +166,7 @@ const BillingSetting = React.forwardRef<
         </Select>
         <Input placeholder="Postal Code" />
       </div>
-      <Select defaultSelectedKeys={["ar"]}>
+      <Select defaultSelectedKeys={['ar']}>
         {countryOptions.map((countryOption) => (
           <SelectItem key={countryOption.value} value={countryOption.value}>
             {countryOption.label}
@@ -177,8 +178,8 @@ const BillingSetting = React.forwardRef<
       Save
     </Button>
   </div>
-));
+))
 
-BillingSetting.displayName = "BillingSetting";
+BillingSetting.displayName = 'BillingSetting'
 
-export default BillingSetting;
+export default BillingSetting

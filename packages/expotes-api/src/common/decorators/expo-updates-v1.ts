@@ -57,7 +57,7 @@ export class ExpoUpdatesV1QueryDto {
 export class ExpoUpdatesV1Dto {
   protocolVersion: 0 | 1;
   platform: 'ios' | 'android';
-  runtimeVersion: number;
+  runtimeVersion: string;
   currentUpdateId: string;
   embeddedUpdateId?: string;
 }
@@ -66,7 +66,7 @@ export const ExpoUpdatesV1 = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
     const headers = request.headers;
-
+    console.log(headers);
     const headersDto = plainToInstance(ExpoUpdatesV1HeadersDto, headers);
     const errors = await validate(headersDto);
 
@@ -76,8 +76,8 @@ export const ExpoUpdatesV1 = createParamDecorator(
 
     return {
       protocolVersion: headersDto.protocolVersion,
-      platform: headers.platform,
-      runtimeVersion: headers.runtimeVersion,
+      platform: headersDto.platform,
+      runtimeVersion: headersDto.runtimeVersion,
     };
   },
 );

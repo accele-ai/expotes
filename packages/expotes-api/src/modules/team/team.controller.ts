@@ -15,8 +15,9 @@ import {
   UpdateTeamDto,
 } from './team.dto';
 import { Owner } from '@/common/decorators/get-owner-decorator';
+import { ApiController } from '@/common/decorators/api-controller.decorator';
 
-@Controller('team')
+@ApiController('team')
 export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
