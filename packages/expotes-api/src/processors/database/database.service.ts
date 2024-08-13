@@ -34,7 +34,7 @@ export class DatabaseService
     });
 
     await migrate(drizzle(migrationClient, { schema, logger: true }), {
-      migrationsFolder: './drizzle',
+      migrationsFolder: './db/migrations',
       migrationsSchema: 'public',
     });
     await migrationClient.end();
