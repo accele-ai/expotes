@@ -14,11 +14,11 @@ RUN pnpm deploy --filter=@expotes/dashboard --prod /prod/dashboard
 
 FROM base
 
-ENV PROD_STATIC_PATH="/app/dashboard/dist"
+ENV PROD_STATIC_PATH="/app/dashboard"
 
-COPY --from=build /prod/api /app/api
-COPY --from=build /prod/dashboard /app/dashboard
+COPY --from=build /prod/api/dist /app/api
+COPY --from=build /prod/dashboard/dist /app/dashboard
 
 WORKDIR /app/api
 EXPOSE 3000
-CMD [ "pnpm", "start:prod" ]
+CMD [ "node", "--experimental-require-module", "src/main" ]

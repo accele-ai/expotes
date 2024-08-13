@@ -262,8 +262,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0(typescript@5.5.4)
       typia:
-        specifier: ^6.7.2
-        version: 6.7.2(typescript@5.5.4)
+        specifier: ^6.8.0
+        version: 6.8.0(typescript@5.5.4)
     devDependencies:
       rimraf:
         specifier: ^6.0.1
@@ -7807,6 +7807,12 @@ packages:
     peerDependencies:
       typescript: '>=4.8.0 <5.6.0'
 
+  typia@6.8.0:
+    resolution: {integrity: sha512-fsivAnRyOij2aTY/ZD+0c3zA99/+Z5lUvwrQsYR1/Q8LseVk7DNlxvWKKSb0t2x8UtXNERICLvWFw1WkKHpETw==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=4.8.0 <5.6.0'
+
   uid@2.0.2:
     resolution: {integrity: sha512-u3xV3X7uzvi5b1MncmZo3i2Aw222Zk1keqLA1YkHldREkAhAqi65wuPfe7lHx8H/Wzy+8CE7S7uS3jekIM5s8g==}
     engines: {node: '>=8'}
@@ -13094,7 +13100,7 @@ snapshots:
       '@samchon/openapi': 0.4.4
       commander: 10.0.1
       inquirer: 8.2.6
-      typia: 6.7.2(typescript@5.5.2)
+      typia: 6.8.0(typescript@5.5.2)
     transitivePeerDependencies:
       - typescript
 
@@ -13104,7 +13110,7 @@ snapshots:
       '@samchon/openapi': 0.4.4
       commander: 10.0.1
       inquirer: 8.2.6
-      typia: 6.7.2(typescript@5.5.4)
+      typia: 6.8.0(typescript@5.5.4)
     transitivePeerDependencies:
       - typescript
 
@@ -17496,6 +17502,24 @@ snapshots:
       '@samchon/openapi': 0.4.4
       commander: 10.0.1
       comment-json: 4.2.3
+      inquirer: 8.2.6
+      randexp: 0.5.3
+      typescript: 5.5.4
+
+  typia@6.8.0(typescript@5.5.2):
+    dependencies:
+      '@samchon/openapi': 0.4.4
+      commander: 10.0.1
+      comment-json: 4.2.5
+      inquirer: 8.2.6
+      randexp: 0.5.3
+      typescript: 5.5.2
+
+  typia@6.8.0(typescript@5.5.4):
+    dependencies:
+      '@samchon/openapi': 0.4.4
+      commander: 10.0.1
+      comment-json: 4.2.5
       inquirer: 8.2.6
       randexp: 0.5.3
       typescript: 5.5.4
