@@ -1,0 +1,16 @@
+{
+  "options": [
+    {
+      "mode": "create",
+      "project": "./tsconfig.json",
+      "exportFilename": "index.ts",
+      "output": "src/structures",
+      "overwrite": true,
+      "backup": false,
+      "fileExt": "none",
+      "include": [
+        "src/structures/**/*.ts"
+      ]
+    }
+  ]
+}
