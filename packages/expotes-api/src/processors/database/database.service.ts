@@ -1,7 +1,11 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
-import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  OnApplicationBootstrap,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import * as schema from '@db/schema';
 import { join, resolve } from 'path';
 
@@ -15,7 +19,7 @@ export type Database = InstanceType<typeof Drizzle>;
 
 export class DatabaseService
   extends Drizzle
-  implements OnModuleInit, OnModuleDestroy
+  implements OnApplicationBootstrap, OnModuleDestroy
 {
   private readonly dbUrl: string;
   private queryClient: ReturnType<typeof postgres>;
@@ -30,11 +34,11 @@ export class DatabaseService
     Object.setPrototypeOf(Object.getPrototypeOf(this), Drizzle.prototype);
   }
 
-  async onModuleInit() {
+  async onApplicationBootstrap(): Promise<void> {
     const migrationClient = postgres(this.dbUrl, {
       max: 1,
     });
-    console.log(join(process.cwd(), './dist/db/migrations'));
+
     await migrate(drizzle(migrationClient, { schema, logger: true }), {
       migrationsFolder: join(process.cwd(), './dist/db/migrations'),
       migrationsSchema: 'public',
