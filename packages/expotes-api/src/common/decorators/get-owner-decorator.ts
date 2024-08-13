@@ -9,3 +9,10 @@ export const Owner = createParamDecorator(
     return owner;
   },
 );
+
+export const Team = createParamDecorator(
+  (key: 'id' | undefined, ctx: ExecutionContext) => {
+    const teamId = getNestExecutionContextRequest(ctx)?.teamId;
+    return teamId;
+  },
+);

@@ -2,8 +2,9 @@
  * @module utils/ip
  * @description IP utility functions
  */
+import { Request } from 'express';
 import { IncomingMessage } from 'http';
-import { FastifyRequest } from 'fastify';
+// import { FastifyRequest } from 'fastify';
 
 interface GeoIPData {
   country: string;
@@ -19,7 +20,7 @@ interface GeoIPData {
 }
 
 /* Helper parse real ip from request */
-export const getIp = (request: FastifyRequest | IncomingMessage) => {
+export const getIp = (request: Request | IncomingMessage) => {
   const _ = request as any;
 
   let ip: string =
@@ -42,8 +43,8 @@ const decodeHeaderValue = (value: string): string => {
   return utf8Decoder.decode(iso88591Bytes);
 };
 
-export const getGeo = (request: FastifyRequest) => {
-  const headers = request.headers as any;
+export const getGeo = (request: Request) => {
+  const headers = (request as any).headers as any;
 
   const geoIPData: GeoIPData = {
     country: decodeHeaderValue(headers['x-geoip-country'] as string) || '未知',

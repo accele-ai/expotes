@@ -23,6 +23,7 @@ export class TeamService {
           .insert(teamsTable)
           .values({
             id: uuidv7(),
+            name: dto.name,
             handle: dto.handle,
           })
           .returning()
@@ -78,6 +79,40 @@ export class TeamService {
       }
       return team;
     });
+  }
+
+  async findOne(teamId: string, userId?: string) {
+    const team = await this.db.query.teamsTable.findFirst({
+      where: eq(teamsTable.id, teamId),
+    });
+
+    if (userId) {
+      const userTeam = await this.db.query.usersToTeams.findFirst({
+        where: and(
+          eq(usersToTeams.teamId, teamId),
+          eq(usersToTeams.userId, userId),
+        ),
+      });
+
+      if (userTeam) {
+        // Here you can check the user's role if needed
+        // For example: return { ...application, userRole: userTeam.role };
+      }
+    }
+
+    return team;
+  }
+
+  async findAllByUser(userId: string) {
+    return this.db
+      .select({
+        id: usersToTeams.teamId,
+        name: teamsTable.name,
+        handle: teamsTable.handle,
+      })
+      .from(usersToTeams)
+      .innerJoin(teamsTable, eq(usersToTeams.teamId, teamsTable.id))
+      .where(eq(usersToTeams.userId, userId));
   }
 
   findAll({ size = 10, cursor, ...dto }: TeamFindAllDto) {

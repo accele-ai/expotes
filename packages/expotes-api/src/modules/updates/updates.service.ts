@@ -3,7 +3,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import AdmZip from 'adm-zip';
 import * as fs from 'fs';
 import * as path from 'path';
-import { manifestsTable } from '@db/schema';
+import { applicationsTable, manifestsTable } from '@db/schema';
 import { FileMetadata } from './updates.interface';
 import { v7 as uuidv7 } from 'uuid';
 import {
@@ -13,7 +13,7 @@ import {
 import { ManifestService } from '../manifest/manifest.service';
 import { AssetsService } from '../assets/assets.service';
 import { StorageService } from '../../processors/helper/storage.services';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { createHash, getBase64URLEncoding } from '@/shared/utils/crypto.util';
 // import mime from 'mime';
 
@@ -222,6 +222,36 @@ export class UpdatesService {
       return manifest;
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  async listUpdates({ appId, teamId }: { appId?: string; teamId: string }) {
+    if (appId) {
+      return this.db.query.manifestsTable.findMany({
+        where: eq(manifestsTable.appId, appId),
+        columns: {
+          appId: false,
+        },
+        orderBy: [desc(manifestsTable.createdAt)],
+      });
+    } else {
+      return (
+        await this.db
+          .select()
+          .from(manifestsTable)
+          .innerJoin(
+            applicationsTable,
+            eq(manifestsTable.appId, applicationsTable.id),
+          )
+          .where(eq(applicationsTable.teamId, teamId))
+          .orderBy(desc(manifestsTable.createdAt))
+      ).map((r) => {
+        return {
+          ...r.manifests,
+          appId: undefined,
+          application: r.applications,
+        };
+      });
     }
   }
 }

@@ -62,34 +62,35 @@ export class AllExceptionsFilter implements ExceptionFilter {
       (exception as myError)?.message ||
       '';
 
-    const url = request.raw.url!;
-    if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
-      Logger.error(exception, undefined, 'Catch');
-      console.error(exception);
+    // @ts-ignore
+    // const url = request.raw.url!;
+    // if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+    //   Logger.error(exception, undefined, 'Catch');
+    //   console.error(exception);
 
-      // if (!isDev) {
-      // this.errorLogPipe =
-      //   this.errorLogPipe ??
-      //   fs.createWriteStream(resolve(LOG_DIR, 'error.log'), {
-      //     flags: 'a+',
-      //     encoding: 'utf-8',
-      //   });
+    //   // if (!isDev) {
+    //   // this.errorLogPipe =
+    //   //   this.errorLogPipe ??
+    //   //   fs.createWriteStream(resolve(LOG_DIR, 'error.log'), {
+    //   //     flags: 'a+',
+    //   //     encoding: 'utf-8',
+    //   //   });
 
-      //   this.errorLogPipe.write(
-      //     `[${new Date().toISOString()}] ${decodeURI(url)}: ${
-      //       (exception as any)?.response?.message ||
-      //       (exception as myError)?.message
-      //     }\n${(exception as Error).stack}\n`,
-      //   );
-      // }
-    } else {
-      const ip = getIp(request);
-      const logMessage = `IP: ${ip} Error Info: (${status}) ${message} Path: ${decodeURI(
-        url,
-      )}`;
-      // if (isTest) console.log(logMessage);
-      this.logger.warn(logMessage);
-    }
+    //   //   this.errorLogPipe.write(
+    //   //     `[${new Date().toISOString()}] ${decodeURI(url)}: ${
+    //   //       (exception as any)?.response?.message ||
+    //   //       (exception as myError)?.message
+    //   //     }\n${(exception as Error).stack}\n`,
+    //   //   );
+    //   // }
+    // } else {
+    //   const ip = getIp(request);
+    //   const logMessage = `IP: ${ip} Error Info: (${status}) ${message} Path: ${decodeURI(
+    //     url,
+    //   )}`;
+    //   // if (isTest) console.log(logMessage);
+    //   this.logger.warn(logMessage);
+    // }
 
     // const prevRequestTs = this.reflector.get(HTTP_REQUEST_TIME, request as any);
 

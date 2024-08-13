@@ -4,6 +4,7 @@ import { ISessionPayload } from '@/modules/session/session.dto';
 
 export interface ContextRequest extends Request, Record<string, any> {
   owner?: ISessionPayload;
+  teamId?: string;
 }
 /*
  * Auth guard will set the user in the context

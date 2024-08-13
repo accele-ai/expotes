@@ -6,6 +6,7 @@ type IUser2TeamsInsert = typeof usersToTeams.$inferInsert;
 
 export class CreateTeamDto {
   userId: string;
+  name: ITeamInsert['name'];
   handle: ITeamInsert['handle'];
 }
 

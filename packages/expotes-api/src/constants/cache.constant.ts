@@ -8,6 +8,7 @@ export enum RedisKeys {
   SessionStore = 'session',
   SessionsStore = 'sessions',
   ValidateCodeStore = 'validate_code',
+  TeamUserStore = 'team_user',
 
   /** HTTP 请求缓存 */
   HTTPCache = 'http_cache',

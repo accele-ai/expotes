@@ -22,8 +22,8 @@ export class TeamController {
   constructor(private readonly teamService: TeamService) {}
 
   @Get('/list')
-  async list(@Body() dto: TeamFindAllDto) {
-    return this.teamService.findAll(dto);
+  async list(@Owner('userId') userId: string) {
+    return this.teamService.findAllByUser(userId);
   }
 
   @Post('/create')

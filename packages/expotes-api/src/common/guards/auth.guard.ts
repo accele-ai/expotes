@@ -1,4 +1,7 @@
-import { getNestExecutionContextRequest } from '@/transformers/get-req.transformer';
+import {
+  ContextRequest,
+  getNestExecutionContextRequest,
+} from '@/transformers/get-req.transformer';
 import {
   CanActivate,
   ExecutionContext,
@@ -24,10 +27,32 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-
     const request = this.getRequest(context);
     const cookies = request.cookies;
+    const headers = request.headers;
 
+    const isSessionValid = await this.verifySession(isPublic, request, cookies);
+
+    const teamId = headers['expotes-team-id'];
+    if (teamId) {
+      const isUserInTeam = await this.sessionService.verifyUserTeam(
+        request.owner!.userId,
+        teamId,
+      );
+      if (isUserInTeam) {
+        request.teamId = teamId;
+      } else {
+        throw new ForbiddenException('用户不在团队中');
+      }
+    }
+    return isSessionValid;
+  }
+
+  async verifySession(
+    isPublic: boolean,
+    request: ContextRequest,
+    cookies: Record<string, string>,
+  ) {
     const sessionId = cookies[SESSION_COOKIE_NAME];
     if (sessionId) {
       const session = await this.sessionService.find(sessionId);

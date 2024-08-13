@@ -5,6 +5,8 @@ import { Redis } from 'ioredis';
 import { RedisKeys, SESSION_DURATION } from '@/constants/cache.constant';
 import { nanoid } from 'nanoid';
 import { ISessionPayload } from '@/modules/session/session.dto';
+import { usersToTeams } from '@db/schema';
+import { and, eq } from 'drizzle-orm';
 
 export interface SessionResult {
   value: string;
@@ -108,6 +110,48 @@ export class SessionService {
     } else {
       const ttl = await this.redisClient.ttl(sessionKey);
       return new Date(now + ttl * 1000);
+    }
+  }
+
+  async verifyUserTeam(userId: string, teamId: string) {
+    const key = RedisKeys.TeamUserStore + teamId;
+    const fallbackKey = `${RedisKeys.TeamUserStore}:fallback:${teamId}`;
+    const fallbackTTL = 60 * 60; // 1 hour
+
+    // Check if user is in the team's set
+    const isUserInTeam = await this.redisClient.sismember(key, userId);
+    if (isUserInTeam) {
+      return true;
+    }
+
+    // Check if user is in the fallback set
+    const isUserInFallback = await this.redisClient.sismember(
+      fallbackKey,
+      userId,
+    );
+    if (isUserInFallback) {
+      return false;
+    }
+
+    // If not in either, check the database
+    const isUserInTeamDB = await this.db.query.usersToTeams.findFirst({
+      where: and(
+        eq(usersToTeams.userId, userId),
+        eq(usersToTeams.teamId, teamId),
+      ),
+    });
+
+    if (isUserInTeamDB !== null) {
+      await this.redisClient.sadd(key, userId);
+      return true;
+    } else {
+      // Add user to fallback set with TTL
+      await this.redisClient
+        .multi()
+        .sadd(fallbackKey, userId)
+        .expire(fallbackKey, fallbackTTL)
+        .exec();
+      return false;
     }
   }
 }
