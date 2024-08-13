@@ -16,6 +16,7 @@ FROM base
 
 ENV PROD_STATIC_PATH="/app/dashboard/dist"
 
+RUN pnpm install -g @nestjs/cli
 COPY --from=build /prod/api /app/api
 COPY --from=build /prod/dashboard /app/dashboard
 
