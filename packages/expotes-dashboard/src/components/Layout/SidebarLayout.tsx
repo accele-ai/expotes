@@ -23,8 +23,12 @@ import {
   Spacer,
   User,
 } from '@nextui-org/react'
+import { useMemo } from 'react'
+import { hash as md5 } from 'spark-md5'
+import { useLocation } from 'wouter'
 import type { SidebarItem } from './Sidebar'
 
+import { useSession } from '@/provider/SessionProvider'
 import { useSDK } from '@/services/api'
 import { usePersistStore } from '@/store/persist'
 import { sdk } from '@expotes/sdk'
@@ -37,71 +41,71 @@ import Sidebar from './Sidebar'
 const sidebarItems: SidebarItem[] = [
   {
     key: 'home',
-    href: '#',
+    href: 'home',
     icon: 'solar:home-2-linear',
     title: 'Home',
   },
   {
-    key: 'projects',
-    href: '#',
+    key: 'applications',
+    href: 'applications',
     icon: 'solar:widget-2-outline',
     title: 'Applications',
-    endContent: (
-      <Icon
-        className="text-default-400"
-        icon="solar:add-circle-line-duotone"
-        width={24}
-      />
-    ),
+    // endContent: (
+    //   <Icon
+    //     className="text-default-400"
+    //     icon="solar:add-circle-line-duotone"
+    //     width={24}
+    //   />
+    // ),
   },
   {
-    key: 'tasks',
-    href: '#',
+    key: 'updates',
+    href: 'updates',
     icon: 'solar:checklist-minimalistic-outline',
     title: 'Updates',
-    endContent: (
-      <Icon
-        className="text-default-400"
-        icon="solar:add-circle-line-duotone"
-        width={24}
-      />
-    ),
+    // endContent: (
+    //   <Icon
+    //     className="text-default-400"
+    //     icon="solar:add-circle-line-duotone"
+    //     width={24}
+    //   />
+    // ),
   },
   {
     key: 'team',
-    href: '#',
+    href: 'team',
     icon: 'solar:users-group-two-rounded-outline',
     title: 'Team',
   },
-  {
-    key: 'tracker',
-    href: '#',
-    icon: 'solar:sort-by-time-linear',
-    title: 'Tracker',
-    endContent: (
-      <Chip size="sm" variant="flat">
-        New
-      </Chip>
-    ),
-  },
-  {
-    key: 'analytics',
-    href: '#',
-    icon: 'solar:chart-outline',
-    title: 'Analytics',
-  },
-  {
-    key: 'expenses',
-    href: '#',
-    icon: 'solar:bill-list-outline',
-    title: 'Expenses',
-  },
-  {
-    key: 'settings',
-    href: '#',
-    icon: 'solar:settings-outline',
-    title: 'Settings',
-  },
+  // {
+  //   key: 'tracker',
+  //   href: '#',
+  //   icon: 'solar:sort-by-time-linear',
+  //   title: 'Tracker',
+  //   endContent: (
+  //     <Chip size="sm" variant="flat">
+  //       New
+  //     </Chip>
+  //   ),
+  // },
+  // {
+  //   key: 'analytics',
+  //   href: '#',
+  //   icon: 'solar:chart-outline',
+  //   title: 'Analytics',
+  // },
+  // {
+  //   key: 'expenses',
+  //   href: '#',
+  //   icon: 'solar:bill-list-outline',
+  //   title: 'Expenses',
+  // },
+  // {
+  //   key: 'settings',
+  //   href: '#',
+  //   icon: 'solar:settings-outline',
+  //   title: 'Settings',
+  // },
 ]
 
 const workspaces = [
@@ -175,12 +179,20 @@ export default function SidebarLayout({
 }: {
   children: React.ReactNode
 }) {
+  const [location, setLocation] = useLocation()
+  const currentPath = location.split('/')?.[1]
+
+  const { name, email } = useSession()
   const { teamId, setTeamId } = usePersistStore()
   const { data: teams } = useSDK(sdk.v1.team.list, [], {
     fallbackData: [],
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   })
+
+  const avatarUrl = useMemo(() => {
+    return `https://www.gravatar.com/avatar/${md5(email)}?d=identicon`
+  }, [email])
 
   return (
     <div className="flex h-dvh flex-row">
@@ -198,9 +210,11 @@ export default function SidebarLayout({
                 <Avatar
                   className="h-6 w-6 cursor-pointer"
                   name="Kate Moore"
-                  src="https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg"
+                  src={avatarUrl}
                 />
-                <span className="text-tiny font-bold uppercase">Acme</span>
+                <span className="text-tiny font-bold uppercase">
+                  {name || email}
+                </span>
               </Button>
             </DropdownTrigger>
             <DropdownMenu
@@ -220,32 +234,32 @@ export default function SidebarLayout({
                       imgProps: {
                         className: 'transition-none',
                       },
-                      src: 'https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/avatars/e1b8ec120710c09589a12c0004f85825.jpg',
+                      src: avatarUrl,
                     }}
                     classNames={{
                       name: 'text-default-600',
                       description: 'text-default-500',
                     }}
                     description="Customer Support"
-                    name="Kate Moore"
+                    name={name || email}
                   />
                 </DropdownItem>
-                <DropdownItem key="dashboard">Dashboard</DropdownItem>
-                <DropdownItem key="settings">Settings</DropdownItem>
-                <DropdownItem
+                {/* <DropdownItem key="dashboard">Dashboard</DropdownItem> */}
+                {/* <DropdownItem key="settings">Settings</DropdownItem> */}
+                {/* <DropdownItem
                   key="new_project"
                   endContent={
                     <Icon className="text-large" icon="lucide:plus" />
                   }
                 >
                   New Project
-                </DropdownItem>
+                </DropdownItem> */}
               </DropdownSection>
 
               <DropdownSection showDivider aria-label="Preferences">
-                <DropdownItem key="quick_search" shortcut="⌘K">
+                {/* <DropdownItem key="quick_search" shortcut="⌘K">
                   Quick search
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem
                   key="theme"
                   isReadOnly
@@ -267,15 +281,15 @@ export default function SidebarLayout({
               </DropdownSection>
 
               <DropdownSection aria-label="Help & Feedback">
-                <DropdownItem key="help_and_feedback">
+                {/* <DropdownItem key="help_and_feedback">
                   Help & Feedback
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem key="logout">Log Out</DropdownItem>
               </DropdownSection>
             </DropdownMenu>
           </Dropdown>
           {/* Notifications */}
-          <Popover offset={12} placement="bottom-start">
+          {/* <Popover offset={12} placement="bottom-start">
             <PopoverTrigger>
               <Button
                 disableRipple
@@ -296,7 +310,7 @@ export default function SidebarLayout({
             <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
               <NotificationsCard className="w-full shadow-none" />
             </PopoverContent>
-          </Popover>
+          </Popover> */}
         </div>
 
         <Spacer y={8} />
@@ -304,6 +318,7 @@ export default function SidebarLayout({
         <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
           <Sidebar
             defaultSelectedKey="home"
+            selectedKeys={[currentPath]}
             iconClassName="group-data-[selected=true]:text-primary-foreground"
             itemClasses={{
               base: 'data-[selected=true]:bg-primary-400 dark:data-[selected=true]:bg-primary-300 data-[hover=true]:bg-default-300/20 dark:data-[hover=true]:bg-default-200/40',
@@ -312,7 +327,7 @@ export default function SidebarLayout({
             items={sidebarItems}
           />
           <Spacer y={8} />
-          <Card className="mx-2 overflow-visible" shadow="sm">
+          {/* <Card className="mx-2 overflow-visible" shadow="sm">
             <CardBody className="items-center py-5 text-center">
               <h3 className="text-medium text-default-700 font-medium">
                 Upgrade to Pro
@@ -329,7 +344,7 @@ export default function SidebarLayout({
                 Upgrade
               </Button>
             </CardFooter>
-          </Card>
+          </Card> */}
         </ScrollShadow>
         <div className="flex flex-col gap-y-2">
           <Select

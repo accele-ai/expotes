@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import { Route, Switch, useLocation, useParams } from 'wouter'
 
 import SidebarLayout from './components/Layout/SidebarLayout'
-import Application from './pages/app/application.tsx'
+import Applications from './pages/app/applications.tsx'
 import Updates from './pages/app/updates.tsx'
 import Login from './pages/login.tsx'
 import Signup from './pages/signup.tsx'
@@ -40,7 +40,7 @@ function Router() {
           <TeamContext.Provider value={teamId ? { id: teamId } : null}>
             <SidebarLayout>
               <Route path="/" component={() => <div>2</div>} />
-              <Route path="/application" component={Application} />
+              <Route path="/applications" component={Applications} />
               <Route path="/updates" nest component={Updates} />
             </SidebarLayout>
           </TeamContext.Provider>
