@@ -15,9 +15,9 @@ FROM base
 
 ENV PROD_STATIC_PATH="/app/dashboard"
 
-COPY --from=build /prod/api/dist /app/api
+COPY --from=build /prod/api /app/api
 COPY --from=build /usr/src/app/packages/expotes-dashboard/dist /app/dashboard
 
 WORKDIR /app/api
 EXPOSE 3000
-CMD [ "node", "--experimental-require-module", "src/main" ]
+CMD [ "pnpm", "start:prod" ]
