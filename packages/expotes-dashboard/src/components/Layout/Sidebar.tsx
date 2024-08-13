@@ -32,13 +32,12 @@ export type SidebarItem = {
   className?: string
 }
 
-export type SidebarProps = Omit & {
+export type SidebarProps = Omit<ListboxProps, 'children'> & {
   items: SidebarItem[]
   isCompact?: boolean
   hideEndContent?: boolean
   iconClassName?: string
   sectionClasses?: ListboxSectionProps['classNames']
-  classNames?: ListboxProps['classNames']
   defaultSelectedKey: string
   onSelect?: (key: string) => void
 }
@@ -298,21 +297,22 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
         {...props}
       >
         {(item) => {
-          return item.items &&
-            item.items?.length > 0 &&
-            item?.type === SidebarItemType.Nest ? (
-            renderNestItem(item)
-          ) : item.items && item.items?.length > 0 ? (
+          const typedItem = item as SidebarItem
+          return typedItem.items &&
+            typedItem.items?.length > 0 &&
+            typedItem?.type === SidebarItemType.Nest ? (
+            renderNestItem(typedItem)
+          ) : typedItem.items && typedItem.items?.length > 0 ? (
             <ListboxSection
-              key={item.key}
+              key={typedItem.key}
               classNames={sectionClasses}
               showDivider={isCompact}
-              title={item.title}
+              title={typedItem.title}
             >
-              {item.items.map(renderItem)}
+              {typedItem.items.map(renderItem)}
             </ListboxSection>
           ) : (
-            renderItem(item)
+            renderItem(typedItem)
           )
         }}
       </Listbox>

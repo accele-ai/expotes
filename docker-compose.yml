@@ -1,6 +1,31 @@
 version: '3'
 
 services:
+  expotes:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    # Add `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` to the environment variables
+    # env_file:
+    #   - .env
+    environment:
+      - NODE_ENV=production
+      - PROD_STATIC_PATH=/app/dashboard
+      - DATABASE_URL=postgres://postgres:postgres@expotes-db:5432/expotes
+      - REDIS_URL=redis://:mypassword@expotes-redis:6379
+      - MINIO_ENDPOINT=expotes-minio
+      - MINIO_PORT=9000
+      - MINIO_USE_SSL=false
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+
+    depends_on:
+      - expotes-db
+      - expotes-minio
+      - expotes-redis
+
   expotes-db:
     image: postgres:16.3-alpine
     restart: always
@@ -11,7 +36,7 @@ services:
     ports:
       - '5532:5432'
     volumes:
-      - db:/var/lib/postgresql/data
+      - expotes-db:/var/lib/postgresql/data
 
   expotes-minio:
     image: minio/minio
@@ -19,7 +44,7 @@ services:
       - "9100:9000"
       - "9101:9001" 
     volumes:
-      - minio_data:/data
+      - expotes-minio-data:/data
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -33,5 +58,5 @@ services:
       - REDIS_ARGS=--requirepass mypassword
       
 volumes:
-  db:
-  minio_data:
+  expotes-db:
+  expotes-minio-data:

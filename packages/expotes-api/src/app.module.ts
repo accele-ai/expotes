@@ -15,9 +15,22 @@ import { AuthGuard } from './common/guards/auth.guard';
 import { AuthModule } from './modules/auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
+const staticPath =
+  process.env.NODE_ENV === 'production'
+    ? process.env.PROD_STATIC_PATH
+    : join(__dirname, '../../..', 'expotes-dashboard', 'dist');
 @Module({
   imports: [
+    ...(staticPath
+      ? [
+          ServeStaticModule.forRoot({
+            rootPath: staticPath,
+          }),
+        ]
+      : []),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -35,7 +35,7 @@ import { sdk } from '@expotes/sdk'
 
 // import {AcmeIcon} from "./acme";
 
-import NotificationsCard from './NotificationCard'
+// import NotificationsCard from './NotificationCard'
 import Sidebar from './Sidebar'
 
 const sidebarItems: SidebarItem[] = [

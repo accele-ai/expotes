@@ -8,7 +8,9 @@ const SDKProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <SDKContext.Provider
       value={{
-        host: 'http://localhost:5173',
+        host: import.meta.env.PROD
+          ? import.meta.env.VITE_API_URL
+          : 'http://localhost:3000',
         headers: {
           ...(teamId ? { 'expotes-team-id': teamId } : {}),
         },
