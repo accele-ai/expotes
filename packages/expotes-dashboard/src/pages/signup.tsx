@@ -1,5 +1,3 @@
-'use client'
-
 import { Icon } from '@iconify/react'
 import { Button, Checkbox, Divider, Input, Link } from '@nextui-org/react'
 import React from 'react'
@@ -21,7 +19,7 @@ export default function Signup() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500 p-2 sm:p-4 lg:p-8">
-      <div className="flex w-full max-w-sm flex-col gap-4 rounded-large bg-background/60 px-8 pb-10 pt-6 shadow-small backdrop-blur-md backdrop-saturate-150 dark:bg-default-100/50">
+      <div className="rounded-large bg-background/60 shadow-small dark:bg-default-100/50 flex w-full max-w-sm flex-col gap-4 px-8 pb-10 pt-6 backdrop-blur-md backdrop-saturate-150">
         <p className="pb-2 text-xl font-medium">Sign Up</p>
         <form
           className="flex flex-col gap-3"
@@ -52,12 +50,12 @@ export default function Signup() {
               <button type="button" onClick={toggleVisibility}>
                 {isVisible ? (
                   <Icon
-                    className="pointer-events-none text-2xl text-foreground/50"
+                    className="text-foreground/50 pointer-events-none text-2xl"
                     icon="solar:eye-closed-linear"
                   />
                 ) : (
                   <Icon
-                    className="pointer-events-none text-2xl text-foreground/50"
+                    className="text-foreground/50 pointer-events-none text-2xl"
                     icon="solar:eye-bold"
                   />
                 )}
@@ -76,12 +74,12 @@ export default function Signup() {
               <button type="button" onClick={toggleConfirmVisibility}>
                 {isConfirmVisible ? (
                   <Icon
-                    className="pointer-events-none text-2xl text-foreground/50"
+                    className="text-foreground/50 pointer-events-none text-2xl"
                     icon="solar:eye-closed-linear"
                   />
                 ) : (
                   <Icon
-                    className="pointer-events-none text-2xl text-foreground/50"
+                    className="text-foreground/50 pointer-events-none text-2xl"
                     icon="solar:eye-bold"
                   />
                 )}
@@ -117,7 +115,7 @@ export default function Signup() {
         </form>
         <div className="flex items-center gap-4 py-2">
           <Divider className="flex-1" />
-          <p className="shrink-0 text-tiny text-default-500">OR</p>
+          <p className="text-tiny text-default-500 shrink-0">OR</p>
           <Divider className="flex-1" />
         </div>
         <div className="flex flex-col gap-2">
@@ -134,7 +132,7 @@ export default function Signup() {
             Continue with Github
           </Button>
         </div>
-        <p className="text-center text-small text-foreground/50">
+        <p className="text-small text-foreground/50 text-center">
           Already have an account?&nbsp;
           <Link color="foreground" href="#" size="sm">
             Log In
