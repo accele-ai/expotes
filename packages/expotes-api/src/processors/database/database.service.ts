@@ -3,6 +3,7 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import postgres from 'postgres';
 import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import * as schema from '@db/schema';
+import { join, resolve } from 'path';
 
 type DrizzleFn = typeof drizzle<typeof schema>;
 
@@ -25,6 +26,7 @@ export class DatabaseService
     super(queryClient, { schema });
     this.dbUrl = dbUrl;
     this.queryClient = queryClient;
+
     Object.setPrototypeOf(Object.getPrototypeOf(this), Drizzle.prototype);
   }
 
@@ -32,9 +34,9 @@ export class DatabaseService
     const migrationClient = postgres(this.dbUrl, {
       max: 1,
     });
-
+    console.log(join(process.cwd(), './dist/db/migrations'));
     await migrate(drizzle(migrationClient, { schema, logger: true }), {
-      migrationsFolder: './db/migrations',
+      migrationsFolder: join(process.cwd(), './dist/db/migrations'),
       migrationsSchema: 'public',
     });
     await migrationClient.end();
