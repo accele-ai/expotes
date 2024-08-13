@@ -13,10 +13,10 @@ RUN pnpm deploy --filter=@expotes/api --prod /prod/api
 
 FROM base
 
-ENV PROD_STATIC_PATH="/app/dashboard"
+ENV PROD_STATIC_PATH="/app/dist/static"
 
-COPY --from=build /prod/api /app/api
-COPY --from=build /usr/src/app/packages/expotes-dashboard/dist /app/dashboard
+COPY --from=build /prod/api /app/
+COPY --from=build /usr/src/app/packages/expotes-dashboard/dist /app/dist/static
 
 WORKDIR /app/api
 EXPOSE 3000

@@ -12,7 +12,7 @@ services:
     #   - .env
     environment:
       - NODE_ENV=production
-      - PROD_STATIC_PATH=/app/dashboard
+      - PROD_STATIC_PATH=/app/dist/static
       - DATABASE_URL=postgres://postgres:postgres@expotes-db:5432/expotes
       - REDIS_URL=redis://:mypassword@expotes-redis:6379
       - MINIO_ENDPOINT=expotes-minio
