@@ -5,7 +5,8 @@ import { applicationsTable } from './applications';
 
 export const teamsTable = pgTable('teams', {
   id: uuid('id').primaryKey(),
-  handle: varchar('name', { length: 32 }).notNull(),
+  name: varchar('name', { length: 32 }).notNull(),
+  handle: varchar('handle', { length: 32 }).notNull(),
 
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
 });
