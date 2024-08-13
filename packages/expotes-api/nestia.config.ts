@@ -2,6 +2,7 @@ import { INestiaConfig } from '@nestia/sdk';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './src/app.module';
 import cookieParser from 'cookie-parser';
+import { join } from 'path';
 
 const NESTIA_CONFIG: INestiaConfig = {
   input: async () => {
@@ -14,7 +15,7 @@ const NESTIA_CONFIG: INestiaConfig = {
 
     return app;
   },
-  output: '../expotes-sdk/src',
+  output: join(__dirname, '../expotes-sdk/src'),
   clone: true,
   distribute: 'sdk',
 };

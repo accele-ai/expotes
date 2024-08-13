@@ -14,10 +14,11 @@ RUN pnpm deploy --filter=@expotes/dashboard --prod /prod/dashboard
 
 FROM base
 
-ENV PROD_STATIC_PATH="/app/dashboard"
+ENV PROD_STATIC_PATH="/app/dashboard/dist"
 
 COPY --from=build /prod/api /app/api
 COPY --from=build /prod/dashboard /app/dashboard
 
+WORKDIR /app/api
 EXPOSE 3000
 CMD [ "pnpm", "start" ]
