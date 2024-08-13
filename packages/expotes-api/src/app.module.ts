@@ -21,13 +21,14 @@ import { join } from 'path';
 const staticPath =
   process.env.NODE_ENV === 'production'
     ? process.env.PROD_STATIC_PATH
-    : join(__dirname, '../../..', 'expotes-dashboard', 'dist');
+    : join(__dirname, '..', 'static');
 @Module({
   imports: [
     ...(staticPath
       ? [
           ServeStaticModule.forRoot({
             rootPath: staticPath,
+            exclude: ['/api/(.*)'],
           }),
         ]
       : []),
