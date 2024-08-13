@@ -18,6 +18,6 @@ ENV PROD_STATIC_PATH="/app/dist/static"
 COPY --from=build /prod/api /app/
 COPY --from=build /usr/src/app/packages/expotes-dashboard/dist /app/dist/static
 
-WORKDIR /app/api
+WORKDIR /app
 EXPOSE 3000
 CMD [ "pnpm", "start:prod" ]
