@@ -53,6 +53,9 @@ export class ExpoSignatureInterceptor implements NestInterceptor {
   ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
+    response.setHeader('expo-protocol-version', 1);
+    response.setHeader('expo-sfv-version', 0);
+
     return next.handle().pipe(
       map(async (data) => {
         const expectSignatureHeader = request.headers['expo-expect-signature'];
@@ -92,8 +95,6 @@ export class ExpoSignatureInterceptor implements NestInterceptor {
 
         response.status(200);
         // set response headers to match standard: https://docs.expo.dev/technical-specs/expo-updates-1/#common-response-headers
-        response.setHeader('expo-protocol-version', 1);
-        response.setHeader('expo-sfv-version', 0);
         response.setHeader('cache-control', 'private, max-age=0');
         response.setHeader(
           'content-type',
