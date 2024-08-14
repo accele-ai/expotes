@@ -13,7 +13,8 @@ export default function CreateApplication() {
     const formData = new FormData(e.currentTarget)
     const name = formData.get('name') as string
     const teamId = formData.get('teamId') as string
-    await trigger([{ name, teamId }])
+    const handle = formData.get('handle') as string
+    await trigger([{ name, teamId, handle }])
   }
 
   return (
@@ -34,6 +35,14 @@ export default function CreateApplication() {
             label="Team ID"
             name="teamId"
             placeholder="Enter team ID"
+            type="text"
+            variant="bordered"
+          />
+          <Input
+            isRequired
+            label="Handle"
+            name="handle"
+            placeholder="Enter application handle"
             type="text"
             variant="bordered"
           />
