@@ -1,6 +1,13 @@
-import { timestamp, pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  timestamp,
+  pgTable,
+  uuid,
+  varchar,
+  boolean,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
 import { manifestsTable } from './mainfest';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { teamsTable } from './teams';
 
 export interface Bundle {
@@ -8,16 +15,24 @@ export interface Bundle {
   android: string;
 }
 
-export const applicationsTable = pgTable('applications', {
-  id: uuid('id').primaryKey(),
-  teamId: uuid('team_id')
-    .references(() => teamsTable.id)
-    .notNull(),
-  name: varchar('name').notNull(),
-  // handle: varchar('handle').notNull().unique(),
+export const applicationsTable = pgTable(
+  'applications',
+  {
+    id: uuid('id').primaryKey(),
+    teamId: uuid('team_id')
+      .references(() => teamsTable.id)
+      .notNull(),
+    name: varchar('name').notNull(),
+    handle: varchar('handle', { length: 15 }).notNull(),
 
-  createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-});
+    createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+  },
+  (t) => ({
+    handleIdx: uniqueIndex('application_handle_idx').on(
+      sql`lower(${t.handle})`,
+    ),
+  }),
+);
 
 export const applicationsRelation = relations(
   applicationsTable,
@@ -29,3 +44,20 @@ export const applicationsRelation = relations(
     manifests: many(manifestsTable),
   }),
 );
+
+export const domainsTable = pgTable('domains', {
+  id: uuid('id').primaryKey(),
+  applicationId: uuid('application_id')
+    .references(() => applicationsTable.id, { onDelete: 'cascade' })
+    .notNull(),
+  domain: varchar('domain').notNull().unique(),
+  isVerified: boolean('is_verified').notNull().default(false),
+  createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+});
+
+export const domainsRelation = relations(domainsTable, ({ one }) => ({
+  application: one(applicationsTable, {
+    fields: [domainsTable.applicationId],
+    references: [applicationsTable.id],
+  }),
+}));

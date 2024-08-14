@@ -16,7 +16,9 @@ import { v7 as uuidv7 } from 'uuid';
 export const usersTable = pgTable(
   'users',
   {
-    id: uuid('id').primaryKey().default(uuidv7()),
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
     name: varchar('name'),
     email: varchar('email').notNull().unique(),
     password: varchar('password'),

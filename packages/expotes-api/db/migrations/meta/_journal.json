@@ -8,6 +8,13 @@
       "when": 1723589714556,
       "tag": "0000_wooden_elektra",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1723623486306,
+      "tag": "0001_even_pyro",
+      "breakpoints": true
     }
   ]
 }

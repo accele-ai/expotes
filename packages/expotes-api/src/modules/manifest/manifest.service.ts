@@ -1,6 +1,6 @@
 import { assetsTable, manifestsTable } from '@db/schema';
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import {
   Database,
   DatabaseService,
@@ -24,8 +24,8 @@ export class ManifestService {
     private readonly directiveService: DriectiveService,
   ) {}
 
-  async endpoint(meta: ExpoUpdatesV1Dto) {
-    const manifest = await this.getLatestManifest(meta.runtimeVersion);
+  async endpoint(meta: ExpoUpdatesV1Dto, appId: string) {
+    const manifest = await this.getLatestManifest(appId, meta.runtimeVersion);
     // if (manifest.isRollbacked) {
     //   return this.rollback(meta, manifest);
     // }
@@ -33,9 +33,12 @@ export class ManifestService {
     return this.normalUpdate(meta, manifest);
   }
 
-  async getLatestManifest(runtimeVersion: string) {
+  async getLatestManifest(appId: string, runtimeVersion: string) {
     const manifest = await this.db.query.manifestsTable.findFirst({
-      where: eq(manifestsTable.runtimeVersion, runtimeVersion),
+      where: and(
+        eq(manifestsTable.appId, appId),
+        eq(manifestsTable.runtimeVersion, runtimeVersion),
+      ),
       orderBy: desc(manifestsTable.createdAt),
     });
     if (!manifest) {

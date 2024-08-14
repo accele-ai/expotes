@@ -19,30 +19,40 @@ export class ApplicationService {
       .returning();
   }
 
-  async findOne(applicationId: string, teamId: string, userId?: string) {
+  // async findOne(applicationId: string, teamId: string, userId?: string) {
+  async findOne(applicationId: string) {
     const application = await this.db.query.applicationsTable.findFirst({
-      where: and(
-        eq(applicationsTable.id, applicationId),
-        eq(applicationsTable.teamId, teamId),
-      ),
+      where: eq(applicationsTable.id, applicationId),
     });
 
     if (!application) {
       return null;
     }
 
-    if (userId) {
-      const userTeam = await this.db.query.usersToTeams.findFirst({
-        where: and(
-          eq(usersToTeams.teamId, teamId),
-          eq(usersToTeams.userId, userId),
-        ),
-      });
+    // if (userId) {
+    //   const userTeam = await this.db.query.usersToTeams.findFirst({
+    //     where: and(
+    //       eq(usersToTeams.teamId, teamId),
+    //       eq(usersToTeams.userId, userId),
+    //     ),
+    //   });
 
-      if (userTeam) {
-        // Here you can add user-specific information if needed
-        // For example: return { ...application, userRole: userTeam.role };
-      }
+    //   if (userTeam) {
+    //     // Here you can add user-specific information if needed
+    //     // For example: return { ...application, userRole: userTeam.role };
+    //   }
+    // }
+
+    return application;
+  }
+
+  async findOneByHandle(handle: string) {
+    const application = await this.db.query.applicationsTable.findFirst({
+      where: eq(applicationsTable.handle, handle),
+    });
+
+    if (!application) {
+      throw new Error('Application not found');
     }
 
     return application;
