@@ -52,6 +52,9 @@ export class ManifestController {
     private readonly applicationService: ApplicationService,
   ) {}
 
+  /**
+   * @ignore
+   */
   @Get('/:appId')
   @UseInterceptors(ExpoSignatureInterceptor)
   async manifest(
