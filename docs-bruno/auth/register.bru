@@ -5,14 +5,18 @@ meta {
 }
 
 post {
-  url: {{base}}/user/register
+  url: {{base}}/auth/register
   body: json
   auth: none
 }
 
 body:json {
   {
-    "email":"test@example.com",
-    "password":"123456"
+    "email": "{{email}}",
+    "password": "{{password}}""
   }
+}
+
+script:post-response {
+  bru.setVar("session",res.body.value)
 }

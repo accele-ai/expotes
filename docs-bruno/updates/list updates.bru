@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{base}}/updates/list
+  url: {{base}}/updates/list?appId
   body: none
   auth: none
+}
+
+params:query {
+  appId: 
 }
 
 headers {

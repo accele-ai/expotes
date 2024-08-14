@@ -5,13 +5,18 @@ meta {
 }
 
 get {
-  url: {{base}}/manifest
+  url: {{base}}/manifest/:appId
   body: none
   auth: none
+}
+
+params:path {
+  appId: 0191389a-706b-7668-9d0b-66f3802719e1
 }
 
 headers {
   expo-platform: ios
   expo-runtime-version: 1
   expo-protocol-version: 1
+  : 
 }
