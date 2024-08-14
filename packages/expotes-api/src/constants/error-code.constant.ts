@@ -1,11 +1,12 @@
 export enum ErrorCodeEnum {
   NoContentCanBeModified = 1000,
 
-  PostNotFound = 10000,
-  PostExist = 10001,
-  CategoryNotFound = 10002,
-  CategoryCannotDeleted = 10003,
-  CategoryAlreadyExists = 10004,
+  NoUpdateAvailableError = 10000,
+  ManifestNotFound = 10001,
+  AssetNotFound = 10002,
+  RollbackBadProtocolVersion = 10003,
+  InvalidExpoEmbeddedUpdateId = 10004,
+  RollbackAtNotFound = 10005,
 
   AuthFailUserNotExist = 20000,
   AuthFail = 20001,
@@ -22,14 +23,20 @@ export enum ErrorCodeEnum {
 export const ErrorCode = Object.freeze<Record<ErrorCodeEnum, [string, number]>>(
   {
     [ErrorCodeEnum.NoContentCanBeModified]: ['no content can be modified', 400],
-    [ErrorCodeEnum.PostNotFound]: ['post not found', 404],
-    [ErrorCodeEnum.PostExist]: ['post already exist', 400],
-    [ErrorCodeEnum.CategoryNotFound]: ['category not found', 404],
-    [ErrorCodeEnum.CategoryCannotDeleted]: [
-      'there are other posts in this category, cannot be deleted',
+    [ErrorCodeEnum.NoUpdateAvailableError]: ['no update available', 304],
+    [ErrorCodeEnum.ManifestNotFound]: ['manifest not found', 404],
+    [ErrorCodeEnum.AssetNotFound]: ['asset not found', 404],
+
+    [ErrorCodeEnum.RollbackBadProtocolVersion]: [
+      'Rollbacks not supported on protocol version 0',
       400,
     ],
-    [ErrorCodeEnum.CategoryAlreadyExists]: ['category already exists', 400],
+    [ErrorCodeEnum.InvalidExpoEmbeddedUpdateId]: [
+      'Invalid Expo-Embedded-Update-ID request header specified.',
+      400,
+    ],
+    [ErrorCodeEnum.RollbackAtNotFound]: ['RollbackedAt not found', 400],
+
     [ErrorCodeEnum.AuthFailUserNotExist]: ['auth failed, user not exist', 400],
     [ErrorCodeEnum.AuthFail]: [
       'auth failed, please check your username and password',

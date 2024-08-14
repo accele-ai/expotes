@@ -9,6 +9,8 @@ import { DriectiveService } from './driective.service';
 import { ExpoUpdatesV1Dto } from 'src/common/decorators/expo-updates-v1';
 import { convertSHA256HashToUUID } from 'src/shared/utils/crypto.util';
 import { StorageService } from '../../processors/helper/storage.services';
+import { BizException } from '@/common/exceptions/biz.exception';
+import { ErrorCodeEnum } from '@/constants/error-code.constant';
 
 export class NoUpdateAvailableError extends Error {}
 
@@ -26,9 +28,9 @@ export class ManifestService {
 
   async endpoint(meta: ExpoUpdatesV1Dto, appId: string) {
     const manifest = await this.getLatestManifest(appId, meta.runtimeVersion);
-    // if (manifest.isRollbacked) {
-    //   return this.rollback(meta, manifest);
-    // }
+    if (manifest.isRollbacked) {
+      return this.rollback(meta, manifest);
+    }
 
     return this.normalUpdate(meta, manifest);
   }
@@ -42,7 +44,7 @@ export class ManifestService {
       orderBy: desc(manifestsTable.createdAt),
     });
     if (!manifest) {
-      throw new NoUpdateAvailableError();
+      throw new BizException(ErrorCodeEnum.ManifestNotFound);
     }
     return manifest;
   }
@@ -64,7 +66,7 @@ export class ManifestService {
       },
     });
     if (!result) {
-      throw new ServiceUnavailableException();
+      throw new BizException(ErrorCodeEnum.ManifestNotFound);
     }
     return result;
   }
@@ -97,7 +99,7 @@ export class ManifestService {
       meta.currentUpdateId === convertSHA256HashToUUID(manifest.id) &&
       meta.protocolVersion === 1
     ) {
-      throw new NoUpdateAvailableError();
+      throw new BizException(ErrorCodeEnum.NoUpdateAvailableError);
     }
 
     const fullManifest = await this.getFullManifest(manifest.id);
@@ -124,18 +126,16 @@ export class ManifestService {
   /* rollback response */
   async rollback(meta: ExpoUpdatesV1Dto, manifest: any) {
     if (meta.protocolVersion === 0) {
-      throw new Error('Rollbacks not supported on protocol version 0');
+      throw new BizException(ErrorCodeEnum.RollbackBadProtocolVersion);
     }
     if (!meta.embeddedUpdateId) {
-      throw new Error(
-        'Invalid Expo-Embedded-Update-ID request header specified.',
-      );
+      throw new BizException(ErrorCodeEnum.InvalidExpoEmbeddedUpdateId);
     }
     if (meta.currentUpdateId === meta.embeddedUpdateId) {
-      throw new NoUpdateAvailableError();
+      throw new BizException(ErrorCodeEnum.NoUpdateAvailableError);
     }
     if (!manifest.rollbackedAt) {
-      throw new Error('RollbackedAt not found');
+      throw new BizException(ErrorCodeEnum.RollbackAtNotFound);
     }
     return this.directiveService.RollBack(manifest.rollbackedAt.toISOString());
   }

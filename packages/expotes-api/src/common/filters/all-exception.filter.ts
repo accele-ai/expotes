@@ -91,7 +91,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
     //   // if (isTest) console.log(logMessage);
     //   this.logger.warn(logMessage);
     // }
-
+    const logMessage = `Error Info: (${status}) ${message}`;
+    // if () console.log(logMessage);
+    this.logger.warn(logMessage);
     // const prevRequestTs = this.reflector.get(HTTP_REQUEST_TIME, request as any);
 
     // if (prevRequestTs) {
