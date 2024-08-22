@@ -61,6 +61,7 @@ export class ManifestController {
     @Param('appId', AppIdPipe) _appId: IAppId,
     @ExpoUpdatesV1() meta: ExpoUpdatesV1Dto,
   ) {
+    console.log('manifest', _appId);
     const appId =
       _appId.type === 'id'
         ? _appId.value
