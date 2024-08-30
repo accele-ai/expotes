@@ -18,6 +18,8 @@ export enum ErrorCodeEnum {
   TeamAlreadyExists = 40001,
   TeamMemberAlreadyExists = 40002,
   TeamMemberNotFound = 40003,
+
+  ServerNotIdempotent = 50000,
 }
 
 export const ErrorCode = Object.freeze<Record<ErrorCodeEnum, [string, number]>>(
@@ -51,5 +53,6 @@ export const ErrorCode = Object.freeze<Record<ErrorCodeEnum, [string, number]>>(
       400,
     ],
     [ErrorCodeEnum.TeamMemberNotFound]: ['team member not found', 404],
+    [ErrorCodeEnum.ServerNotIdempotent]: ['server not idempotent', 500],
   },
 );

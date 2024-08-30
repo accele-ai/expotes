@@ -11,6 +11,7 @@ import { convertSHA256HashToUUID } from 'src/shared/utils/crypto.util';
 import { StorageService } from '../../processors/helper/storage.services';
 import { BizException } from '@/common/exceptions/biz.exception';
 import { ErrorCodeEnum } from '@/constants/error-code.constant';
+import { API_URL } from '@/constants/system.config';
 
 export class NoUpdateAvailableError extends Error {}
 
@@ -66,7 +67,7 @@ export class ManifestService {
       },
     });
     if (!result) {
-      throw new BizException(ErrorCodeEnum.ManifestNotFound);
+      throw new BizException(ErrorCodeEnum.ServerNotIdempotent);
     }
     return result;
   }
@@ -87,7 +88,7 @@ export class ManifestService {
       fileExtension: asset.fileExtension,
       contentType: asset.contentType,
       url: asset.path
-        ? `http://10.0.0.11:3000/api/v1/assets/${asset.id}`
+        ? `${API_URL}/api/v1/assets/${asset.id}`
         : // ? await this.storageService.signUrl({ key: asset.path })
           undefined,
     };

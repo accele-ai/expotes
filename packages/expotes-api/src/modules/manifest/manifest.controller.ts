@@ -16,7 +16,7 @@ import {
 } from 'src/common/decorators/expo-updates-v1';
 import { ApiController } from '@/common/decorators/api-controller.decorator';
 import { Public } from '@/common/decorators/auth.decorator';
-import { ExpoResponseHeaderInterceptor } from '@/common/interceptors/expo-response.interceptors';
+
 import { ExpoSignatureInterceptor } from '@/common/interceptors/expo-signature.interceptors';
 import { ApplicationService } from '../application/application.service';
 
