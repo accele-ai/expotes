@@ -31,12 +31,8 @@ export class UpdatesService {
     private readonly assetsService: AssetsService,
   ) {}
 
-  private createAssetS3Key(
-    runtimeVersion: string,
-    mainfestId: string,
-    assetName: string,
-  ): string {
-    return `${runtimeVersion}/${mainfestId}/${assetName}`;
+  private createAssetS3Key(mainfestId: string, assetName: string): string {
+    return `/${mainfestId}/${assetName}`;
   }
 
   private async createAsset(
@@ -61,7 +57,7 @@ export class UpdatesService {
     },
     tx?: Database,
   ) {
-    const s3Path = this.createAssetS3Key(runtimeVersion, manifestId, fileName);
+    const s3Path = this.createAssetS3Key(manifestId, fileName);
 
     const fileBuffer = await fs.promises.readFile(localPath);
     if (options.storage.length > 0) {
