@@ -6,7 +6,7 @@ import {
   DatabaseService,
 } from 'src/processors/database/database.service';
 import { ManifestService } from '../manifest/manifest.service';
-import { StorageService } from '../../processors/helper/storage.services';
+import { StorageService } from '../../processors/helper/storage/storage.services';
 import { ExpoUpdatesV1Dto } from '@/common/decorators/expo-updates-v1';
 
 type InsertAsset = typeof assetsTable.$inferInsert;
@@ -26,7 +26,8 @@ export class AssetsService {
     if (!asset) {
       return new NotFoundException('Asset not found');
     }
-    return this.storageService.getObject(asset.path);
+    const storage = await this.storageService.getStorage();
+    return storage.download(asset.path);
   }
 
   async createAsset(asset: InsertAsset, tx?: Database) {

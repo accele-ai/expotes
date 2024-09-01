@@ -4,8 +4,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { CreateUpdatesDto, FindAllUpdatesDto } from './updates.dto';
 import { ApiController } from '@/common/decorators/api-controller.decorator';
-import { TypedQuery, TypedRoute } from '@nestia/core';
+import { TypedBody, TypedFormData, TypedQuery, TypedRoute } from '@nestia/core';
 import { Team } from '@/common/decorators/get-owner-decorator';
+import { ManifestsOptions } from '@db/schema';
 
 @ApiController('updates')
 export class UpdatesController {
@@ -28,7 +29,8 @@ export class UpdatesController {
     return this.uploadService.createUpdates(
       {
         appId: body.appId,
-        meta: { runtimeVersion: '1' },
+        options: JSON.parse(body.options),
+        meta: { runtimeVersion: body.runtimeVersion },
       },
       file,
     );

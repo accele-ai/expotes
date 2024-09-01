@@ -77,6 +77,18 @@ const sidebarItems: SidebarItem[] = [
     icon: 'solar:users-group-two-rounded-outline',
     title: 'Team',
   },
+  {
+    key: 'storage',
+    href: '#',
+    icon: 'solar:bill-list-outline',
+    title: 'Storage',
+  },
+  {
+    key: 'cdn',
+    href: '#',
+    icon: 'solar:bill-list-outline',
+    title: 'CDN',
+  },
   // {
   //   key: 'tracker',
   //   href: '#',
@@ -93,12 +105,6 @@ const sidebarItems: SidebarItem[] = [
   //   href: '#',
   //   icon: 'solar:chart-outline',
   //   title: 'Analytics',
-  // },
-  // {
-  //   key: 'expenses',
-  //   href: '#',
-  //   icon: 'solar:bill-list-outline',
-  //   title: 'Expenses',
   // },
   // {
   //   key: 'settings',
@@ -317,6 +323,7 @@ export default function SidebarLayout({
 
         <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
           <Sidebar
+            prefix="/app/"
             defaultSelectedKey="home"
             selectedKeys={[currentPath]}
             iconClassName="group-data-[selected=true]:text-primary-foreground"

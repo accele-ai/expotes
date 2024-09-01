@@ -15,6 +15,13 @@
       "when": 1723623486306,
       "tag": "0001_even_pyro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725185099802,
+      "tag": "0002_illegal_guardian",
+      "breakpoints": true
     }
   ]
 }

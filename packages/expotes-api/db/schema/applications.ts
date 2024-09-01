@@ -9,10 +9,14 @@ import {
 import { manifestsTable } from './mainfest';
 import { relations, sql } from 'drizzle-orm';
 import { teamsTable } from './teams';
+import { jsonb } from 'drizzle-orm/pg-core';
 
-export interface Bundle {
-  ios: string;
-  android: string;
+export interface ApplicationOptions {
+  /* Default Storage For Manifests */
+  storage: {
+    providerId: number;
+    cdnIds: number[];
+  }[];
 }
 
 export const applicationsTable = pgTable(
@@ -24,6 +28,10 @@ export const applicationsTable = pgTable(
       .notNull(),
     name: varchar('name').notNull(),
     handle: varchar('handle', { length: 15 }).notNull(),
+
+    // options: jsonb('options').$type<ApplicationOptions>().notNull().default({
+    //   storage: [],
+    // }),
 
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
   },

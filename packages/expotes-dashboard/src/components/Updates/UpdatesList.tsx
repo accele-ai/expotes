@@ -25,30 +25,24 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import React from 'react'
-import { Controller, useForm } from 'react-hook-form'
 import { useLocation, useParams } from 'wouter'
 import type {
   CreateUpdatesDto,
   FindAllUpdatesDto,
 } from '@expotes/sdk/structures'
 
-import { getTeam } from '@/router'
+import { useTeam } from '@/provider/SessionProvider'
 import { useSDK } from '@/services/api'
 import { sdk } from '@expotes/sdk'
 
-type CreateUpdateFormValues = CreateUpdatesDto & {
-  file: File
-}
+import { CreateUpdateModal } from './CreateUpdate'
 
 export default function UpdateList() {
   const [_, setLocation] = useLocation()
-  const { id: teamId } = getTeam()
+  const { id: teamId } = useTeam()
   const { appId } = useParams()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const form = useForm<CreateUpdateFormValues>()
-  const onSubmit = (values: CreateUpdateFormValues) => {}
 
   const { data: applications } = useSDK(sdk.v1.application.list, [{ teamId }])
 
@@ -138,86 +132,7 @@ export default function UpdateList() {
           ))}
         </Select>
         <Button onPress={() => onOpen()}>Create Update</Button>
-        <Modal size="lg" isOpen={isOpen} onClose={onClose}>
-          <ModalContent>
-            {(onClose) => (
-              <form {...form}>
-                <ModalHeader className="flex flex-col gap-1">
-                  Create New Update
-                </ModalHeader>
-                <ModalBody>
-                  <Controller
-                    name="appId"
-                    control={form.control}
-                    render={({ field }) => (
-                      <Select
-                        label="Select App"
-                        placeholder="Choose an app"
-                        {...field}
-                      >
-                        {applications.map((application) => (
-                          <SelectItem
-                            key={application.id}
-                            value={application.id}
-                          >
-                            {application.name}
-                          </SelectItem>
-                        ))}
-                      </Select>
-                    )}
-                  />
-                  <Controller
-                    name="file"
-                    control={form.control}
-                    render={({ field }) => (
-                      // @ts-ignore
-                      <Input
-                        type="file"
-                        label="Upload File"
-                        placeholder="Choose a file"
-                        accept=".zip"
-                        className="mb-4"
-                        {...field}
-                      />
-                    )}
-                  />
-                  {/* <Controller
-                      name="version"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          label="Version"
-                          placeholder="Enter version number"
-                          className="mb-4"
-                          {...field}
-                        />
-                      )}
-                    />
-                    <Controller
-                      name="releaseNotes"
-                      control={control}
-                      render={({ field }) => (
-                        <Textarea
-                          label="Release Notes"
-                          placeholder="Enter release notes"
-                          className="mb-4"
-                          {...field}
-                        />
-                      )}
-                    /> */}
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    Close
-                  </Button>
-                  <Button color="primary" type="submit">
-                    Submit
-                  </Button>
-                </ModalFooter>
-              </form>
-            )}
-          </ModalContent>
-        </Modal>
+        <CreateUpdateModal isOpen={isOpen} onClose={onClose} />
       </div>
 
       <Table>

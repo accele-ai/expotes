@@ -1,16 +1,23 @@
 import {
   boolean,
-  integer,
   jsonb,
   pgTable,
   uuid,
   varchar,
   timestamp,
   AnyPgColumn,
+  text,
 } from 'drizzle-orm/pg-core';
 import { applicationsTable } from './applications';
 import { relations } from 'drizzle-orm';
 import { assetsTable } from './assets';
+
+export interface ManifestsOptions {
+  storage: {
+    providerId: number;
+    cdnIds: number[];
+  }[];
+}
 
 export const manifestsTable = pgTable('manifests', {
   /* The ID MUST uniquely specify the manifest and MUST be a UUID. */
@@ -48,6 +55,11 @@ export const manifestsTable = pgTable('manifests', {
     as the client library selects the most recent update (subject to any constraints supplied by the expo-manifest-filters header). 
   The datetime should be formatted according to ISO 8601. */
   createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
+
+  notes: text('notes').notNull().default(''),
+  options: jsonb('options').$type<ManifestsOptions>().notNull().default({
+    storage: [],
+  }),
 });
 
 export const manifestsRelation = relations(manifestsTable, ({ one, many }) => ({

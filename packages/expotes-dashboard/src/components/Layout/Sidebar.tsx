@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from '@nextui-org/react'
 import * as React from 'react'
+import { Link, useLocation } from 'wouter'
 import type {
   ListboxProps,
   ListboxSectionProps,
@@ -40,6 +41,7 @@ export type SidebarProps = Omit<ListboxProps, 'children'> & {
   sectionClasses?: ListboxSectionProps['classNames']
   defaultSelectedKey: string
   onSelect?: (key: string) => void
+  prefix?: string
 }
 
 const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
@@ -55,10 +57,12 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
       iconClassName,
       classNames,
       className,
+      prefix = '',
       ...props
     },
     ref,
   ) => {
+    const [location, setLocation] = useLocation()
     const [selected, setSelected] =
       React.useState<React.Key>(defaultSelectedKey)
 
@@ -128,6 +132,12 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
               )
             }
             title={isCompact || isNestType ? null : item.title}
+            href={undefined}
+            onClick={() => {
+              if (item.href) {
+                setLocation(`${prefix}${item.href}`)
+              }
+            }}
           >
             {isCompact ? (
               <Tooltip content={item.title} placement="right">
@@ -236,6 +246,12 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
             }
             textValue={item.title}
             title={isCompact ? null : item.title}
+            href={undefined}
+            onClick={() => {
+              if (item.href) {
+                setLocation(`${prefix}${item.href}`)
+              }
+            }}
           >
             {isCompact ? (
               <Tooltip content={item.title} placement="right">
@@ -258,7 +274,7 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
           </ListboxItem>
         )
       },
-      [isCompact, hideEndContent, iconClassName, itemClasses?.base],
+      [isCompact, hideEndContent, iconClassName, itemClasses?.base, prefix],
     )
 
     return (

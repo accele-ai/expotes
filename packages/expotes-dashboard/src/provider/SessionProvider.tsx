@@ -1,6 +1,8 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { useLocation } from 'wouter'
 
-import { useSDK } from '@/services/api'
+import { useSDK, useSDKMutation } from '@/services/api'
+import { usePersistStore } from '@/store/persist'
 import { sdk } from '@expotes/sdk'
 import { IUserDto } from '@expotes/sdk/structures'
 
@@ -51,15 +53,86 @@ export default function SessionProvider({
 }: {
   children: React.ReactNode
 }) {
-  const { user, isLoading } = useUser()
+  const { user, ...swr } = useUser()
 
-  if (isLoading) {
+  if (swr.isLoading) {
     return null
   }
 
   return (
-    <SessionContext.Provider value={{ user, isLoading }}>
+    <SessionContext.Provider value={{ user, ...swr }}>
       {children}
     </SessionContext.Provider>
   )
+}
+
+/**
+ * 用于保护路由, 当用户未登录时, 重定向到登录页面
+ * @returns
+ */
+export function SessionGuard({ children }: { children: React.ReactNode }) {
+  const [location, setLocation] = useLocation()
+  const [isReady, setIsReady] = useState(false)
+  const user = useSession()
+
+  useEffect(() => {
+    if ((location === '/app' || location.startsWith('/app/')) && !user) {
+      setLocation('login1', {
+        replace: true,
+      })
+      return
+    } else if (
+      (location.startsWith('/login') || location.startsWith('/signup')) &&
+      user
+    ) {
+      setLocation('/app', {
+        replace: true,
+      })
+      return
+    }
+    setIsReady(true)
+  }, [location, user])
+
+  if (!isReady) {
+    return null
+  }
+
+  return <>{children}</>
+}
+
+export const TeamContext = createContext<{ id: string } | null>(null)
+
+export const TeamProvider = ({ children }: { children: React.ReactNode }) => {
+  const [isReady, setIsReady] = useState(false)
+  const { teamId, setTeamId } = usePersistStore()
+
+  const { data: teams } = useSDK(sdk.v1.team.list, teamId ? null : [])
+
+  useEffect(() => {
+    if (!teamId && teams?.length && teams.length > 0) {
+      setTeamId(teams[0].id)
+    }
+    setIsReady(true)
+  }, [teamId, teams])
+
+  if (!isReady) {
+    return null
+  }
+
+  return (
+    <TeamContext.Provider value={teamId ? { id: teamId } : null}>
+      {children}
+    </TeamContext.Provider>
+  )
+}
+
+export const useTeam = () => {
+  const [_, setLocation] = useLocation()
+  const team = useContext(TeamContext)
+
+  if (!team) {
+    throw setLocation('/app/home?modal=createTeam')
+  }
+
+  return team
 }

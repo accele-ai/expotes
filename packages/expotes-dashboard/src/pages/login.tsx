@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { Button, Checkbox, Divider, Input, Link } from '@nextui-org/react'
 import React from 'react'
 import { tv } from 'tailwind-variants'
+import { useLocation } from 'wouter'
 
 import { useSDKMutation } from '@/services/api'
 import { sdk } from '@expotes/sdk'
@@ -15,6 +16,7 @@ const buttonClasses = tv({
 })
 
 export default function Login() {
+  const [location, setLocation] = useLocation()
   const [isVisible, setIsVisible] = React.useState(false)
 
   const toggleVisibility = () => setIsVisible(!isVisible)
@@ -26,12 +28,14 @@ export default function Login() {
     const formData = new FormData(e.currentTarget)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
-    console.log(email, password)
-    await trigger([{ email, password }])
+    const result = await trigger([{ email, password }])
+    if ('value' in result) {
+      setLocation('/app')
+    }
   }
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500 p-2 sm:p-4 lg:p-8">
+    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-rose-400 via-fuchsia-500 to-indigo-500">
       <div className="rounded-large bg-background/60 shadow-small dark:bg-default-100/50 flex w-full max-w-sm flex-col gap-4 px-8 pb-10 pt-6 backdrop-blur-md backdrop-saturate-150">
         <p className="pb-2 text-xl font-medium">Log In</p>
         <form

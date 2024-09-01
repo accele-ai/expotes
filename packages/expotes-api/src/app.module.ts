@@ -17,6 +17,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ProviderModule } from './modules/provider/provider.module';
 
 const staticPath =
   process.env.NODE_ENV === 'production'
@@ -54,6 +55,7 @@ const staticPath =
     UpdatesModule,
     AssetsModule,
     ManifestModule,
+    ProviderModule,
   ],
   providers: [
     Logger,

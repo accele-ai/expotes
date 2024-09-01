@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { S3Client } from '@aws-sdk/client-s3';
+import { Injectable, Logger } from '@nestjs/common';
 import AdmZip from 'adm-zip';
 import * as fs from 'fs';
 import * as path from 'path';
-import { applicationsTable, manifestsTable } from '@db/schema';
+import {
+  applicationsTable,
+  ManifestsOptions,
+  manifestsTable,
+} from '@db/schema';
 import { FileMetadata } from './updates.interface';
 import { v7 as uuidv7 } from 'uuid';
 import {
@@ -12,30 +15,21 @@ import {
 } from 'src/processors/database/database.service';
 import { ManifestService } from '../manifest/manifest.service';
 import { AssetsService } from '../assets/assets.service';
-import { StorageService } from '../../processors/helper/storage.services';
+import { StorageService } from '../../processors/helper/storage/storage.services';
 import { desc, eq } from 'drizzle-orm';
 import { createHash, getBase64URLEncoding } from '@/shared/utils/crypto.util';
 // import mime from 'mime';
 
 @Injectable()
 export class UpdatesService {
-  private s3Client: S3Client;
+  logger = new Logger(UpdatesService.name);
 
   constructor(
     private readonly db: DatabaseService,
     private readonly storageService: StorageService,
     private readonly manifestService: ManifestService,
     private readonly assetsService: AssetsService,
-  ) {
-    this.s3Client = new S3Client({
-      region: 'auto',
-      endpoint: 'http://minio:9000',
-      credentials: {
-        accessKeyId: 'minio',
-        secretAccessKey: 'minio',
-      },
-    });
-  }
+  ) {}
 
   private createAssetS3Key(
     runtimeVersion: string,
@@ -54,6 +48,7 @@ export class UpdatesService {
       fileExtension,
       fileName,
       localPath,
+      options,
     }: {
       assetId?: string;
       runtimeVersion: string;
@@ -62,17 +57,32 @@ export class UpdatesService {
       fileExtension: string;
       fileName: string;
       localPath: string;
+      options: ManifestsOptions;
     },
     tx?: Database,
   ) {
     const s3Path = this.createAssetS3Key(runtimeVersion, manifestId, fileName);
 
     const fileBuffer = await fs.promises.readFile(localPath);
+    if (options.storage.length > 0) {
+      for (const storageOption of options.storage) {
+        const storage = await this.storageService.getStorage(
+          storageOption.providerId,
+        );
+        await storage.uploadBuffer({
+          key: s3Path,
+          buffer: fileBuffer,
+        });
+      }
+    } else {
+      // default storage
+      const storage = await this.storageService.getStorage();
 
-    await this.storageService.uploadBuffer({
-      key: s3Path,
-      buffer: fileBuffer,
-    });
+      await storage.uploadBuffer({
+        key: s3Path,
+        buffer: fileBuffer,
+      });
+    }
 
     await this.assetsService.createAsset(
       {
@@ -87,12 +97,15 @@ export class UpdatesService {
     );
   }
 
+  /* Create updates by creating a new manifest and assets */
   async createUpdates(
     {
       appId,
+      options,
       meta,
     }: {
       appId: string;
+      options: ManifestsOptions;
       meta: { runtimeVersion: string };
     },
     file: Express.Multer.File,
@@ -137,6 +150,7 @@ export class UpdatesService {
           // extra: {
           //   expoClient: expoConfig,
           // },
+          options,
         });
 
         const iosLaunchAssetId = fileMetadata.ios ? uuidv7() : null;
@@ -157,6 +171,7 @@ export class UpdatesService {
                 localPath: iosBundlePath,
                 fileExtension: '.bundle',
                 contentType: 'application/javascript',
+                options,
               },
               tx,
             ),
@@ -176,6 +191,7 @@ export class UpdatesService {
                   fileExtension: `.${asset.ext}`,
                   fileName: asset.path,
                   localPath: path.join(extractPath, asset.path),
+                  options,
                 },
                 tx,
               );
@@ -197,6 +213,7 @@ export class UpdatesService {
                 localPath: androidBundlePath,
                 fileExtension: '.bundle',
                 contentType: 'application/javascript',
+                options,
               },
               tx,
             ),
@@ -218,7 +235,7 @@ export class UpdatesService {
 
       // 删除上传的ZIP文件（可选）
       // fs.unlinkSync(extractPath);
-
+      console.log(manifest);
       return manifest;
     } catch (e) {
       console.log(e);
