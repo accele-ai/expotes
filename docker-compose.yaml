@@ -55,8 +55,11 @@ services:
     ports:
       - "6379:6379"
     environment:
-      - REDIS_ARGS=--requirepass mypassword
+      - REDIS_ARGS=--requirepass mypassword --appendonly yes
+    volumes:
+      - expotes-redis-data:/data
       
 volumes:
   expotes-db:
   expotes-minio-data:
+  expotes-redis-data:
