@@ -68,6 +68,9 @@ export class UpdatesService {
         await storage.uploadBuffer({
           key: s3Path,
           buffer: fileBuffer,
+          extras: {
+            ContentType: contentType,
+          },
         });
       }
     } else {
@@ -77,6 +80,9 @@ export class UpdatesService {
       await storage.uploadBuffer({
         key: s3Path,
         buffer: fileBuffer,
+        extras: {
+          ContentType: contentType,
+        },
       });
     }
 

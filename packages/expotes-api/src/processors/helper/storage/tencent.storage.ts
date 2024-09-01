@@ -66,6 +66,7 @@ export class TencentCosStorage extends AbstractObjectStorage {
     path,
     key,
     bucket,
+    extras,
   }: UploadLocalFileProps | UploadLocalFilePropsWithBucket): Promise<void> {
     try {
       await this.cos.uploadFile({
@@ -73,6 +74,7 @@ export class TencentCosStorage extends AbstractObjectStorage {
         Region: this.REGION,
         Key: key,
         FilePath: path,
+        ContentType: extras?.ContentType,
       });
     } catch (error) {
       await this.checkBucket(bucket || this.bucket);
