@@ -1,6 +1,6 @@
 import { assetsTable, manifestsTable } from '@db/schema';
 import { Injectable } from '@nestjs/common';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, notInArray } from 'drizzle-orm';
 import {
   Database,
   DatabaseService,
@@ -135,9 +135,13 @@ export class ManifestService {
         return this.transformAsset(asset, manifest);
       })(),
       assets: await Promise.all(
-        fullManifest.assets.map((asset) =>
-          this.transformAsset(asset, manifest),
-        ),
+        fullManifest.assets
+          .filter(
+            (asset) =>
+              asset.id !== fullManifest.iosLaunchAsset?.id &&
+              asset.id !== fullManifest.androidLaunchAsset?.id,
+          )
+          .map((asset) => this.transformAsset(asset, manifest)),
       ),
       metadata: fullManifest.metadata,
       extra: fullManifest.extra,
