@@ -14,6 +14,7 @@ import {
 } from '@tanstack/react-table'
 import React, { useMemo } from 'react'
 
+import { useTeam } from '@/provider/SessionProvider'
 import { useSDK } from '@/services/api'
 import { usePersistStore } from '@/store/persist'
 import { sdk } from '@expotes/sdk'
@@ -24,7 +25,7 @@ type Application = {
 }
 
 export default function Applications() {
-  const { teamId } = usePersistStore()
+  const { id: teamId } = useTeam()
   const {
     data: applications,
     isLoading,
