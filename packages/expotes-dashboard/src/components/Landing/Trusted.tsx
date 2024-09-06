@@ -40,7 +40,7 @@ export const Trusted = () => {
         </div>
       </div>
 
-      <Divider className="absolute inset-0 left-0 mt-5" />
+      <Divider className="" />
     </>
   )
 }

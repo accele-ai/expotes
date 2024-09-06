@@ -31,6 +31,15 @@ function Router() {
         <link rel="canonical" href="https://expotes.com" />
       </Helmet>
       <Switch>
+        <LandingLayout>
+          <Route path="/" component={Landing} />
+          <Route path="/pricing" component={Pricing} />
+          <SessionGuard>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+          </SessionGuard>
+        </LandingLayout>
+
         <SessionGuard>
           <TeamProvider>
             <SidebarLayout>
@@ -42,15 +51,6 @@ function Router() {
             </SidebarLayout>
           </TeamProvider>
         </SessionGuard>
-
-        <LandingLayout>
-          <Route path="/" component={Landing} />
-          <Route path="/pricing" component={Pricing} />
-          <SessionGuard>
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-          </SessionGuard>
-        </LandingLayout>
 
         {/* Default route in a switch */}
         <Route>404: No such page!</Route>

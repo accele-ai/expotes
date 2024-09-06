@@ -18,8 +18,7 @@ import React from 'react'
 
 import { cn } from '@/utils/cn'
 
-import { frequencies, tiers } from './PricingTiers.js'
-import { FrequencyEnum } from './PricingTypes.js'
+import { frequencies, FrequencyEnum, tiers } from './types'
 
 export default function PricingComponent() {
   const [selectedFrequency, setSelectedFrequency] = React.useState(

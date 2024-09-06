@@ -1,5 +1,5 @@
-import PricingComponent from '@/components/Pricing/PricingComponent'
+import Pricing from '@/components/Landing/Pricing'
 
-export default function Pricing() {
-  return <PricingComponent />
+export default function PricingPage() {
+  return <Pricing />
 }

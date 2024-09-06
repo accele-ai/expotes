@@ -50,7 +50,7 @@ export const Features1 = () => {
           <Icon icon="mdi:feature" width={400} height={400} />
         </div>
       </div>
-      <Divider className="absolute inset-0 left-0 mt-5" />
+      <Divider className="" />
     </>
   )
 }
