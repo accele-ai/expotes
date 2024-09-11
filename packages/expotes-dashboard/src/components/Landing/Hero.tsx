@@ -39,37 +39,30 @@ const Hero = () => {
             <h1 className="inline w-full overflow-hidden text-[128px] font-bold">
               <div className="flex w-full justify-center">
                 <AnimatePresence>
-                  {animationStage === 0 && (
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.5 }}
-                      className="inline-block"
-                    >
-                      Expo Updates
-                    </motion.span>
-                  )}
-                  {animationStage === 1 && (
-                    <>
-                      <motion.span
-                        initial={{ x: -200, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 1 }}
-                        className="inline-block"
-                      >
-                        Exp
-                      </motion.span>
-                      <motion.span
-                        initial={{ x: 200, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 1 }}
-                        className="inline-block"
-                      >
-                        otes
-                      </motion.span>
-                    </>
-                  )}
+                  <motion.span
+                    initial={{ x:0 }}
+                    animate={{ x: 169 }}
+                    transition={{ type: 'spring', duration: 1, delay: 2 }}
+                    className="inline-block"
+                  >
+                    Expo
+                  </motion.span>
+                  <motion.span
+                    initial={{ scale: 1, opacity: 1, y: 0 }}
+                    animate={{ scale: 0.2, opacity: 0, y: 30 }}
+                    transition={{ type: 'easeOut', duration: 0.45, delay: 2 }}
+                    className="inline-block"
+                  >
+                    &nbsp;Upda
+                  </motion.span>
+                  <motion.span
+                    initial={{ x: 0 }}
+                    animate={{ x: -169 }}
+                    transition={{ type: 'spring', duration: 1, delay: 2 }}
+                    className="inline-block"
+                  >
+                    tes
+                  </motion.span>
                 </AnimatePresence>
               </div>
             </h1>
