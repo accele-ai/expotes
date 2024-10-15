@@ -4,6 +4,7 @@ dist
 node_modules
 apps/**/ios
 apps/**/android
+**/.next
 
 tmp
 .env
