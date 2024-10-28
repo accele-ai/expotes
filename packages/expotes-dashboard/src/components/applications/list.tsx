@@ -18,6 +18,7 @@ import { useSDK } from "@/lib/api";
 
 import { usePersistStore } from "@/store/persist";
 import { sdk } from "@expotes/sdk";
+import useSWRInfinite from "swr/infinite";
 import { DataTable } from "../app-table";
 import { Button } from "../ui/button";
 

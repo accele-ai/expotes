@@ -4,7 +4,7 @@ import React from "react";
 export const SDKContext = React.createContext<IConnection | null>(null);
 export const FetchContext = React.createContext<typeof fetch | null>(null);
 
-const { useSDK, useSDKMutation } = createSDKServices(SDKContext);
+const { useSDK, useSDKMutation, useSDKFetcher } = createSDKServices(SDKContext);
 
 const useFetcher = () => {
 	const fetch = React.useContext(FetchContext);
@@ -14,4 +14,4 @@ const useFetcher = () => {
 	return fetch;
 };
 
-export { useSDK, useSDKMutation, useFetcher };
+export { useSDK, useSDKMutation, useSDKFetcher, useFetcher };
