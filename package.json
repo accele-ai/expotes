@@ -1,21 +1,37 @@
 {
   "name": "expotes",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev:server": "turbo dev --filter @expotes/api --filter @expotes/db"
+  "version": "0.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/accele-ai/expotes.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@9.11.0",
+  "scripts": {
+    "dev:server": "turbo dev --filter @expotes/api --filter @expotes/db",
+    "lint": "turbo lint --parallel",
+    "format": "turbo format --parallel",
+    "check": "turbo check --parallel"
+  },
+  "keywords": [
+    "Expo",
+    "Updates"
+  ],
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@innei/prettier": "^0.15.0",
     "prettier": "^3.3.3",
     "turbo": "^2.0.12"
   },
   "engines": {
     "node": ">=22.4.0"
-  }
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "19",
+        "next": "15"
+      }
+    }
+  },
+  "packageManager": "pnpm@9.12.3"
 }

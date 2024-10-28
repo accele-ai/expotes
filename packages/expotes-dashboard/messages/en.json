@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Hello world!"
+  },
+  "Pathname": {
+    "applications": " Applications",
+    "manifest": " Manifest",
+    "updates": "Updates"
+  }
+}
