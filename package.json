@@ -28,9 +28,13 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "react": "19",
+        "react": "18 || 19",
         "next": "15"
-      }
+      },
+      "ignoreMissing": [
+        "react",
+        "@types/react"
+      ]
     }
   },
   "packageManager": "pnpm@9.12.3"
