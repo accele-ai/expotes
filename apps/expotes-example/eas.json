@@ -1,41 +1,41 @@
 {
-  "cli": {
-    "version": ">= 10.2.2"
-  },
-  "build": {
-    "base":{
-      "ios": {
-        "credentialsSource": "local"
-      },
-      "android": {
-        "credentialsSource": "local"
-      }
-    },
-    "development": {
-      "extends": "base",
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "extends": "base",
-      "android": {
-        "buildType": "apk",
-        "distribution": "internal",
-        "withoutCredentials": true
-      }
-    },
-    "production": {
-      "extends": "base",
-      "env": {
-        "NODE_ENV": "production"
-      },
-      "distribution": "store",
-      "android": {
-        "buildType": "app-bundle"
-      }
-    }
-  },
-  "submit": {
-    "production": {}
-  }
+	"cli": {
+		"version": ">= 10.2.2"
+	},
+	"build": {
+		"base": {
+			"ios": {
+				"credentialsSource": "local"
+			},
+			"android": {
+				"credentialsSource": "local"
+			}
+		},
+		"development": {
+			"extends": "base",
+			"developmentClient": true,
+			"distribution": "internal"
+		},
+		"preview": {
+			"extends": "base",
+			"android": {
+				"buildType": "apk",
+				"distribution": "internal",
+				"withoutCredentials": true
+			}
+		},
+		"production": {
+			"extends": "base",
+			"env": {
+				"NODE_ENV": "production"
+			},
+			"distribution": "store",
+			"android": {
+				"buildType": "app-bundle"
+			}
+		}
+	},
+	"submit": {
+		"production": {}
+	}
 }

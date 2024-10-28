@@ -1,19 +1,19 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import cookieParser from 'cookie-parser';
-import { dbMigration } from './migrator';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import cookieParser from "cookie-parser";
+import { dbMigration } from "./migrator";
 
 async function bootstrap() {
-  await dbMigration();
+	await dbMigration();
 
-  const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
-  });
-  app.use(cookieParser());
+	const app = await NestFactory.create(AppModule, {
+		logger: ["error", "warn", "log", "debug", "verbose"],
+	});
+	app.use(cookieParser());
 
-  app.setGlobalPrefix('api');
+	app.setGlobalPrefix("api");
 
-  await app.listen(3000);
+	await app.listen(3000);
 }
 
 bootstrap();

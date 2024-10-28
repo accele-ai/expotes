@@ -1,3 +1,3 @@
-export * from './module'
+export * from "./module";
 
-export { api as sdk } from './functional'
+export { api as sdk } from "./functional";
