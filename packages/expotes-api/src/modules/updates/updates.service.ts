@@ -1,23 +1,24 @@
-import { Injectable, Logger } from "@nestjs/common";
-import AdmZip from "adm-zip";
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { createHash, getBase64URLEncoding } from "@/shared/utils/crypto.util";
 import {
+	type ManifestsOptions,
 	applicationsTable,
-	ManifestsOptions,
 	manifestsTable,
 } from "@db/schema";
-import { FileMetadata } from "./updates.interface";
-import { v7 as uuidv7 } from "uuid";
+import { Injectable, Logger } from "@nestjs/common";
+import AdmZip from "adm-zip";
+import { and, desc, eq, gt } from "drizzle-orm";
 import {
 	Database,
 	DatabaseService,
 } from "src/processors/database/database.service";
-import { ManifestService } from "../manifest/manifest.service";
-import { AssetsService } from "../assets/assets.service";
+import { v7 as uuidv7 } from "uuid";
 import { StorageService } from "../../processors/helper/storage/storage.services";
-import { desc, eq } from "drizzle-orm";
-import { createHash, getBase64URLEncoding } from "@/shared/utils/crypto.util";
+import { AssetsService } from "../assets/assets.service";
+import { ManifestService } from "../manifest/manifest.service";
+import { FindAllUpdatesDto, FindAllUpdatesEntity } from "./updates.dto";
+import { FileMetadata } from "./updates.interface";
 // import mime from 'mime';
 
 @Injectable()
@@ -105,10 +106,12 @@ export class UpdatesService {
 			appId,
 			options,
 			meta,
+			notes,
 		}: {
 			appId: string;
 			options: ManifestsOptions;
 			meta: { runtimeVersion: string };
+			notes?: string;
 		},
 		file: Express.Multer.File,
 	) {
@@ -153,6 +156,7 @@ export class UpdatesService {
 					//   expoClient: expoConfig,
 					// },
 					options,
+					notes,
 				});
 
 				const iosLaunchAssetId = fileMetadata.ios ? uuidv7() : null;
@@ -244,33 +248,35 @@ export class UpdatesService {
 		}
 	}
 
-	async listUpdates({ appId, teamId }: { appId?: string; teamId: string }) {
-		if (appId) {
-			return this.db.query.manifestsTable.findMany({
-				where: eq(manifestsTable.appId, appId),
-				columns: {
-					appId: false,
-				},
-				orderBy: [desc(manifestsTable.createdAt)],
-			});
-		} else {
-			return (
-				await this.db
-					.select()
-					.from(manifestsTable)
-					.innerJoin(
-						applicationsTable,
-						eq(manifestsTable.appId, applicationsTable.id),
-					)
-					.where(eq(applicationsTable.teamId, teamId))
-					.orderBy(desc(manifestsTable.createdAt))
-			).map((r) => {
-				return {
-					...r.manifests,
-					appId: undefined,
-					application: r.applications,
-				};
-			});
-		}
+	async listUpdates({
+		appId,
+		teamId,
+		size,
+		cursor,
+	}: FindAllUpdatesDto & { teamId: string }) {
+		return (
+			await this.db
+				.select()
+				.from(manifestsTable)
+				.limit(size)
+				.innerJoin(
+					applicationsTable,
+					eq(manifestsTable.appId, applicationsTable.id),
+				)
+				.where(
+					and(
+						eq(applicationsTable.teamId, teamId),
+						appId ? eq(manifestsTable.appId, appId) : undefined,
+						cursor ? gt(manifestsTable.id, cursor) : undefined,
+					),
+				)
+				.orderBy(desc(manifestsTable.createdAt))
+		).map((r) => {
+			return {
+				...r.manifests,
+				appId: undefined,
+				application: r.applications,
+			};
+		});
 	}
 }

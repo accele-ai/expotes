@@ -1,12 +1,17 @@
-import { Body, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { UpdatesService } from "./updates.service";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { Express } from "express";
-import { CreateUpdatesDto, FindAllUpdatesDto } from "./updates.dto";
 import { ApiController } from "@/common/decorators/api-controller.decorator";
-import { TypedBody, TypedFormData, TypedQuery, TypedRoute } from "@nestia/core";
 import { Team } from "@/common/decorators/get-owner-decorator";
+import { CursorPagerDto, PagerDto } from "@/shared/dto/pager.dto";
 import { ManifestsOptions } from "@db/schema";
+import { TypedBody, TypedFormData, TypedQuery, TypedRoute } from "@nestia/core";
+import { Body, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import type { Express } from "express";
+import type {
+	CreateUpdatesDto,
+	FindAllUpdatesDto,
+	FindAllUpdatesEntity,
+} from "./updates.dto";
+import { UpdatesService } from "./updates.service";
 
 @ApiController("updates")
 export class UpdatesController {
@@ -14,10 +19,10 @@ export class UpdatesController {
 
 	@TypedRoute.Get("list")
 	async list(
-		@TypedQuery() { appId }: { appId?: string },
+		@TypedQuery() dto: FindAllUpdatesDto,
 		@Team() teamId: string,
-	): Promise<FindAllUpdatesDto[]> {
-		return this.uploadService.listUpdates({ appId, teamId });
+	): Promise<FindAllUpdatesEntity[]> {
+		return this.uploadService.listUpdates({ ...dto, teamId });
 	}
 
 	@TypedRoute.Post("create")
@@ -31,6 +36,7 @@ export class UpdatesController {
 				appId: body.appId,
 				options: JSON.parse(body.options),
 				meta: { runtimeVersion: body.runtimeVersion },
+				notes: body.notes,
 			},
 			file,
 		);

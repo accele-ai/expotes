@@ -1,10 +1,12 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
 import cookieParser from "cookie-parser";
+import { AppModule } from "./app.module";
 import { dbMigration } from "./migrator";
 
 async function bootstrap() {
-	await dbMigration();
+	if (process.env.NODE_ENV === "production") {
+		await dbMigration();
+	}
 
 	const app = await NestFactory.create(AppModule, {
 		logger: ["error", "warn", "log", "debug", "verbose"],
@@ -13,7 +15,7 @@ async function bootstrap() {
 
 	app.setGlobalPrefix("api");
 
-	await app.listen(3000);
+	await app.listen(3001);
 }
 
 bootstrap();

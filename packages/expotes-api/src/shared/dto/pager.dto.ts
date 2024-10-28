@@ -1,7 +1,7 @@
 import { tags } from "typia";
 
 interface BasePagerDto {
-	size?: number & tags.Default<25>;
+	size: number & tags.Default<25>;
 }
 
 export interface PagerDto extends BasePagerDto {
