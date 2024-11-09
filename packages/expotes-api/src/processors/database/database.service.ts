@@ -19,11 +19,14 @@ export class DatabaseService extends Drizzle implements OnModuleDestroy {
 		const dbUrl = test
 			? process.env.TEST_DATABASE_URL
 			: process.env.DATABASE_URL;
-		if (!dbUrl) {
-			throw new Error("DATABASE_URL is not set");
+		if (process.env.NODE_ENV === "production") {
+			if (!dbUrl) {
+				throw new Error("DATABASE_URL is not set");
+			}
+			console.error("DATABASE_URL is not set");
 		}
 
-		const queryClient = postgres(dbUrl);
+		const queryClient = postgres(dbUrl!);
 		super(queryClient, { schema });
 		// this.dbUrl = dbUrl;
 		this.queryClient = queryClient;
