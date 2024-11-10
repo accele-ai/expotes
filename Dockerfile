@@ -5,6 +5,9 @@ RUN npm install -g pnpm
 
 
 FROM base AS build
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
