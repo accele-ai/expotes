@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -36,28 +37,28 @@ export default function Applications() {
 
   const columnHelper = createColumnHelper<Application>();
 
-  const columns = React.useMemo(
+  const columns = React.useMemo<ColumnDef<Application>[]>(
     () => [
       columnHelper.accessor("id", {
         header: "ID",
         cell: (info) => info.getValue(),
-      }),
+      }) as ColumnDef<Application>,
       columnHelper.accessor("teamId", {
         header: "Team ID",
         cell: (info) => info.getValue(),
-      }),
+      }) as ColumnDef<Application>,
       columnHelper.accessor("name", {
         header: "Name",
         cell: (info) => info.getValue(),
-      }),
+      }) as ColumnDef<Application>,
       columnHelper.accessor("handle", {
         header: "Handle",
         cell: (info) => info.getValue(),
-      }),
+      }) as ColumnDef<Application>,
       columnHelper.accessor("createdAt", {
         header: "Created At",
         cell: (info) => info.getValue(),
-      }),
+      }) as ColumnDef<Application>,
       columnHelper.display({
         header: "Actions",
         cell: (info) => (

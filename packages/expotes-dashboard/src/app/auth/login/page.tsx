@@ -36,7 +36,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
   const router = useRouter();
-  const { trigger, isLoading } = useSDKMutation(sdk.v1.auth.login);
+  const { trigger } = useSDKMutation(sdk.v1.auth.login);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

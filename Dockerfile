@@ -16,7 +16,7 @@ FROM base
 ENV PROD_STATIC_PATH="/app/dist/static"
 
 COPY --from=build /prod/api /app/
-COPY --from=build /usr/src/app/packages/expotes-dashboard/dist /app/dist/static
+COPY --from=build /usr/src/app/packages/expotes-dashboard/out /app/dist/static
 
 WORKDIR /app
 EXPOSE 3000

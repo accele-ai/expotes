@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -93,7 +94,10 @@ export default function UpdatesTable() {
       }),
       columnHelper.accessor("createdAt", {
         header: "Created At",
-        cell: (info) => info.getValue(),
+        cell: (info) => {
+          const value = info.getValue();
+          return value ? new Date(value).toLocaleString() : null;
+        },
       }),
       columnHelper.display({
         header: "Actions",
@@ -133,7 +137,7 @@ export default function UpdatesTable() {
   return (
     <div className="flex flex-col gap-4 w-full">
       <DataTable
-        columns={columns}
+        columns={columns as ColumnDef<Update>[]}
         data={updatesData || []}
         pagination={{
           page: size,
