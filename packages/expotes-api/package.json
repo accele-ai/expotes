@@ -42,6 +42,7 @@
 		"@nestjs/platform-express": "^10.3.10",
 		"@nestjs/serve-static": "^4.0.2",
 		"@nestjs/swagger": "^7.4.0",
+		"@sentry/nestjs": "^8.37.1",
 		"add": "^2.0.6",
 		"adm-zip": "^0.5.14",
 		"arctic": "^1.9.2",
