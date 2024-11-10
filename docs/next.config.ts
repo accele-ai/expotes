@@ -11,6 +11,7 @@ const withNextra = nextra({
 });
 
 export default withNextra({
+	basePath: "/docs",
 	output: "standalone",
 	reactStrictMode: true,
 	images: {
