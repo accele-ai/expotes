@@ -12,7 +12,7 @@ const withNextra = nextra({
 });
 
 export default withNextra({
-	output: "export",
+	output: "standalone",
 	reactStrictMode: true,
 	images: {
 		unoptimized: true,
