@@ -8,48 +8,48 @@ import { getLocale, getMessages } from "next-intl/server";
 import { ViewTransitions } from "next-view-transitions";
 
 const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+	src: "../fonts/GeistVF.woff",
+	variable: "--font-geist-sans",
+	weight: "100 900",
 });
 const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+	src: "../fonts/GeistMonoVF.woff",
+	variable: "--font-geist-mono",
+	weight: "100 900",
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Expotes",
-    template: "%s | Expotes",
-  },
-  description: "Best Expo OTA Alternative to EAS Updates",
+	title: {
+		default: "Expotes",
+		template: "%s | Expotes",
+	},
+	description: "Best Expo OTA Alternative to EAS Updates",
 };
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
+	const locale = await getLocale();
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
+	// Providing all messages to the client
+	// side is the easiest way to get started
+	const messages = await getMessages();
 
-  return (
-    <ViewTransitions>
-      <html lang={locale}>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <NextIntlClientProvider messages={messages}>
-            <SDKProvider>
-              <SessionProvider>{children}</SessionProvider>
-            </SDKProvider>
-          </NextIntlClientProvider>
-        </body>
-      </html>
-    </ViewTransitions>
-  );
+	return (
+		<ViewTransitions>
+			<html lang={locale}>
+				<body
+					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				>
+					<NextIntlClientProvider messages={messages}>
+						<SDKProvider>
+							<SessionProvider>{children}</SessionProvider>
+						</SDKProvider>
+					</NextIntlClientProvider>
+				</body>
+			</html>
+		</ViewTransitions>
+	);
 }

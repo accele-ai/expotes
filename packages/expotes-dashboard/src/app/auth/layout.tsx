@@ -2,9 +2,9 @@ import { SessionGuard } from "@/provider/session-provider";
 import type React from "react";
 
 export default function AuthLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return <SessionGuard>{children}</SessionGuard>;
+	return <SessionGuard>{children}</SessionGuard>;
 }

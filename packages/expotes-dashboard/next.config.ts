@@ -7,22 +7,17 @@ const IS_PROD = process.env.NODE_ENV === "production";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	output: IS_PROD ? ("export" as const) : undefined,
+	trailingSlash: true,
 	rewrites: !IS_PROD
 		? async () => {
 				return [
 					{
 						source: "/api/:path*",
-						destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
+						destination: `${process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001"}/api/:path*`,
 					},
 				];
 			}
 		: undefined,
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-	typescript: {
-		ignoreBuildErrors: true,
-	},
 };
 
 export default withNextIntl(nextConfig);
