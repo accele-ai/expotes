@@ -1,18 +1,18 @@
+import { Readable } from "node:stream";
 import {
 	Injectable,
-	StreamableFile,
 	ServiceUnavailableException,
+	StreamableFile,
 } from "@nestjs/common";
 import COS from "cos-nodejs-sdk-v5";
-import { Readable } from "stream";
 import {
 	AbstractObjectStorage,
-	UploadProps,
-	UploadPropsWithBucket,
-	UploadLocalFileProps,
-	UploadLocalFilePropsWithBucket,
 	UploadBufferProps,
 	UploadBufferPropsWithBucket,
+	UploadLocalFileProps,
+	UploadLocalFilePropsWithBucket,
+	UploadProps,
+	UploadPropsWithBucket,
 } from "./abstract.storage";
 
 export interface TencentCosStorageProps {
@@ -55,7 +55,6 @@ export class TencentCosStorage extends AbstractObjectStorage {
 				...extras,
 			});
 		} catch (error) {
-			await this.checkBucket(bucket || this.bucket);
 			throw new ServiceUnavailableException(error);
 		}
 	}
@@ -77,7 +76,6 @@ export class TencentCosStorage extends AbstractObjectStorage {
 				ContentType: extras?.ContentType,
 			});
 		} catch (error) {
-			await this.checkBucket(bucket || this.bucket);
 			throw new ServiceUnavailableException(error);
 		}
 	}
@@ -144,24 +142,6 @@ export class TencentCosStorage extends AbstractObjectStorage {
 				return false;
 			}
 			throw new ServiceUnavailableException(error);
-		}
-	}
-
-	protected async checkBucket(bucket: string): Promise<void> {
-		try {
-			await this.cos.headBucket({
-				Bucket: bucket,
-				Region: this.REGION,
-			});
-		} catch (error) {
-			if (error.statusCode === 404) {
-				await this.cos.putBucket({
-					Bucket: bucket,
-					Region: this.REGION,
-				});
-			} else {
-				throw new ServiceUnavailableException(error);
-			}
 		}
 	}
 

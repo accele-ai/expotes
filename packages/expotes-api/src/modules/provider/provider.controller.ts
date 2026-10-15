@@ -1,17 +1,17 @@
-import { Body, Controller } from "@nestjs/common";
-import { ProviderService } from "./provider.service";
-import { TypedParam, TypedRoute } from "@nestia/core";
-import {
-	CreateStorageProviderDto,
-	UpdateStorageProviderDto,
-	StorageProviderResponseDto,
-	CreateCdnProviderDto,
-	UpdateCdnProviderDto,
-	CdnProviderResponseDto,
-} from "./provider.dto";
-import { Owner, Team } from "@/common/decorators/get-owner-decorator";
-import { ISessionPayload } from "../session/session.dto";
 import { ApiController } from "@/common/decorators/api-controller.decorator";
+import { Owner, Team } from "@/common/decorators/get-owner-decorator";
+import { TypedParam, TypedRoute } from "@nestia/core";
+import { Body, Controller } from "@nestjs/common";
+import { ISessionPayload } from "../session/session.dto";
+import {
+	CdnProviderResponseDto,
+	CreateCdnProviderDto,
+	CreateStorageProviderDto,
+	StorageProviderResponseDto,
+	UpdateCdnProviderDto,
+	UpdateStorageProviderDto,
+} from "./provider.dto";
+import { ProviderService } from "./provider.service";
 
 @ApiController("provider")
 export class ProviderController {

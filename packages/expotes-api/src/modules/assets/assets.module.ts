@@ -1,13 +1,12 @@
+import { HelperModule } from "@/processors/helper/helper.module";
 import { Module } from "@nestjs/common";
-import { AssetsService } from "./assets.service";
 import { AssetsController } from "./assets.controller";
-import { ManifestModule } from "../manifest/manifest.module";
-import { StorageService } from "@/processors/helper/storage/storage.services";
+import { AssetsService } from "./assets.service";
 
 @Module({
-	imports: [ManifestModule],
+	imports: [HelperModule],
 	controllers: [AssetsController],
-	providers: [AssetsService, StorageService],
+	providers: [AssetsService],
 	exports: [AssetsService],
 })
 export class AssetsModule {}

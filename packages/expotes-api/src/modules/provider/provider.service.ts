@@ -1,7 +1,7 @@
 import { DatabaseService } from "@/processors/database/database.service";
 import {
-	cdnProviderTable,
 	IStorageProviderSelect,
+	cdnProviderTable,
 	storageProviderTable,
 } from "@db/schema";
 import { Injectable } from "@nestjs/common";

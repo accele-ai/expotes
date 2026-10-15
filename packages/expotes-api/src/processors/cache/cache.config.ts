@@ -1,8 +1,8 @@
-import { redisStore } from "cache-manager-ioredis-yet";
-import { RedisOptions } from "ioredis";
 import { CacheModuleOptions, CacheOptionsFactory } from "@nestjs/cache-manager";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { redisStore } from "cache-manager-ioredis-yet";
+import { RedisOptions } from "ioredis";
 import { parseRedisUrl } from "parse-redis-url-simple";
 
 @Injectable()
@@ -11,9 +11,9 @@ export class CacheConfigService implements CacheOptionsFactory {
 
 	// 缓存配置
 	public createCacheOptions(): CacheModuleOptions {
-		const redisOptions = parseRedisUrl(
-			process.env.REDIS_URL!,
-		)[0] satisfies RedisOptions;
+		const redisUrl = process.env.REDIS_URL;
+		if (!redisUrl) throw new Error("REDIS_URL is not set");
+		const redisOptions = parseRedisUrl(redisUrl)[0] satisfies RedisOptions;
 		return {
 			store: redisStore,
 			ttl: 60 * 1000, // millisecond

@@ -1,8 +1,7 @@
 import { API_VERSION } from "@/app.config";
 import { Controller, type ControllerOptions } from "@nestjs/common";
 
-export const apiRoutePrefix = `/v${API_VERSION}`;
-// export const apiRoutePrefix = isDev || isTest ? '' : `/api/v${API_VERSION}`;
+export const apiRoutePrefix = `/api/v${API_VERSION}`;
 
 export const ApiController: (
 	optionOrString?: string | string[] | undefined | ControllerOptions,

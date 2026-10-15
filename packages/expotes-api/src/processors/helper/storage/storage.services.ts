@@ -1,16 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { AbstractObjectStorage } from "./abstract.storage";
-import { DEFAULT_MINIO_PROPS, MinioStorage } from "./minio.storage";
+import { CacheService } from "@/processors/cache/cache.service";
 import { DatabaseService } from "@/processors/database/database.service";
 import { IStorageProviderSelect, storageProviderTable } from "@db/schema";
+import { Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
+import { assert } from "typia";
+import { AbstractObjectStorage } from "./abstract.storage";
+import { S3Storage, S3StorageProps, readDefaultS3Config } from "./s3.storage";
 import { TencentCosStorage } from "./tencent.storage";
-import { CacheService } from "@/processors/cache/cache.service";
 
 @Injectable()
 export class StorageService {
-	private default: AbstractObjectStorage = new MinioStorage(
-		DEFAULT_MINIO_PROPS,
+	private readonly default: AbstractObjectStorage = new S3Storage(
+		readDefaultS3Config(),
 	);
 
 	constructor(
@@ -48,17 +49,20 @@ export class StorageService {
 		const storageProvider = await this.fetchStorage(providerId);
 
 		switch (storageProvider.type) {
+			case "s3":
 			case "minio":
-				return new MinioStorage({
-					bucket: storageProvider.bucket,
-					accessKey: storageProvider.accessKey,
-					secretKey: storageProvider.secretKey,
-					endpoint: storageProvider.endpoint,
-					region: storageProvider.region,
-					// prefix: storageProvider.prefix,
-					port: storageProvider.extras.port,
-					useSSL: storageProvider.extras.useSSL,
-				});
+				return new S3Storage(
+					assert<S3StorageProps>({
+						bucket: storageProvider.bucket,
+						accessKey: storageProvider.accessKey,
+						secretKey: storageProvider.secretKey,
+						endpoint: storageProvider.endpoint,
+						region: storageProvider.region,
+						// prefix: storageProvider.prefix,
+						port: storageProvider.extras.port,
+						useSSL: storageProvider.extras.useSSL,
+					}),
+				);
 			case "tencent-cos":
 				return new TencentCosStorage({
 					bucket: storageProvider.bucket,

@@ -23,7 +23,6 @@
 		"strictBindCallApply": true,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
-		"preserveSymlinks": true,
 		"plugins": [
 			{
 				"transform": "@nestia/core/lib/transform",

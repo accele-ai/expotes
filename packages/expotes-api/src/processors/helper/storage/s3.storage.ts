@@ -1,35 +1,54 @@
-import { StreamableFile, ServiceUnavailableException } from "@nestjs/common";
+import { ServiceUnavailableException, StreamableFile } from "@nestjs/common";
 import * as Minio from "minio";
 import {
 	AbstractObjectStorage,
-	UploadProps,
-	UploadLocalFileProps,
 	UploadBufferProps,
+	UploadLocalFileProps,
+	UploadProps,
 } from "./abstract.storage";
 
-export interface MinioStorageProps {
+export interface S3StorageProps {
 	endpoint: string;
-	port: number;
-	useSSL: boolean;
+	port?: number;
+	useSSL?: boolean;
 	accessKey: string;
 	secretKey: string;
 	bucket: string;
 	region?: string;
-	prefix?: string;
 }
 
-export const DEFAULT_MINIO_PROPS: MinioStorageProps = {
-	endpoint: process.env.MINIO_ENDPOINT || "localhost",
-	port: process.env.MINIO_PORT ? parseInt(process.env.MINIO_PORT) : 9000,
-	useSSL: process.env.MINIO_USE_SSL === "true",
-	accessKey: process.env.MINIO_ACCESS_KEY || "minioadmin",
-	secretKey: process.env.MINIO_SECRET_KEY || "minioadmin",
-	bucket: process.env.MINIO_BUCKET || "expotes",
-};
+export function readDefaultS3Config(
+	env: NodeJS.ProcessEnv = process.env,
+): S3StorageProps {
+	const accessKey = env.S3_ACCESS_KEY ?? env.MINIO_ACCESS_KEY;
+	const secretKey = env.S3_SECRET_KEY ?? env.MINIO_SECRET_KEY;
+	if (!accessKey || !secretKey) {
+		throw new Error("S3_ACCESS_KEY and S3_SECRET_KEY must be set");
+	}
 
-export class MinioStorage extends AbstractObjectStorage {
-	private minio: Minio.Client;
-	// private prefix = '';
+	const port = Number(env.S3_PORT ?? env.MINIO_PORT ?? "9000");
+	if (!Number.isInteger(port) || port < 0 || port > 65535) {
+		throw new Error("S3_PORT must be an integer between 0 and 65535");
+	}
+
+	const useSSL = env.S3_USE_SSL ?? env.MINIO_USE_SSL ?? "false";
+	if (useSSL !== "true" && useSSL !== "false") {
+		throw new Error("S3_USE_SSL must be true or false");
+	}
+
+	return {
+		endpoint: env.S3_ENDPOINT ?? env.MINIO_ENDPOINT ?? "localhost",
+		port,
+		useSSL: useSSL === "true",
+		accessKey,
+		secretKey,
+		bucket: env.S3_BUCKET ?? env.MINIO_BUCKET ?? "expotes",
+		region: env.S3_REGION ?? env.MINIO_REGION,
+	};
+}
+
+export class S3Storage extends AbstractObjectStorage {
+	private readonly client: Minio.Client;
 
 	constructor({
 		endpoint,
@@ -39,10 +58,9 @@ export class MinioStorage extends AbstractObjectStorage {
 		secretKey,
 		bucket,
 		region,
-	}: // prefix,
-	MinioStorageProps) {
+	}: S3StorageProps) {
 		super(bucket);
-		this.minio = new Minio.Client({
+		this.client = new Minio.Client({
 			endPoint: endpoint,
 			port,
 			useSSL,
@@ -54,7 +72,7 @@ export class MinioStorage extends AbstractObjectStorage {
 
 	async upload({ key, data, bucket, extras }: UploadProps): Promise<void> {
 		try {
-			await this.minio.putObject(
+			await this.client.putObject(
 				bucket || this.bucket,
 				key,
 				data,
@@ -62,7 +80,6 @@ export class MinioStorage extends AbstractObjectStorage {
 				extras,
 			);
 		} catch (error) {
-			await this.checkBucket(bucket || this.bucket);
 			throw new ServiceUnavailableException(error);
 		}
 	}
@@ -73,9 +90,8 @@ export class MinioStorage extends AbstractObjectStorage {
 		bucket,
 	}: UploadLocalFileProps): Promise<void> {
 		try {
-			await this.minio.fPutObject(bucket || this.bucket, key, path);
+			await this.client.fPutObject(bucket || this.bucket, key, path);
 		} catch (error) {
-			await this.checkBucket(bucket || this.bucket);
 			throw new ServiceUnavailableException(error);
 		}
 	}
@@ -91,7 +107,7 @@ export class MinioStorage extends AbstractObjectStorage {
 
 	async download(key: string, bucket?: string): Promise<StreamableFile> {
 		try {
-			const stream = await this.minio.getObject(bucket || this.bucket, key);
+			const stream = await this.client.getObject(bucket || this.bucket, key);
 			return new StreamableFile(stream);
 		} catch (error) {
 			throw new ServiceUnavailableException(error);
@@ -100,7 +116,7 @@ export class MinioStorage extends AbstractObjectStorage {
 
 	async delete(key: string, bucket?: string): Promise<void> {
 		try {
-			await this.minio.removeObject(bucket || this.bucket, key);
+			await this.client.removeObject(bucket || this.bucket, key);
 		} catch (error) {
 			throw new ServiceUnavailableException(error);
 		}
@@ -108,7 +124,7 @@ export class MinioStorage extends AbstractObjectStorage {
 
 	async list(prefix: string, bucket?: string): Promise<string[]> {
 		const objectsList: string[] = [];
-		const stream = this.minio.listObjects(bucket || this.bucket, prefix, true);
+		const stream = this.client.listObjects(bucket || this.bucket, prefix, true);
 
 		return new Promise((resolve, reject) => {
 			stream.on("data", (obj) => {
@@ -123,7 +139,7 @@ export class MinioStorage extends AbstractObjectStorage {
 
 	async exists(key: string, bucket?: string): Promise<boolean> {
 		try {
-			await this.minio.statObject(bucket || this.bucket, key);
+			await this.client.statObject(bucket || this.bucket, key);
 			return true;
 		} catch (error) {
 			if (error.code === "NotFound") {
@@ -133,15 +149,8 @@ export class MinioStorage extends AbstractObjectStorage {
 		}
 	}
 
-	protected async checkBucket(bucket: string): Promise<void> {
-		const exists = await this.minio.bucketExists(bucket);
-		if (!exists) {
-			await this.minio.makeBucket(bucket);
-		}
-	}
-
 	async signUrl(key: string, bucket?: string): Promise<string> {
 		const expiry = 60 * 60 * 24; // 24 hours
-		return this.minio.presignedGetObject(bucket || this.bucket, key, expiry);
+		return this.client.presignedGetObject(bucket || this.bucket, key, expiry);
 	}
 }

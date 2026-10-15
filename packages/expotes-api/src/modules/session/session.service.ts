@@ -1,12 +1,12 @@
-import { Injectable } from "@nestjs/common";
-import { DatabaseService } from "@/processors/database/database.service";
-import { CacheService } from "@/processors/cache/cache.service";
-import { Redis } from "ioredis";
 import { RedisKeys, SESSION_DURATION } from "@/constants/cache.constant";
-import { nanoid } from "nanoid";
 import { ISessionPayload } from "@/modules/session/session.dto";
+import { CacheService } from "@/processors/cache/cache.service";
+import { DatabaseService } from "@/processors/database/database.service";
 import { usersToTeams } from "@db/schema";
+import { Injectable } from "@nestjs/common";
 import { and, eq } from "drizzle-orm";
+import { Cluster, Redis } from "ioredis";
+import { nanoid } from "nanoid";
 
 export interface SessionResult {
 	value: string;
@@ -15,7 +15,7 @@ export interface SessionResult {
 
 @Injectable()
 export class SessionService {
-	redisClient: Redis;
+	redisClient: Redis | Cluster;
 
 	constructor(
 		private readonly db: DatabaseService,
@@ -107,51 +107,19 @@ export class SessionService {
 				.zadd(sessionsKey, expires, sessionId)
 				.exec();
 			return new Date(expires);
-		} else {
-			const ttl = await this.redisClient.ttl(sessionKey);
-			return new Date(now + ttl * 1000);
 		}
+		const ttl = await this.redisClient.ttl(sessionKey);
+		return new Date(now + ttl * 1000);
 	}
 
-	async verifyUserTeam(userId: string, teamId: string) {
-		const key = RedisKeys.TeamUserStore + teamId;
-		const fallbackKey = `${RedisKeys.TeamUserStore}:fallback:${teamId}`;
-		const fallbackTTL = 60 * 60; // 1 hour
-
-		// Check if user is in the team's set
-		const isUserInTeam = await this.redisClient.sismember(key, userId);
-		if (isUserInTeam) {
-			return true;
-		}
-
-		// Check if user is in the fallback set
-		const isUserInFallback = await this.redisClient.sismember(
-			fallbackKey,
-			userId,
-		);
-		if (isUserInFallback) {
-			return false;
-		}
-
-		// If not in either, check the database
-		const isUserInTeamDB = await this.db.query.usersToTeams.findFirst({
+	async verifyUserTeam(userId: string, teamId: string): Promise<boolean> {
+		// Read current membership because older deployments cached unauthorized users without an expiry.
+		const membership = await this.db.query.usersToTeams.findFirst({
 			where: and(
 				eq(usersToTeams.userId, userId),
 				eq(usersToTeams.teamId, teamId),
 			),
 		});
-
-		if (isUserInTeamDB !== null) {
-			await this.redisClient.sadd(key, userId);
-			return true;
-		} else {
-			// Add user to fallback set with TTL
-			await this.redisClient
-				.multi()
-				.sadd(fallbackKey, userId)
-				.expire(fallbackKey, fallbackTTL)
-				.exec();
-			return false;
-		}
+		return membership !== undefined && membership.isSuspended !== true;
 	}
 }

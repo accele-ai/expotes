@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { uuid } from "drizzle-orm/pg-core";
 import {
 	jsonb,
@@ -7,7 +8,6 @@ import {
 	varchar,
 } from "drizzle-orm/pg-core";
 import { teamsTable } from "./teams";
-import { relations } from "drizzle-orm";
 
 /* Object Storage Provider, must be S3 compatible */
 export const storageProviderTable = pgTable("storage_provider", {
@@ -27,7 +27,10 @@ export const storageProviderTable = pgTable("storage_provider", {
 	region: varchar("region", { length: 256 }).notNull(),
 	prefix: varchar("prefix", { length: 256 }).default("").notNull(),
 
-	extras: jsonb("extras").$type<Record<string, any>>().default({}).notNull(),
+	extras: jsonb("extras")
+		.$type<Record<string, unknown>>()
+		.default({})
+		.notNull(),
 
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -63,7 +66,10 @@ export const cdnProviderTable = pgTable("cdn_provider", {
 	host: varchar("host", { length: 256 }).notNull(),
 	origin: varchar("origin", { length: 256 }).notNull(),
 
-	options: jsonb("options").$type<Record<string, any>>().default({}).notNull(),
+	options: jsonb("options")
+		.$type<Record<string, unknown>>()
+		.default({})
+		.notNull(),
 
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull(),

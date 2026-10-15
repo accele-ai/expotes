@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import {
-	cdnProviderTable,
 	ICDNProviderInsert,
 	ICDNProviderSelect,
 	IStorageProviderSelect,
+	cdnProviderTable,
 } from "@db/schema";
 
 export interface CreateCdnProviderDto

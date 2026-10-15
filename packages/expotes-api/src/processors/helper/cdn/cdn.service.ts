@@ -2,7 +2,8 @@ import { DatabaseService } from "@/processors/database/database.service";
 import { cdnProviderTable } from "@db/schema";
 import { Injectable } from "@nestjs/common";
 import { eq } from "drizzle-orm";
-import { TencentCDN } from "./tencent.cdn";
+import { assert } from "typia";
+import { TencentCDN, TencentCDNOptions } from "./tencent.cdn";
 
 @Injectable()
 export class CDNService {
@@ -22,12 +23,14 @@ export class CDNService {
 		const cdn = await this.getCDN(cdnId);
 		switch (cdn.type) {
 			case "tencent-cdn":
-				return new TencentCDN({
-					url: `${cdn.protocol}://${cdn.host}`,
-					key: cdn.options.key,
-					key2: cdn.options.key2,
-					type: cdn.options.type,
-				});
+				return new TencentCDN(
+					assert<TencentCDNOptions>({
+						url: `${cdn.protocol}://${cdn.host}`,
+						key: cdn.options.key,
+						key2: cdn.options.key2,
+						type: cdn.options.type,
+					}),
+				);
 			// case 'aws':
 			//   return new AWSCDN(cdn.config);
 			// case 'cloudflare':

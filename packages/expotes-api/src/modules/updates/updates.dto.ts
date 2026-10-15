@@ -1,15 +1,12 @@
 import type { CursorPagerDto } from "@/shared/dto/pager.dto";
-import {
-	ManifestsOptions,
-	type applicationsTable,
-	type manifestsTable,
-} from "@db/schema";
+import type { applicationsTable, manifestsTable } from "@db/schema";
+import type { UpdateChannel } from "./updates.interface";
 
 export class CreateUpdatesDto {
 	appId: string;
 	runtimeVersion: string;
-	/* a json string of the options */
-	options: string;
+	channel?: UpdateChannel;
+	options?: string;
 	notes?: string;
 }
 

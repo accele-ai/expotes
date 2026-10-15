@@ -1,21 +1,21 @@
+import { SESSION_COOKIE_NAME } from "@/constants/cache.constant";
+import { SALT_ROUNDS } from "@/constants/system.config";
+import {
+	SessionResult,
+	SessionService,
+} from "@/modules/session/session.service";
 import { DatabaseService } from "@/processors/database/database.service";
+import { usersTable } from "@db/index";
 import {
 	Injectable,
 	NotFoundException,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { CreateUserDto, LoginUserDto } from "./auth.dto";
-import { v4 as uuidv4 } from "uuid";
 import { compare, hash } from "bcrypt";
-import { SALT_ROUNDS } from "@/constants/system.config";
-import { usersTable } from "@db/index";
 import { eq } from "drizzle-orm";
-import {
-	SessionResult,
-	SessionService,
-} from "@/modules/session/session.service";
 import { Response } from "express";
-import { SESSION_COOKIE_NAME } from "@/constants/cache.constant";
+import { v4 as uuidv4 } from "uuid";
+import { CreateUserDto, LoginUserDto } from "./auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -42,8 +42,6 @@ export class AuthService {
 		response: Response,
 		data: SessionResult,
 	): Promise<SessionResult> {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
 		response.cookie(SESSION_COOKIE_NAME, data.value, {
 			expires: new Date(data.expires),
 			httpOnly: true,
@@ -55,9 +53,7 @@ export class AuthService {
 	async login(dto: LoginUserDto) {
 		const user = await this.findOne(dto.email);
 
-		if (
-			!(user && user.password && (await compare(dto.password, user.password)))
-		) {
+		if (!(user?.password && (await compare(dto.password, user.password)))) {
 			throw new UnauthorizedException("Invalid email or password");
 		}
 

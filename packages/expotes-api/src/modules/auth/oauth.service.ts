@@ -1,14 +1,14 @@
+import { DatabaseService } from "@/processors/database/database.service";
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { userOAuthTable, usersTable } from "@db/schema";
-import { Injectable } from "@nestjs/common";
+import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 // @ts-ignore
-import { generateState, GitHub } from "arctic";
+import { GitHub, generateState } from "arctic";
 import { and, eq } from "drizzle-orm";
+import { Response } from "express";
 // @ts-ignore
 import { serializeCookie } from "oslo/cookie";
 import { AuthService } from "./auth.service";
-import { DatabaseService } from "@/processors/database/database.service";
-import { Response } from "express";
 
 interface GitHubUserResult {
 	login: string;
@@ -47,23 +47,22 @@ interface GitHubUserResult {
 
 @Injectable()
 export class OauthService {
-	github: GitHub;
+	get github(): GitHub {
+		const clientId = process.env.GITHUB_CLIENT_ID;
+		const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+		if (!clientId || !clientSecret)
+			throw new ServiceUnavailableException("GitHub login is not configured");
+		return new GitHub(clientId, clientSecret);
+	}
 
 	constructor(
 		private db: DatabaseService,
 		private authService: AuthService,
-	) {
-		this.github = new GitHub(
-			process.env.GITHUB_CLIENT_ID!,
-			process.env.GITHUB_CLIENT_SECRET!,
-		);
-	}
+	) {}
 
 	async getGithubAuthUrl(res: Response) {
 		const state = generateState();
 		const url = await this.github.createAuthorizationURL(state);
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
 		res.cookie("github_oauth_state", state, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "PRODUCTION", // set `Secure` flag in HTTPS

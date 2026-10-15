@@ -1,5 +1,5 @@
-import { teamsTable, usersToTeams } from "@db/schema";
 import { CursorPagerDto } from "@/shared/dto/pager.dto";
+import { teamsTable, usersToTeams } from "@db/schema";
 
 type ITeamInsert = typeof teamsTable.$inferInsert;
 type IUser2TeamsInsert = typeof usersToTeams.$inferInsert;

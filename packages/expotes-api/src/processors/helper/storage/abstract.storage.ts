@@ -34,8 +34,6 @@ export interface UploadBufferPropsWithBucket
 export abstract class AbstractObjectStorage {
 	constructor(protected readonly bucket: string) {}
 
-	protected abstract checkBucket(bucket: string): Promise<void>;
-
 	abstract upload(props: UploadProps): Promise<void>;
 	abstract upload(props: UploadPropsWithBucket): Promise<void>;
 

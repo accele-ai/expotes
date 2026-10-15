@@ -1,6 +1,6 @@
 import { DatabaseService } from "@/processors/database/database.service";
-import { Injectable, NotFoundException } from "@nestjs/common";
 import { usersTable } from "@db/index";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 
 @Injectable()

@@ -1,12 +1,12 @@
+import { Public } from "@/common/decorators/auth.decorator";
 import { Cookie } from "@/common/decorators/cookie.decorator";
 import { Controller, Get, Query, Redirect, Res } from "@nestjs/common";
-import { OauthService } from "./oauth.service";
-import { AuthService } from "./auth.service";
 import { Response } from "express";
 import { SessionService } from "../session/session.service";
-import { Public } from "@/common/decorators/auth.decorator";
+import { AuthService } from "./auth.service";
+import { OauthService } from "./oauth.service";
 
-@Controller("oauth")
+@Controller("api/oauth")
 export class OauthController {
 	constructor(
 		private readonly authService: AuthService,

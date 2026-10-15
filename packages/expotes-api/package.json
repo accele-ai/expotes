@@ -12,9 +12,9 @@
 		"start:dev": "nest start --watch",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node --experimental-require-module dist/src/main",
-		"lint": "biome lint --write .",
+		"lint": "biome lint .",
 		"format": "biome format --write .",
-		"check": "biome check --write .",
+		"check": "biome check .",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
@@ -24,7 +24,10 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"prepare": "ts-patch install && typia patch",
-		"sdk": "nestia sdk"
+		"sdk": "nestia sdk",
+		"typecheck": "tsc --noEmit --incremental false",
+		"token:create": "node scripts/publish-token.mjs create",
+		"token:revoke": "node scripts/publish-token.mjs revoke"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.622.0",
@@ -107,20 +110,32 @@
 		"typescript": "^5.5.2"
 	},
 	"jest": {
-		"moduleFileExtensions": [
-			"js",
-			"json",
-			"ts"
-		],
+		"moduleFileExtensions": ["js", "json", "ts"],
 		"rootDir": "src",
 		"testRegex": ".*\\.spec\\.ts$",
 		"transform": {
-			"^.+\\.(t|j)s$": "ts-jest"
+			"^.+\\.ts$": [
+				"ts-jest",
+				{
+					"compiler": "ts-patch/compiler",
+					"tsconfig": {
+						"module": "CommonJS",
+						"moduleResolution": "Node"
+					}
+				}
+			],
+			"^.+\\.js$": "<rootDir>/../test/javascript-transformer.cjs"
 		},
-		"collectCoverageFrom": [
-			"**/*.(t|j)s"
-		],
+		"collectCoverageFrom": ["**/*.(t|j)s"],
 		"coverageDirectory": "../coverage",
-		"testEnvironment": "node"
+		"testEnvironment": "node",
+		"moduleNameMapper": {
+			"^@/(.*)$": "<rootDir>/$1",
+			"^@db/(.*)$": "<rootDir>/../db/$1",
+			"^src/(.*)$": "<rootDir>/$1"
+		},
+		"transformIgnorePatterns": [
+			"node_modules/(?!\\.pnpm/(?:mime|arctic|oslo)@|(?:mime|arctic|oslo)/)"
+		]
 	}
 }

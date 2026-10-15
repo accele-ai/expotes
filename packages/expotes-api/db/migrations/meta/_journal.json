@@ -22,6 +22,13 @@
 			"when": 1725185099802,
 			"tag": "0002_illegal_guardian",
 			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1792070169441,
+			"tag": "0003_sdk57-update-delivery",
+			"breakpoints": true
 		}
 	]
 }

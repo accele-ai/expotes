@@ -1,23 +1,23 @@
-import { Logger, Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { MulterModule } from "@nestjs/platform-express";
-import { AssetsModule } from "./modules/assets/assets.module";
-import { ManifestModule } from "./modules/manifest/manifest.module";
-import { UpdatesModule } from "./modules/updates/updates.module";
-import { ApplicationModule } from "./modules/application/application.module";
-import { DatabaseModule } from "./processors/database/database.module";
+import { join } from "node:path";
+import { SessionModule } from "@/modules/session/session.module";
 import { UserModule } from "@/modules/user/user.module";
 import { CacheModule } from "@/processors/cache/cache.module";
-import { SessionModule } from "@/modules/session/session.module";
-import { TeamModule } from "./modules/team/team.module";
+import { Logger, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
-import { AuthGuard } from "./common/guards/auth.guard";
-import { AuthModule } from "./modules/auth/auth.module";
 import { APP_FILTER } from "@nestjs/core";
-import { AllExceptionsFilter } from "./common/filters/all-exception.filter";
+import { MulterModule } from "@nestjs/platform-express";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { join } from "path";
+import { AllExceptionsFilter } from "./common/filters/all-exception.filter";
+import { AuthGuard } from "./common/guards/auth.guard";
+import { ApplicationModule } from "./modules/application/application.module";
+import { AssetsModule } from "./modules/assets/assets.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { ManifestModule } from "./modules/manifest/manifest.module";
 import { ProviderModule } from "./modules/provider/provider.module";
+import { TeamModule } from "./modules/team/team.module";
+import { UpdatesModule } from "./modules/updates/updates.module";
+import { DatabaseModule } from "./processors/database/database.module";
 
 const staticPath =
 	process.env.NODE_ENV === "production"
@@ -29,6 +29,8 @@ const staticPath =
 			? [
 					ServeStaticModule.forRoot({
 						rootPath: staticPath,
+						renderPath: "/",
+						serveStaticOptions: { index: "index.html", redirect: true },
 						exclude: ["/api/(.*)"],
 					}),
 				]

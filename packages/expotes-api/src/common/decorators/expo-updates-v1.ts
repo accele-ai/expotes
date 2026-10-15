@@ -1,83 +1,85 @@
+import type { IncomingHttpHeaders } from "node:http";
 import {
-	createParamDecorator,
-	ExecutionContext,
 	BadRequestException,
+	type ExecutionContext,
+	createParamDecorator,
 } from "@nestjs/common";
 import { Expose, plainToInstance } from "class-transformer";
-import { IsNumberString, validate } from "class-validator";
+import {
+	IsIn,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	IsUUID,
+	validate,
+} from "class-validator";
 
-import { IsString, IsIn, IsOptional } from "class-validator";
+export type UpdateChannel = "preview" | "production";
 
 export class ExpoUpdatesV1HeadersDto {
-	@IsNumberString()
-	@IsIn(["0", "1"], {
-		message: "Unsupported protocol version. Expected either 0 or 1.",
-	})
+	@IsIn(["0", "1"])
 	@Expose({ name: "expo-protocol-version" })
-	protocolVersion: string;
+	protocolVersion: "0" | "1";
+
+	@IsIn(["ios", "android"])
+	@Expose({ name: "expo-platform" })
+	platform: "ios" | "android";
 
 	@IsString()
-	@IsIn(["ios", "android"], {
-		message: "Unsupported platform. Expected either ios or android.",
-	})
-	@IsOptional()
-	@Expose({ name: "expo-platform" })
-	platform: string;
-
-	@IsNumberString()
-	@IsOptional()
+	@IsNotEmpty()
 	@Expose({ name: "expo-runtime-version" })
 	runtimeVersion: string;
 
-	@IsString()
+	@IsUUID()
 	@IsOptional()
 	@Expose({ name: "expo-current-update-id" })
-	currentUpdateId: string;
+	currentUpdateId?: string;
 
-	@IsString()
+	@IsUUID()
 	@IsOptional()
 	@Expose({ name: "expo-embedded-update-id" })
-	embeddedUpdateId: string;
+	embeddedUpdateId?: string;
+
+	@IsIn(["preview", "production"])
+	channel: UpdateChannel;
 }
 
-export class ExpoUpdatesV1QueryDto {
-	@IsString()
-	@IsIn(["ios", "android"], {
-		message: "Unsupported platform. Expected either ios or android.",
-	})
-	@IsOptional()
-	platform: string;
-
-	@IsString()
-	@IsOptional()
-	@Expose({ name: "runtime-version" })
-	runtimeVersion: string;
-}
-
-export class ExpoUpdatesV1Dto {
+export interface ExpoUpdatesV1Dto {
 	protocolVersion: 0 | 1;
 	platform: "ios" | "android";
 	runtimeVersion: string;
-	currentUpdateId: string;
+	currentUpdateId?: string;
 	embeddedUpdateId?: string;
+	channel: UpdateChannel;
+}
+
+export async function parseExpoUpdatesRequest(
+	headers: IncomingHttpHeaders,
+	query: { channel?: unknown } = {},
+): Promise<ExpoUpdatesV1Dto> {
+	const input = plainToInstance(ExpoUpdatesV1HeadersDto, {
+		...headers,
+		channel: headers["expo-channel-name"] ?? query.channel ?? "production",
+	});
+	if ((await validate(input)).length > 0) {
+		throw new BadRequestException(
+			"Invalid Expo Updates request headers or channel.",
+		);
+	}
+
+	return {
+		protocolVersion: input.protocolVersion === "0" ? 0 : 1,
+		platform: input.platform,
+		runtimeVersion: input.runtimeVersion,
+		currentUpdateId: input.currentUpdateId?.toLowerCase(),
+		embeddedUpdateId: input.embeddedUpdateId?.toLowerCase(),
+		channel: input.channel,
+	};
 }
 
 export const ExpoUpdatesV1 = createParamDecorator(
-	async (data: unknown, ctx: ExecutionContext) => {
-		const request = ctx.switchToHttp().getRequest();
-		const headers = request.headers;
-		console.log(headers);
-		const headersDto = plainToInstance(ExpoUpdatesV1HeadersDto, headers);
-		const errors = await validate(headersDto);
-
-		if (errors.length > 0) {
-			throw new BadRequestException("Invalid headers");
-		}
-
-		return {
-			protocolVersion: headersDto.protocolVersion,
-			platform: headersDto.platform,
-			runtimeVersion: headersDto.runtimeVersion,
-		};
+	(_data: unknown, context: ExecutionContext) => {
+		const request = context.switchToHttp().getRequest();
+		return parseExpoUpdatesRequest(request.headers, request.query);
 	},
 );

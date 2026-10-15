@@ -1,8 +1,9 @@
 import { Cache } from "cache-manager";
+import type { RedisCache } from "cache-manager-ioredis-yet";
 
+import { RedisDelimiter } from "@/constants/cache.constant";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { RedisDelimiter } from "@/constants/cache.constant";
 import { Redis } from "ioredis";
 
 // 获取器
@@ -17,10 +18,10 @@ export type TCacheResult<T> = Promise<T | undefined>;
  */
 @Injectable()
 export class CacheService {
-	public cache!: Cache;
+	public cache: RedisCache;
 	private logger = new Logger(CacheService.name);
 
-	constructor(@Inject(CACHE_MANAGER) cache: Cache) {
+	constructor(@Inject(CACHE_MANAGER) cache: RedisCache) {
 		this.cache = cache;
 		this.redisClient.on("ready", () => {
 			this.logger.log("Redis is ready!");
@@ -28,9 +29,7 @@ export class CacheService {
 	}
 
 	public get redisClient() {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
-		return this.cache.store.client as Redis;
+		return this.cache.store.client;
 	}
 
 	private getKey(key: TCacheKey): TCacheKey {
@@ -42,7 +41,7 @@ export class CacheService {
 		return this.cache.get(this.getKey(key));
 	}
 
-	public set(key: TCacheKey, value: any, ttl?: number | undefined) {
+	public set(key: TCacheKey, value: unknown, ttl?: number | undefined) {
 		// return this.cache.set(key, value, ttl || 0);
 		return this.cache.set(this.getKey(key), value, ttl || 0);
 	}

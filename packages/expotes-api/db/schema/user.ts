@@ -1,15 +1,15 @@
+import { relations, sql } from "drizzle-orm";
 import {
+	boolean,
 	pgEnum,
 	pgTable,
 	primaryKey,
 	timestamp,
+	uniqueIndex,
 	uuid,
 	varchar,
-	boolean,
-	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { teamsTable } from "./teams";
-import { relations, sql } from "drizzle-orm";
 
 import { v7 as uuidv7 } from "uuid";
 

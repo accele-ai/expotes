@@ -1,36 +1,29 @@
-import { assetsTable, manifestsTable } from "@db/schema";
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { desc, eq } from "drizzle-orm";
-import {
-	Database,
-	DatabaseService,
-} from "src/processors/database/database.service";
-import { ManifestService } from "../manifest/manifest.service";
+import { assetsTable } from "@db/schema";
+import { Injectable, NotFoundException, StreamableFile } from "@nestjs/common";
+import { eq } from "drizzle-orm";
+import { DatabaseService } from "../../processors/database/database.service";
 import { StorageService } from "../../processors/helper/storage/storage.services";
-import { ExpoUpdatesV1Dto } from "@/common/decorators/expo-updates-v1";
-
-type InsertAsset = typeof assetsTable.$inferInsert;
 
 @Injectable()
 export class AssetsService {
 	constructor(
 		private readonly db: DatabaseService,
 		private readonly storageService: StorageService,
-		private readonly manifestService: ManifestService,
 	) {}
 
 	async getAssetObject(assetId: string) {
 		const asset = await this.db.query.assetsTable.findFirst({
 			where: eq(assetsTable.id, assetId),
+			with: { manifest: { columns: { options: true } } },
 		});
-		if (!asset) {
-			return new NotFoundException("Asset not found");
-		}
-		const storage = await this.storageService.getStorage();
-		return storage.download(asset.path);
-	}
-
-	async createAsset(asset: InsertAsset, tx?: Database) {
-		return await (tx ?? this.db).insert(assetsTable).values(asset);
+		if (!asset) throw new NotFoundException("Asset not found");
+		const storage = await this.storageService.getStorage(
+			asset.manifest.options.storage[0]?.providerId,
+		);
+		const file = await storage.download(asset.path);
+		return new StreamableFile(file.getStream(), {
+			...file.getHeaders(),
+			type: asset.contentType,
+		});
 	}
 }

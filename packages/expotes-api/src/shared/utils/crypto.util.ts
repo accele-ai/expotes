@@ -1,9 +1,7 @@
-import crypto, { BinaryToTextEncoding } from "crypto";
-import fs from "fs/promises";
-import path from "path";
-import { Dictionary } from "structured-headers";
-
-export class NoUpdateAvailableError extends Error {}
+import crypto, { type BinaryToTextEncoding } from "node:crypto";
+import fs from "node:fs/promises";
+import path from "node:path";
+import type { Dictionary } from "structured-headers";
 
 export function createHash(
 	file: Buffer,
@@ -18,13 +16,6 @@ export function getBase64URLEncoding(base64EncodedString: string): string {
 		.replace(/\+/g, "-")
 		.replace(/\//g, "_")
 		.replace(/=+$/, "");
-}
-
-export function convertSHA256HashToUUID(value: string) {
-	return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(
-		12,
-		16,
-	)}-${value.slice(16, 20)}-${value.slice(20, 32)}`;
 }
 
 export async function getPrivateKeyAsync() {

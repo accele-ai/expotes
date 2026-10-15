@@ -1,5 +1,5 @@
 // assets-query.dto.ts
-import { IsString, IsIn, IsNotEmpty } from "class-validator";
+import { IsIn, IsNotEmpty, IsString } from "class-validator";
 
 export class ManifestQueryDto {
 	@IsString()

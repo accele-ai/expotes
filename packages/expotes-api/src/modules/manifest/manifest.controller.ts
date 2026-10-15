@@ -1,19 +1,19 @@
+import { ApiController } from "@/common/decorators/api-controller.decorator";
+import { Public } from "@/common/decorators/auth.decorator";
 import {
-	Get,
-	Param,
-	UseInterceptors,
-	PipeTransform,
-	Injectable,
 	ArgumentMetadata,
 	BadRequestException,
+	Get,
+	Injectable,
+	Param,
+	PipeTransform,
+	UseInterceptors,
 } from "@nestjs/common";
-import { ManifestService } from "./manifest.service";
 import {
 	ExpoUpdatesV1,
 	ExpoUpdatesV1Dto,
 } from "src/common/decorators/expo-updates-v1";
-import { ApiController } from "@/common/decorators/api-controller.decorator";
-import { Public } from "@/common/decorators/auth.decorator";
+import { ManifestService } from "./manifest.service";
 
 import { ExpoSignatureInterceptor } from "@/common/interceptors/expo-signature.interceptors";
 import { ApplicationService } from "../application/application.service";
@@ -63,6 +63,6 @@ export class ManifestController {
 			_appId.type === "id"
 				? _appId.value
 				: (await this.applicationService.findOneByHandle(_appId.value)).id;
-		return { manifest: await this.manifestService.endpoint(meta, appId) };
+		return this.manifestService.endpoint(meta, appId);
 	}
 }

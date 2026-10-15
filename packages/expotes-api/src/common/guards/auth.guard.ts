@@ -1,79 +1,66 @@
-import {
-	ContextRequest,
-	getNestExecutionContextRequest,
-} from "@/transformers/get-req.transformer";
+import { SESSION_COOKIE_NAME } from "@/constants/cache.constant";
+import { PublishTokenService } from "@/modules/session/publish-token.service";
+import { SessionService } from "@/modules/session/session.service";
+import { getNestExecutionContextRequest } from "@/transformers/get-req.transformer";
 import {
 	CanActivate,
 	ExecutionContext,
 	ForbiddenException,
-	Inject,
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
-import { SessionService } from "@/modules/session/session.service";
-import { SESSION_COOKIE_NAME } from "@/constants/cache.constant";
 import { Reflector } from "@nestjs/core";
+import { isUUID } from "class-validator";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 	constructor(
-		@Inject(SessionService)
-		protected readonly sessionService: SessionService,
-		private reflector: Reflector,
+		private readonly sessionService: SessionService,
+		private readonly reflector: Reflector,
+		private readonly publishTokens: PublishTokenService,
 	) {}
 
-	async canActivate(context: ExecutionContext): Promise<any> {
-		const isPublic = this.reflector.getAllAndOverride<boolean>("isPublicAuth", [
-			context.getHandler(),
-			context.getClass(),
-		]);
-		const request = this.getRequest(context);
-		const cookies = request.cookies;
-		const headers = request.headers;
-
-		const isSessionValid = await this.verifySession(isPublic, request, cookies);
-
-		const teamId = headers["expotes-team-id"];
-		if (teamId) {
-			const isUserInTeam = await this.sessionService.verifyUserTeam(
-				request.owner!.userId,
-				teamId,
-			);
-			if (isUserInTeam) {
-				request.teamId = teamId;
-			} else {
-				throw new ForbiddenException("用户不在团队中");
+	async canActivate(context: ExecutionContext): Promise<boolean> {
+		const targets = [context.getHandler(), context.getClass()];
+		const request = getNestExecutionContextRequest(context);
+		const authorization = request.headers.authorization;
+		if (authorization) {
+			if (
+				!this.reflector.getAllAndOverride<boolean>("allowPublishToken", targets)
+			) {
+				throw new ForbiddenException(
+					"Publish tokens cannot access this endpoint",
+				);
 			}
-		}
-		return isSessionValid;
-	}
-
-	async verifySession(
-		isPublic: boolean,
-		request: ContextRequest,
-		cookies: Record<string, string>,
-	) {
-		const sessionId = cookies[SESSION_COOKIE_NAME];
-		if (sessionId) {
-			const session = await this.sessionService.find(sessionId);
-
-			if (session) {
-				request.owner = session;
-
-				return true;
-			} else if (isPublic) {
-				return true;
-			}
-		} else if (isPublic) {
+			const match = /^Bearer (\S+)$/.exec(authorization);
+			if (!match)
+				throw new UnauthorizedException("Expected a Bearer publish token");
+			request.publishScope = await this.publishTokens.verify(match[1]);
+			request.teamId = request.publishScope.teamId;
 			return true;
-		} else {
-			throw new ForbiddenException("未登录");
 		}
 
-		throw new UnauthorizedException("令牌无效");
-	}
-
-	getRequest(context: ExecutionContext) {
-		return getNestExecutionContextRequest(context);
+		const sessionId = request.cookies?.[SESSION_COOKIE_NAME];
+		const session = sessionId
+			? await this.sessionService.find(sessionId)
+			: null;
+		if (!session) {
+			if (this.reflector.getAllAndOverride<boolean>("isPublicAuth", targets))
+				return true;
+			throw new UnauthorizedException("A valid session is required");
+		}
+		request.owner = session;
+		const teamId = request.headers["expotes-team-id"];
+		if (teamId !== undefined) {
+			if (
+				typeof teamId !== "string" ||
+				!isUUID(teamId) ||
+				!(await this.sessionService.verifyUserTeam(session.userId, teamId))
+			) {
+				throw new ForbiddenException("The session cannot access this team");
+			}
+			request.teamId = teamId;
+		}
+		return true;
 	}
 }

@@ -1,13 +1,13 @@
-import { Body, Post, Res } from "@nestjs/common";
-import { AuthService } from "./auth.service";
 import { TypedRoute } from "@nestia/core";
+import { Body, Post, Res } from "@nestjs/common";
 import { CreateUserDto, LoginUserDto } from "./auth.dto";
+import { AuthService } from "./auth.service";
 
+import { ApiController } from "@/common/decorators/api-controller.decorator";
 import { Public } from "@/common/decorators/auth.decorator";
 import { Owner } from "@/common/decorators/get-owner-decorator";
 import { ISessionPayload } from "@/modules/session/session.dto";
 import { Response } from "express";
-import { ApiController } from "@/common/decorators/api-controller.decorator";
 
 @ApiController("auth")
 export class AuthController {

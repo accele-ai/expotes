@@ -1,3 +1,5 @@
+import { ApiController } from "@/common/decorators/api-controller.decorator";
+import { Owner } from "@/common/decorators/get-owner-decorator";
 import {
 	Body,
 	Controller,
@@ -7,15 +9,13 @@ import {
 	Post,
 	Put,
 } from "@nestjs/common";
-import { TeamService } from "./team.service";
 import {
 	Add2TeamDTO,
 	CreateTeamDto,
 	TeamFindAllDto,
 	UpdateTeamDto,
 } from "./team.dto";
-import { Owner } from "@/common/decorators/get-owner-decorator";
-import { ApiController } from "@/common/decorators/api-controller.decorator";
+import { TeamService } from "./team.service";
 
 @ApiController("team")
 export class TeamController {
@@ -35,17 +35,17 @@ export class TeamController {
 	}
 
 	@Put("/update")
-	async update(@Body() dto: UpdateTeamDto) {
-		return this.teamService.update(dto);
+	async update(@Body() dto: UpdateTeamDto, @Owner("userId") userId: string) {
+		return this.teamService.update(dto, userId);
 	}
 
 	@Post("/add-member")
-	async addMember(@Body() dto: Add2TeamDTO) {
-		return this.teamService.addMember(dto);
+	async addMember(@Body() dto: Add2TeamDTO, @Owner("userId") userId: string) {
+		return this.teamService.addMember(dto, userId);
 	}
 
 	@Delete("/delete/:id")
-	async delete(@Param("id") id: string) {
-		return this.teamService.delete(id);
+	async delete(@Param("id") id: string, @Owner("userId") userId: string) {
+		return this.teamService.delete(id, userId);
 	}
 }

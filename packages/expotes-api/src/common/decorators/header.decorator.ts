@@ -1,5 +1,5 @@
-import { IncomingMessage } from "http";
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import { IncomingMessage } from "node:http";
+import { ExecutionContext, createParamDecorator } from "@nestjs/common";
 
 const TeamId = createParamDecorator(
 	(name: string, ctx: ExecutionContext): string | undefined => {

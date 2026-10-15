@@ -1,15 +1,15 @@
+import { relations } from "drizzle-orm";
 import {
+	AnyPgColumn,
 	boolean,
 	jsonb,
 	pgTable,
+	text,
+	timestamp,
 	uuid,
 	varchar,
-	timestamp,
-	AnyPgColumn,
-	text,
 } from "drizzle-orm/pg-core";
 import { applicationsTable } from "./applications";
-import { relations } from "drizzle-orm";
 import { assetsTable } from "./assets";
 
 export interface ManifestsOptions {
@@ -30,6 +30,9 @@ export const manifestsTable = pgTable("manifests", {
 	/* Can be any string defined by the developer. 
   It stipulates what native code setup is required to run the associated update. */
 	runtimeVersion: varchar("runtime_version").notNull(),
+	channel: varchar("channel", { enum: ["preview", "production"] })
+		.notNull()
+		.default("production"),
 	/* Id of a special asset that is the entry point of the application code. 
   The fileExtension field will be ignored for this asset and SHOULD be omitted. */
 	iosLaunchAssetId: uuid("ios_launch_asset_id").references(
@@ -50,7 +53,10 @@ export const manifestsTable = pgTable("manifests", {
 		.default({}),
 	/* For storage of optional "extra" information such as third-party configuration. 
   For example, if the update is hosted on Expo Application Services (EAS), the EAS project ID may be included: */
-	extra: jsonb("extra").$type<{ [key: string]: any }>().notNull().default({}),
+	extra: jsonb("extra")
+		.$type<{ [key: string]: unknown }>()
+		.notNull()
+		.default({}),
 	/* The date and time at which the update was created is essential 
     as the client library selects the most recent update (subject to any constraints supplied by the expo-manifest-filters header). 
   The datetime should be formatted according to ISO 8601. */

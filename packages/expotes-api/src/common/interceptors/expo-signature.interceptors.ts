@@ -1,108 +1,122 @@
-import {
-	Injectable,
-	NestInterceptor,
-	ExecutionContext,
-	CallHandler,
-	BadRequestException,
-} from "@nestjs/common";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import type {
+	ManifestResponse,
+	UpdateManifest,
+} from "@/modules/manifest/manifest.types";
 import {
 	convertToDictionaryItemsRepresentation,
 	getPrivateKeyAsync,
 	signRSASHA256,
-} from "src/shared/utils/crypto.util";
-import { serializeDictionary } from "structured-headers";
+} from "@/shared/utils/crypto.util";
+import {
+	BadRequestException,
+	type CallHandler,
+	type ExecutionContext,
+	Injectable,
+	type NestInterceptor,
+	NotAcceptableException,
+	ServiceUnavailableException,
+	StreamableFile,
+} from "@nestjs/common";
+import type { Request, Response } from "express";
 import FormData from "form-data";
+import { type Observable, mergeMap } from "rxjs";
+import { parseDictionary, serializeDictionary } from "structured-headers";
 
-const sign = async (data: object) => {
-	const privateKey = await getPrivateKeyAsync();
-	if (!privateKey) {
-		throw new BadRequestException(
-			"Code signing requested but no key supplied when starting server.",
+async function sign(body: string, expectedSignature: string): Promise<string> {
+	let expected: ReturnType<typeof parseDictionary>;
+	try {
+		expected = parseDictionary(expectedSignature);
+	} catch {
+		throw new BadRequestException("Invalid expo-expect-signature header.");
+	}
+	const keyId = process.env.PRIVATE_KEY_ID ?? "main";
+	const requestedKeyId = expected.get("keyid")?.[0];
+	const requestedAlgorithm = expected.get("alg")?.[0];
+	if (
+		(requestedKeyId !== undefined && requestedKeyId !== keyId) ||
+		(requestedAlgorithm !== undefined &&
+			requestedAlgorithm !== "rsa-v1_5-sha256")
+	) {
+		throw new NotAcceptableException(
+			"Requested signing key or algorithm is not available.",
 		);
 	}
 
-	const dataString = JSON.stringify(data);
-	const hashSignature = signRSASHA256(dataString, privateKey);
-	const dictionary = convertToDictionaryItemsRepresentation({
-		sig: hashSignature,
-		keyid: "main",
-	});
-	return serializeDictionary(dictionary);
-};
-
-export class ExpoResponseHeaderInterceptor implements NestInterceptor {
-	async intercept(
-		context: ExecutionContext,
-		next: CallHandler,
-	): Promise<Observable<any>> {
-		const response = context.switchToHttp().getResponse();
-		response.setHeader("expo-protocol-version", 1);
-		response.setHeader("expo-sfv-version", 0);
-		response.setHeader("cache-control", "private, max-age=0");
-		return next.handle();
+	const privateKey = await getPrivateKeyAsync();
+	if (!privateKey) {
+		throw new ServiceUnavailableException(
+			"Code signing requires PRIVATE_KEY_PATH.",
+		);
 	}
+	return serializeDictionary(
+		convertToDictionaryItemsRepresentation({
+			sig: signRSASHA256(body, privateKey),
+			keyid: keyId,
+			alg: "rsa-v1_5-sha256",
+		}),
+	);
 }
 
 @Injectable()
 export class ExpoSignatureInterceptor implements NestInterceptor {
-	async intercept(
+	intercept(
 		context: ExecutionContext,
-		next: CallHandler,
-	): Promise<Observable<any>> {
-		const request = context.switchToHttp().getRequest();
-		const response = context.switchToHttp().getResponse();
-		response.setHeader("expo-protocol-version", 1);
-		response.setHeader("expo-sfv-version", 0);
+		next: CallHandler<ManifestResponse>,
+	): Observable<UpdateManifest | StreamableFile | undefined> {
+		const request = context.switchToHttp().getRequest<Request>();
+		const response = context.switchToHttp().getResponse<Response>();
+		response.setHeader("expo-protocol-version", "1");
+		response.setHeader("expo-sfv-version", "0");
+		response.setHeader("cache-control", "private, max-age=0");
+		response.vary("Accept");
+		response.vary("Expo-Platform");
+		response.vary("Expo-Runtime-Version");
+		response.vary("Expo-Channel-Name");
 
 		return next.handle().pipe(
-			map(async (data) => {
-				const expectSignatureHeader = request.headers["expo-expect-signature"];
-				const manifest = data.manifest;
-				const directive = data.directive;
-
-				const form = new FormData();
-				if (manifest) {
-					const signature = expectSignatureHeader ? sign(manifest) : null;
-					form.append("manifest", JSON.stringify(manifest), {
-						contentType: "application/json",
-						header: {
-							"content-type": "application/json; charset=utf-8",
-							...(signature ? { "expo-signature": signature } : {}),
-						},
-					});
-
-					const assetRequestHeaders: { [key: string]: object } = {};
-					[...manifest.assets, manifest.launchAsset].forEach((asset) => {
-						assetRequestHeaders[asset.key] = {
-							"test-header": "test-header-value",
-						};
-					});
-					form.append("extensions", JSON.stringify({ assetRequestHeaders }), {
-						contentType: "application/json",
-					});
-				} else if (directive) {
-					const signature = expectSignatureHeader ? sign(directive) : null;
-					form.append("directive", JSON.stringify(directive), {
-						contentType: "application/json",
-						header: {
-							"content-type": "application/json; charset=utf-8",
-							...(signature ? { "expo-signature": signature } : {}),
-						},
-					});
+			mergeMap(async (data) => {
+				response.setHeader(
+					"expo-manifest-filters",
+					serializeDictionary(
+						convertToDictionaryItemsRepresentation({ channel: data.channel }),
+					),
+				);
+				if (!data.manifest && !data.directive) {
+					response.status(204);
+					return undefined;
 				}
 
-				response.status(200);
-				// set response headers to match standard: https://docs.expo.dev/technical-specs/expo-updates-1/#common-response-headers
-				response.setHeader("cache-control", "private, max-age=0");
-				response.setHeader(
-					"content-type",
-					`multipart/mixed; boundary=${form.getBoundary()}`,
+				const contentType = request.accepts(
+					data.manifest
+						? ["multipart/mixed", "application/expo+json", "application/json"]
+						: ["multipart/mixed"],
 				);
-				response.write(form.getBuffer());
+				if (!contentType) {
+					throw new NotAcceptableException(
+						"The requested update response format is not supported.",
+					);
+				}
 
-				response.end();
+				const body = JSON.stringify(data.manifest ?? data.directive);
+				const expectedSignature = request.get("expo-expect-signature");
+				const signature = expectedSignature
+					? await sign(body, expectedSignature)
+					: undefined;
+				response.status(200);
+				if (contentType !== "multipart/mixed") {
+					response.setHeader("content-type", contentType);
+					if (signature) response.setHeader("expo-signature", signature);
+					return data.manifest;
+				}
+
+				const form = new FormData();
+				form.append(data.manifest ? "manifest" : "directive", body, {
+					contentType: "application/json",
+					header: signature ? { "expo-signature": signature } : undefined,
+				});
+				return new StreamableFile(form.getBuffer(), {
+					type: `multipart/mixed; boundary=${form.getBoundary()}`,
+				});
 			}),
 		);
 	}

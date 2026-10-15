@@ -1,5 +1,5 @@
+import * as crypto from "node:crypto";
 import { Injectable } from "@nestjs/common";
-import * as crypto from "crypto";
 
 export interface TencentCDNOptions {
 	url: string;
@@ -47,6 +47,10 @@ export class TencentCDN {
 		}
 	}
 
+	get requiresSignature(): boolean {
+		return this.type !== null;
+	}
+
 	generateUrl({ path, suffix, ts }: GetCDNUrlProps): string {
 		const now = ts
 			? Math.floor(new Date(ts).getTime() / 1000)
@@ -72,16 +76,13 @@ export class TencentCDN {
 		const ts = now;
 		const randStr = crypto.randomBytes(3).toString("hex");
 
-		// Ensure path starts with '/'
-		if (!path.startsWith("/")) {
-			path = "/" + path;
-		}
+		const absolutePath = path.startsWith("/") ? path : `/${path}`;
 
 		const sign = crypto
 			.createHash("md5")
-			.update(`${path}-${ts}-${randStr}-0-${this.key}`)
+			.update(`${absolutePath}-${ts}-${randStr}-0-${this.key}`)
 			.digest("hex");
-		return `${this.url}${path}${suffix || ""}?${
+		return `${this.url}${absolutePath}${suffix || ""}?${
 			this.signKey
 		}=${ts}-${randStr}-0-${sign}`;
 	}

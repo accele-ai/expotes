@@ -1,15 +1,15 @@
+import { relations, sql } from "drizzle-orm";
 import {
-	timestamp,
+	boolean,
 	pgTable,
+	timestamp,
+	uniqueIndex,
 	uuid,
 	varchar,
-	boolean,
-	uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { manifestsTable } from "./mainfest";
-import { relations, sql } from "drizzle-orm";
-import { teamsTable } from "./teams";
 import { jsonb } from "drizzle-orm/pg-core";
+import { manifestsTable } from "./mainfest";
+import { teamsTable } from "./teams";
 
 export interface ApplicationOptions {
 	/* Default Storage For Manifests */

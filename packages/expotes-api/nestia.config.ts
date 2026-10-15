@@ -1,22 +1,9 @@
-import { INestiaConfig } from "@nestia/sdk";
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./src/app.module";
-import cookieParser from "cookie-parser";
-import { join } from "path";
+import { join } from "node:path";
+import type { INestiaConfig } from "@nestia/sdk";
 
-const NESTIA_CONFIG: INestiaConfig = {
-	input: async () => {
-		const app = await NestFactory.create(AppModule, {
-			logger: ["error", "warn", "log", "debug", "verbose"],
-		});
-		app.use(cookieParser());
-
-		app.setGlobalPrefix("api");
-
-		return app;
-	},
+const config: INestiaConfig = {
+	input: ["src/modules/**/*.controller.ts"],
 	output: join(__dirname, "../expotes-sdk/src"),
 	clone: true,
-	distribute: "sdk",
 };
-export default NESTIA_CONFIG;
+export default config;

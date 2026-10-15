@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { StorageService } from "./storage/storage.services";
 import { CDNService } from "./cdn/cdn.service";
+import { StorageService } from "./storage/storage.services";
 
 @Module({
 	providers: [StorageService, CDNService],

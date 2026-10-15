@@ -1,10 +1,12 @@
-import { Request } from "express";
-import { ExecutionContext } from "@nestjs/common";
+import type { PublishScope } from "@/modules/session/publish-token.service";
 import { ISessionPayload } from "@/modules/session/session.dto";
+import { ExecutionContext } from "@nestjs/common";
+import { Request } from "express";
 
-export interface ContextRequest extends Request, Record<string, any> {
+export interface ContextRequest extends Request {
 	owner?: ISessionPayload;
 	teamId?: string;
+	publishScope?: PublishScope;
 }
 /*
  * Auth guard will set the user in the context

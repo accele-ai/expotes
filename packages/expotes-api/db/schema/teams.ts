@@ -6,8 +6,8 @@ import {
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { usersTable } from "./user";
 import { applicationsTable } from "./applications";
+import { usersTable } from "./user";
 
 export const teamsTable = pgTable(
 	"teams",

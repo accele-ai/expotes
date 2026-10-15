@@ -1,16 +1,21 @@
-import postgres from "postgres";
+import { join } from "node:path";
 import * as schema from "@db/schema";
-import { join } from "path";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
+import postgres from "postgres";
 
 export const dbMigration = async () => {
-	const migrationClient = postgres(process.env.DATABASE_URL!, {
+	const databaseUrl = process.env.DATABASE_URL;
+	if (!databaseUrl) throw new Error("DATABASE_URL is not set");
+	const migrationClient = postgres(databaseUrl, {
 		max: 1,
 	});
 
-	await migrate(drizzle(migrationClient, { schema, logger: true }), {
-		migrationsFolder: join(process.cwd(), "./dist/db/migrations"),
-	});
-	await migrationClient.end();
+	try {
+		await migrate(drizzle(migrationClient, { schema }), {
+			migrationsFolder: join(process.cwd(), "./dist/db/migrations"),
+		});
+	} finally {
+		await migrationClient.end();
+	}
 };
