@@ -10,3 +10,9 @@ apps/**/android
 
 tmp
 .env
+.git
+**/node_modules
+**/.next
+**/out
+**/dist
+**/sdk
